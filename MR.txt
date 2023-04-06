@@ -1,0 +1,53 @@
+Usuarios (dni, nombre, teléfono, correo, fechaIngresoUSC, rol, fechaVeto, numeroInfracciones)  
+    PK: dni  
+    Forma Normal: BC  
+
+Vehiculos (matricula, tipo, marca, modelo, anhoMatriculacion, dni)  
+    PK: matricula  
+    Forma Normal: BC  
+    FK: dni REFERENCIA Usuarios (dni)  
+    Borrado: Set Null  
+    Actualización: Cascade 
+
+Aparcamientos(id, direccion, aforo)  
+    PK: id 
+    ATRIBUTO CALCULADO: aforo 
+    Forma Normal: BC 
+
+PlazasReserva (codigo, tipo, idAparcamiento)  
+    PK: codigo, idAparcamiento 
+    FK: idAparcamiento REFERENCIA Aparcamientos(id) 
+    Borrado: No Action 
+    Actualización: Cascade 
+    Forma Normal: BC  
+
+PlazasAparcar (codigo, tipo, idAparcamiento)  
+    PK: codigo, idAparcamiento  
+    FK: idAparcamiento REFERENCIA Aparcamientos(id) 
+    Borrado: No Action 
+    Actualización: Cascade 
+    Forma Normal: BC  
+
+Aparcar(matriculaVehiculo, codigPlaza, idAparcamiento, fechaEntrada, fechaSalida, tiempo, precio)  
+    PK: codigoPlaza, idAparcamiento, matriculaVehiculo, fechaEntrada
+    Forma Normal: BC  
+    FK: matriculaVehiculo REFERENCIA Vehiculos(matricula)  
+    Borrado: Set Null 
+    Actualización: Cascade 
+    FK: codigoPlaza, idAparcamiento REFERENCIA PlazasAparcar(codigo, idAparcamiento)  
+    Borrado: Set Null 
+    Actualización: Cascade 
+    ATRIBUTO CALCULADO: tiempo → (fechaSalida – fechaEntrada)  
+    ATRIBUTO CALCULADO: precio→ f(tiempo, tipoUsuario)  
+
+Reservar (matriculaVehiculo, codigoPlazaReserva, idAparcamiento, fechaInicio, fechaFin, tiempo, precio)  
+    PK: codigoPlazaReserva, idAparcamiento, matriculaVehiculo, fechaInicio   
+    Forma Normal: BC  
+    FK: matriculaVehiculo REFERENCIA Vehiculos(matricula)  
+    Borrado: Set Null 
+    Actualización: Cascade 
+    FK: codigoPlazaReserva, idAparcamiento REFERENCIA PlazasReserva(codigo, idAparcamiento)  
+    Borrado: Set Null 
+    Actualización: Cascade 
+    ATRIBUTO CALCULADO: tiempo → (fechaFin – fechaInicio)  
+    ATRIBUTO CALCULADO: precio → f(tiempo) 

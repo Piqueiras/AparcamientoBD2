@@ -1,0 +1,93 @@
+CREATE TABLE Usuarios (
+dni CHAR( 9 ) ,
+nombre VARCHAR( 500 ) NOT NULL,
+telefono CHAR( 9 ) ,
+correo VARCHAR ( 500 ) ,
+fechaIngresoUSC DATE,
+rol VARCHAR( 50 ) ,
+fechaVeto DATE,
+numeroInfracciones INT NOT NULL DEFAULT 0 ,
+	CHECK ( numeroInfracciones IN ( 0 , 1 , 2 , 3 , 4 , 5 ) ) ,
+	CHECK ( rol IN ( 'personal de administracion y servicios' , 'alumno' , 'personal docente' ) ) ,
+	PRIMARY KEY ( dni )
+);
+	
+CREATE TABLE Vehiculos (
+matricula CHAR( 7 ) ,
+tipo CHAR( 1 ) NOT NULL,
+marca VARCHAR( 500 ) ,
+modelo VARCHAR( 500 ) ,
+anhoMatriculacion NUMERIC( 4 , 0 ) ,
+dni CHAR( 9 ) DEFAULT '000000000' ,
+	PRIMARY KEY ( matricula ) ,
+	FOREIGN KEY ( dni ) references usuarios(dni)
+		ON DELETE SET NULL /* ( 1 ) AQUI HAY CAMBIO */
+		ON UPDATE CASCADE, /* ( 2 ) */
+	CHECK ( anhoMatriculacion > 1900 ) , /* Primer coche matriculado en Espana */
+	CHECK ( tipo IN ( 'C' , 'M' , 'G' ) ) /* Coche , moto o vehiculo grande */
+);	
+
+CREATE TABLE Aparcamientos (
+id CHAR(5),
+direccion VARCHAR( 1000 ) ,
+aforo numeric(3,0) NOT NULL,
+	PRIMARY KEY ( id )
+);
+	
+CREATE TABLE PlazasAparcar (
+codigo NUMERIC( 3 , 0 ) ,
+tipo CHAR( 1 ) NOT NULL,
+idAparcamiento CHAR(5),
+	PRIMARY KEY ( codigo ) ,
+	FOREIGN KEY ( idAparcamiento ) references aparcamientos(id)
+		ON DELETE NO ACTION
+		ON UPDATE CASCADE,
+	CHECK ( tipo IN ( 'C ' , 'M' , 'G' ) ) /* Coche , moto o vehiculo grande */
+);
+
+CREATE TABLE PlazasReserva (
+codigo NUMERIC( 3 , 0 ) ,
+tipo CHAR( 1 ) NOT NULL,
+idAparcamiento CHAR(5),
+	PRIMARY KEY ( codigo ) ,
+	FOREIGN KEY ( idAparcamiento ) references aparcamientos(id)
+		ON DELETE NO ACTION
+		ON UPDATE CASCADE,
+	CHECK ( tipo IN ( 'C' , 'M' , 'G' ) ) /* Coche , moto o vehiculo grande */
+);
+
+CREATE TABLE aparcar (
+matriculaVehiculo CHAR( 7 ) ,
+codigoPlaza NUMERIC( 3 , 0 ) DEFAULT 0 ,
+idAparcamiento CHAR(5),
+fechaentrada TIMESTAMP,
+fechasalidaa TIMESTAMP,
+tiempo TIME DEFAULT '00:00:00',
+precio NUMERIC(2,2) DEFAULT 0,
+	PRIMARY KEY ( matriculaVehiculo , codigoPlaza , idAparcamiento, fechaentrada ) ,
+	FOREIGN KEY ( matriculaVehiculo) references vehiculos(matricula)
+		ON DELETE SET NULL /* ( 5 ) */
+		ON UPDATE CASCADE, /* ( 6 ) */
+	FOREIGN KEY ( codigoPlaza, idAparcamiento ) references plazasAparcar(codigo, idAparcamiento)
+		ON DELETE SET NULL /* ( 7 ) */
+		ON UPDATE CASCADE /* ( 8 ) */
+);
+
+
+CREATE TABLE reservar (
+matriculaVehiculo CHAR( 7 ) ,
+codigoPlazaReserva NUMERIC( 3 , 0 ) DEFAULT 0 ,
+idAparcamiento CHAR(5),
+fechaInicio TIMESTAMP,
+fechaFin TIMESTAMP,
+tiempo TIME DEFAULT '00:00:00',
+precio NUMERIC(2,2) DEFAULT 0,
+	PRIMARY KEY ( matriculaVehiculo , codigoPlazaReserva , idAparcamiento, fechaInicio) ,
+	FOREIGN KEY ( matriculaVehiculo) references vehiculos(matricula)
+		ON DELETE SET NULL /*( 5 )*/
+		ON UPDATE CASCADE, /* ( 6 )*/
+	FOREIGN KEY ( codigoPlazaReserva, idAparcamiento ) references plazasReserva(codigo, idAparcamiento)
+		ON DELETE SET NULL /* ( 7 )*/
+		ON UPDATE CASCADE/* ( 8 )*/,
+	CHECK( fechaInicio < fechaFin )
+);

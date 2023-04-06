@@ -1,0 +1,69 @@
+INSERT INTO Usuarios (dni, nombre, telefono, correo, fechaIngresoUSC, rol, fechaVeto, numeroInfracciones)
+VALUES
+('333444555', 'José García', '981654987', 'jose.garcia@usc.es', '2016-09-01', 'alumno', NULL, 4),
+('777888999', 'Luisa Pérez', '981123456', 'luisa.perez@usc.es', '2018-06-12', 'personal de administracion y servicios', NULL, 1),
+('111222333', 'Elena Fernández', '981789456', 'elena.fernandez@usc.es', '2013-11-20', 'personal docente', '2022-03-28', 2),
+('444555666', 'Marta Gómez', '981456789', 'marta.gomez@usc.es', '2019-02-15', 'alumno', NULL, 0),
+('888999000', 'Carlos Martínez', '981987654', 'carlos.martinez@usc.es', '2017-05-10', 'personal de administracion y servicios', NULL, 0),
+('101112131', 'Ana Rodríguez', '981654987', 'ana.rodriguez@usc.es', '2020-09-01', 'alumno', NULL, 3),
+('141516171', 'David López', '981123789', 'david.lopez@usc.es', '2015-06-12', 'personal docente', NULL, 0),
+('181920212', 'Isabel Pérez', '981789123', 'isabel.perez@usc.es', '2012-11-20', 'personal de administracion y servicios', '2022-03-15', 1),
+('222333444', 'Carmen García', '981456123', 'carmen.garcia@usc.es', '2022-02-15', 'alumno', NULL, 0),
+('555666777', 'Alberto Gómez', '981987123', 'alberto.gomez@usc.es', '2020-05-10', 'personal docente', NULL, 2),
+('891011121', 'Sofía López', '981654987', 'sofia.lopez@usc.es', '2021-09-01', 'alumno', NULL, 1),
+('131415161', 'Antonio Martínez', '981123789', 'antonio.martinez@usc.es', '2016-06-12', 'personal de administracion y servicios', NULL, 0),
+('171819202', 'María Pérez', '981789123', 'maria.perez@usc.es', '2014-11-20', 'personal de administracion y servicios', '2022-03-15', 4);
+
+INSERT INTO vehiculos (matricula, tipo, marca, modelo, anhoMatriculacion, dni)
+VALUES 
+  ('1234ABC', 'C', 'Ford', 'Focus', 2015, '333444555'),
+  ('5678DEF', 'C', 'Renault', 'Clio', 2010, '777888999'),
+  ('9012GHI', 'M', 'Honda', 'CBR600RR', 2019, '111222333'),
+  ('3456JKL', 'G', 'Mercedes-Benz', 'Sprinter', 2018, '444555666'),
+  ('7890MNO', 'C', 'Seat', 'Ibiza', 2012, '888999000'),
+  ('1234PQR', 'C', 'Volkswagen', 'Polo', 2017, '101112131'),
+  ('5678STU', 'G', 'Iveco', 'Daily', 2020, '141516171'),
+  ('9012VWX', 'M', 'Yamaha', 'MT-07', 2016, '181920212'),
+  ('3456YZA', 'C', 'Opel', 'Corsa', 2014, '222333444'),
+  ('7890BCD', 'M', 'Suzuki', 'GSX-R750', 2013, '555666777');
+
+
+INSERT INTO Aparcamientos (id, direccion, aforo) VALUES
+('PARK1', 'Calle Mayor 1', 50),
+('PARK2', 'Calle Real 2', 100),
+('PARK3', 'Plaza España 3', 75),
+('PARK4', 'Avenida Libertad 4', 200),
+('PARK5', 'Calle Estación 5', 80),
+('PARK6', 'Calle San Juan 6', 60),
+('PARK7', 'Avenida Constitución 7', 150),
+('PARK8', 'Calle Alcalá 8', 90),
+('PARK9', 'Calle Gran Vía 9', 120),
+('PARKA', 'Calle Mayor 10', 70);
+
+INSERT INTO PlazasAparcar (codigo, tipo, idAparcamiento) VALUES
+(1, 'C', 'PARK1'),
+(2, 'M', 'PARK2'),
+(32, 'G', 'PARK3'),
+(4, 'C', 'PARK4'),
+(50, 'M', 'PARK5'),
+(6, 'G', 'PARK6'),
+(7, 'C', 'PARK7'),
+(81, 'M', 'PARK8'),
+(9, 'G', 'PARK9'),
+(10, 'C', 'PARKA'),
+(92, 'G', 'PARK9');
+
+INSERT INTO PlazasReserva (codigo, tipo, idAparcamiento) VALUES
+(12, 'C', 'PARK1'),
+(6, 'M', 'PARK1'),
+(20, 'G', 'PARK2'),
+(3, 'G', 'PARK3'),
+(4, 'C', 'PARK4'),
+(22, 'M', 'PARK5'),
+(61, 'G', 'PARK6'),
+(71, 'C', 'PARK7'),
+(8, 'G', 'PARK8'),
+(94, 'M', 'PARK9'),
+(10, 'C', 'PARKA');
+
+
