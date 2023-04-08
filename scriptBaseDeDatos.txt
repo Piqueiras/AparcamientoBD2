@@ -8,7 +8,7 @@ rol VARCHAR( 50 ) ,
 fechaVeto DATE,
 numeroInfracciones INT NOT NULL DEFAULT 0 ,
 	CHECK ( numeroInfracciones IN ( 0 , 1 , 2 , 3 , 4 , 5 ) ) ,
-	CHECK ( rol IN ( 'personal de administracion y servicios' , 'alumno' , 'personal docente' ) ) ,
+	CHECK ( rol IN ( 'Administracion' , 'Docente' , 'Alumno', 'noUSC' ) ) ,
 	PRIMARY KEY ( dni )
 );
 	
@@ -38,7 +38,7 @@ CREATE TABLE PlazasAparcar (
 codigo NUMERIC( 3 , 0 ) ,
 tipo CHAR( 1 ) NOT NULL,
 idAparcamiento CHAR(5),
-	PRIMARY KEY ( codigo ) ,
+	PRIMARY KEY ( codigo, idAparcamiento ) ,
 	FOREIGN KEY ( idAparcamiento ) references aparcamientos(id)
 		ON DELETE NO ACTION
 		ON UPDATE CASCADE,
@@ -49,7 +49,7 @@ CREATE TABLE PlazasReserva (
 codigo NUMERIC( 3 , 0 ) ,
 tipo CHAR( 1 ) NOT NULL,
 idAparcamiento CHAR(5),
-	PRIMARY KEY ( codigo ) ,
+	PRIMARY KEY ( codigo, idAparcamiento ) ,
 	FOREIGN KEY ( idAparcamiento ) references aparcamientos(id)
 		ON DELETE NO ACTION
 		ON UPDATE CASCADE,
