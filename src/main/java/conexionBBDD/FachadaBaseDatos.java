@@ -7,6 +7,7 @@ package conexionBBDD;
 
 //import aplication.<nombreClase>;
 import aplication.Aparcar;
+import aplication.PlazaReserva;
 import aplication.Reservar;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -26,6 +27,8 @@ public class FachadaBaseDatos {
     private aplication.FachadaAplicacion fa;
     private java.sql.Connection conexion;
     private DAOUsuarios daoUsuarios;
+    private DAOPlazas daoPlazas;
+
     //private DAOClase daoClase;
     
     public FachadaBaseDatos (aplication.FachadaAplicacion fa){
@@ -54,6 +57,8 @@ public class FachadaBaseDatos {
                     usuario);
             
             daoUsuarios = new DAOUsuarios(conexion, fa);
+            daoPlazas = new DAOPlazas(conexion, fa);
+
             
         } catch (FileNotFoundException f){
             System.out.println(f.getMessage());
@@ -80,5 +85,9 @@ public class FachadaBaseDatos {
     
     public List<Reservar> historialReservar (String dni, String mat, String pza, String ap, String cMax, String cMin, String dMax, String dMin, String fMax, String fMin) {
         return daoUsuarios.ConsultarHistorialReservar(dni, mat, pza, ap, cMax, cMin, dMax, dMin, fMax, fMin);
+    }
+    
+    public List<PlazaReserva> obtenerPlazasReserva(String codigoAparcamiento, Integer  codigoPlaza, String tipoPlaza, boolean ocupadas){
+            return daoPlazas.obtenerPlazasReserva(codigoAparcamiento,codigoPlaza,tipoPlaza,ocupadas);
     }
 }

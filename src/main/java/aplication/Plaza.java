@@ -13,5 +13,31 @@ public abstract class Plaza {
     private TipoPlaza tipo;
     private Aparcamiento aparcamiento;
     private Vehiculo vehiculo;
+
+    public Plaza(int codigo, TipoPlaza tipo, Aparcamiento aparcamiento) {
+        this.codigo = codigo;
+        this.tipo = tipo;
+        this.aparcamiento = aparcamiento;
+    }
+    
+    
+
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public TipoPlaza getTipo() {
+        return tipo;
+    }
+
+    public Aparcamiento getAparcamiento() {
+        return aparcamiento;
+    }
+
+    public Vehiculo getVehiculo() {
+        return vehiculo;
+    }
+    
+    
     
 }

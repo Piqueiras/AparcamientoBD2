@@ -9,5 +9,9 @@ package aplication;
  * @author alumnogreibd
  */
 public class PlazaReserva extends Plaza {
+
+    public PlazaReserva(int codigo, TipoPlaza tipo, Aparcamiento aparcamiento) {
+        super(codigo, tipo, aparcamiento);
+    }
     
 }

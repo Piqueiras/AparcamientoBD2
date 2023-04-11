@@ -11,9 +11,19 @@ import java.util.ArrayList;
  * @author alumnogreibd
  */
 public class Aparcamiento {
-    private char[] id;
+    private String id;
     private String direccion;
     private int aforo;
     private ArrayList<PlazaAparcar> plazasAparcar;
     private ArrayList<PlazaReserva> plazasReserva;
+
+    public Aparcamiento(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+    
+    
 }

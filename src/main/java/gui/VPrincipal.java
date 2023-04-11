@@ -37,6 +37,7 @@ public class VPrincipal extends javax.swing.JFrame {
 
         btnGestionPagos = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
+        ButtonReservar = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -57,6 +58,13 @@ public class VPrincipal extends javax.swing.JFrame {
                 btnSalirActionPerformed(evt);
             }
         });
+
+        ButtonReservar.setText("Reservar");
+        ButtonReservar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonReservarActionPerformed(evt);
+            }
+        });
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -66,7 +74,9 @@ public class VPrincipal extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnGestionPagos)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 425, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(ButtonReservar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 321, Short.MAX_VALUE)
                 .addComponent(btnSalir)
                 .addContainerGap())
         );
@@ -76,7 +86,8 @@ public class VPrincipal extends javax.swing.JFrame {
                 .addContainerGap(479, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalir)
-                    .addComponent(btnGestionPagos))
+                    .addComponent(btnGestionPagos)
+                    .addComponent(ButtonReservar))
                 .addContainerGap())
         );
 
@@ -92,12 +103,18 @@ public class VPrincipal extends javax.swing.JFrame {
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         System.exit (0);
     }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void ButtonReservarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonReservarActionPerformed
+        VReservar vreservar=new VReservar(this,true, fa);
+        vreservar.setVisible(true);
+    }//GEN-LAST:event_ButtonReservarActionPerformed
     
     /**
-    * @param args the command line arguments
+    * @param args the command line argumentss
     */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ButtonReservar;
     private javax.swing.JButton btnGestionPagos;
     private javax.swing.JButton btnSalir;
     private javax.swing.JMenuBar jMenuBar1;
