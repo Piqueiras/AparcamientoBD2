@@ -4,7 +4,8 @@
  */
 package gui;
 
-//import aplication.Clase;
+import java.util.List;
+import aplication.*;
 
 /**
  *
@@ -25,5 +26,19 @@ public class FachadaGui {
       va = new VAutentificacion(vp, true, fa);
       vp.setVisible(true);
       va.setVisible(true);
+    }
+    
+    public void muestraExcepcion(String txtExcepcion){
+       VAviso va;
+       
+       va = new VAviso(vp, true, txtExcepcion);
+       va.setVisible(true);
+    }
+    
+    public void historialPagos(String dni){
+        VPagos vpagos;
+        
+        vpagos=new VPagos(vp, true, fa, dni);
+        vpagos.setVisible(true);
     }
 }

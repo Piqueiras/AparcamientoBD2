@@ -9,7 +9,7 @@ package aplication;
  * @author alumnogreibd
  */
 public abstract class Plaza {
-    private Integer codigo;
+    private int codigo;
     private TipoPlaza tipo;
     private Aparcamiento aparcamiento;
     private Vehiculo vehiculo;

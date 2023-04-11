@@ -1,18 +1,18 @@
 INSERT INTO Usuarios (dni, nombre, telefono, correo, fechaIngresoUSC, rol, fechaVeto, numeroInfracciones)
 VALUES
-('333444555', 'José García', '981654987', 'jose.garcia@usc.es', '2016-09-01', 'alumno', NULL, 4),
-('777888999', 'Luisa Pérez', '981123456', 'luisa.perez@usc.es', '2018-06-12', 'personal de administracion y servicios', NULL, 1),
-('111222333', 'Elena Fernández', '981789456', 'elena.fernandez@usc.es', '2013-11-20', 'personal docente', '2022-03-28', 2),
-('444555666', 'Marta Gómez', '981456789', 'marta.gomez@usc.es', '2019-02-15', 'alumno', NULL, 0),
-('888999000', 'Carlos Martínez', '981987654', 'carlos.martinez@usc.es', '2017-05-10', 'personal de administracion y servicios', NULL, 0),
-('101112131', 'Ana Rodríguez', '981654987', 'ana.rodriguez@usc.es', '2020-09-01', 'alumno', NULL, 3),
-('141516171', 'David López', '981123789', 'david.lopez@usc.es', '2015-06-12', 'personal docente', NULL, 0),
-('181920212', 'Isabel Pérez', '981789123', 'isabel.perez@usc.es', '2012-11-20', 'personal de administracion y servicios', '2022-03-15', 1),
-('222333444', 'Carmen García', '981456123', 'carmen.garcia@usc.es', '2022-02-15', 'alumno', NULL, 0),
-('555666777', 'Alberto Gómez', '981987123', 'alberto.gomez@usc.es', '2020-05-10', 'personal docente', NULL, 2),
-('891011121', 'Sofía López', '981654987', 'sofia.lopez@usc.es', '2021-09-01', 'alumno', NULL, 1),
-('131415161', 'Antonio Martínez', '981123789', 'antonio.martinez@usc.es', '2016-06-12', 'personal de administracion y servicios', NULL, 0),
-('171819202', 'María Pérez', '981789123', 'maria.perez@usc.es', '2014-11-20', 'personal de administracion y servicios', '2022-03-15', 4);
+('333444555', 'José García', '981654987', 'jose.garcia@usc.es', '2016-09-01', 'Alumno', NULL, 4),
+('777888999', 'Luisa Pérez', '981123456', 'luisa.perez@usc.es', '2018-06-12', 'Administracion', NULL, 1),
+('111222333', 'Elena Fernández', '981789456', 'elena.fernandez@usc.es', '2013-11-20', 'Docente', '2022-03-28', 2),
+('444555666', 'Marta Gómez', '981456789', 'marta.gomez@usc.es', '2019-02-15', 'Alumno', NULL, 0),
+('888999000', 'Carlos Martínez', '981987654', 'carlos.martinez@usc.es', '2017-05-10', 'Administracion', NULL, 0),
+('101112131', 'Ana Rodríguez', '981654987', 'ana.rodriguez@usc.es', '2020-09-01', 'Alumno', NULL, 3),
+('141516171', 'David López', '981123789', 'david.lopez@usc.es', '2015-06-12', 'Docente', NULL, 0),
+('181920212', 'Isabel Pérez', '981789123', 'isabel.perez@usc.es', '2012-11-20', 'Administracion', '2022-03-15', 1),
+('222333444', 'Carmen García', '981456123', 'carmen.garcia@usc.es', '2022-02-15', 'Alumno', NULL, 0),
+('555666777', 'Alberto Gómez', '981987123', 'alberto.gomez@usc.es', '2020-05-10', 'Docente', NULL, 2),
+('891011121', 'Sofía López', '981654987', 'sofia.lopez@usc.es', '2021-09-01', 'Alumno', NULL, 1),
+('131415161', 'Antonio Martínez', '981123789', 'antonio.martinez@usc.es', NULL, 'noUSC', NULL, 0),
+('171819202', 'María Pérez', '981789123', 'maria.perez@usc.es', NULL, 'noUSC', '2022-03-15', 4);
 
 INSERT INTO vehiculos (matricula, tipo, marca, modelo, anhoMatriculacion, dni)
 VALUES 
@@ -65,5 +65,5 @@ INSERT INTO PlazasReserva (codigo, tipo, idAparcamiento) VALUES
 (8, 'G', 'PARK8'),
 (94, 'M', 'PARK9'),
 (10, 'C', 'PARKA');
-
-
+INSERT INTO reservar (matriculaVehiculo, codigoPlazaReserva, idAparcamiento, fechaInicio, fechaFin, tiempo, precio)
+VALUES ('1234ABC', 12, 'PARK1', '2023-04-12 10:00:00', '2023-04-12 12:00:00', '02:00:00', 4.50);

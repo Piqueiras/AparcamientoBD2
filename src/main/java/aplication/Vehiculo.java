@@ -9,12 +9,21 @@ package aplication;
  * @author alumnogreibd
  */
 public class Vehiculo {
-    private char[] matricula;
+    private String matricula;
     private TipoPlaza tipo;
     private String marca;
     private String modelo;
     private Integer anoMatriculacion;
     private Usuario usuario;
     private Plaza plaza;
+
+    public Vehiculo(String matricula) {
+        this.matricula = matricula;
+    }
+
+    public String getMatricula() {
+        return matricula;
+    }
+    
     
 }

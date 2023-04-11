@@ -63,7 +63,7 @@ idAparcamiento CHAR(5),
 fechaentrada TIMESTAMP,
 fechasalidaa TIMESTAMP,
 tiempo TIME DEFAULT '00:00:00',
-precio NUMERIC(2,2) DEFAULT 0,
+precio NUMERIC(6,2) DEFAULT 0,
 	PRIMARY KEY ( matriculaVehiculo , codigoPlaza , idAparcamiento, fechaentrada ) ,
 	FOREIGN KEY ( matriculaVehiculo) references vehiculos(matricula)
 		ON DELETE SET NULL /* ( 5 ) */
@@ -81,7 +81,7 @@ idAparcamiento CHAR(5),
 fechaInicio TIMESTAMP,
 fechaFin TIMESTAMP,
 tiempo TIME DEFAULT '00:00:00',
-precio NUMERIC(2,2) DEFAULT 0,
+precio NUMERIC(6,2) DEFAULT 0,
 	PRIMARY KEY ( matriculaVehiculo , codigoPlazaReserva , idAparcamiento, fechaInicio) ,
 	FOREIGN KEY ( matriculaVehiculo) references vehiculos(matricula)
 		ON DELETE SET NULL /*( 5 )*/

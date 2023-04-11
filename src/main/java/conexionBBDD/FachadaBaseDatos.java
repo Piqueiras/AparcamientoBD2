@@ -6,12 +6,17 @@
 package conexionBBDD;
 
 //import aplication.<nombreClase>;
+import aplication.Aparcar;
+import aplication.Reservar;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Properties;
+import aplication.Usuario;
+import java.util.List;
+import conexionBBDD.DAOUsuarios;
 
 /**
  *
@@ -20,6 +25,7 @@ import java.util.Properties;
 public class FachadaBaseDatos {
     private aplication.FachadaAplicacion fa;
     private java.sql.Connection conexion;
+    private DAOUsuarios daoUsuarios;
     //private DAOClase daoClase;
     
     public FachadaBaseDatos (aplication.FachadaAplicacion fa){
@@ -29,6 +35,8 @@ public class FachadaBaseDatos {
         FileInputStream arqConfiguracion;
 
         try {
+            //Class.forName("postgresql.jar");
+            
             arqConfiguracion = new FileInputStream("baseDatos.properties");
             configuracion.load(arqConfiguracion);
             arqConfiguracion.close();
@@ -44,8 +52,8 @@ public class FachadaBaseDatos {
                     configuracion.getProperty("puerto")+"/"+
                     configuracion.getProperty("baseDatos"),
                     usuario);
-
-            //daoClase = new DAOClase(conexion, fa);
+            
+            daoUsuarios = new DAOUsuarios(conexion, fa);
             
         } catch (FileNotFoundException f){
             System.out.println(f.getMessage());
@@ -53,13 +61,24 @@ public class FachadaBaseDatos {
         } catch (IOException i){
             System.out.println(i.getMessage());
             fa.muestraExcepcion(i.getMessage());
+        //} catch (ClassNotFoundException e) {        //anhadido por mi para usar forName()
+        //    System.out.println(e.getMessage());
+        //    fa.muestraExcepcion(e.getMessage());
         } catch (java.sql.SQLException e){
             System.out.println(e.getMessage());
             fa.muestraExcepcion(e.getMessage());
-        }   
+        }
     }
 
-    public Usuario validarUsuario(String idUsuario, String clave){
-        return daoUsuarios.validarUsuario(idUsuario, clave);
+    public Usuario validarUsuario(String dni){
+        return daoUsuarios.validarUsuario(dni);
+    }
+    
+    public List<Aparcar> historialAparcar (String dni, String mat, String pza, String ap, String cMax, String cMin, String dMax, String dMin, String fMax, String fMin) {
+        return daoUsuarios.ConsultarHistorialAparcar(dni, mat, pza, ap, cMax, cMin, dMax, dMin, fMax, fMin);
+    }
+    
+    public List<Reservar> historialReservar (String dni, String mat, String pza, String ap, String cMax, String cMin, String dMax, String dMin, String fMax, String fMin) {
+        return daoUsuarios.ConsultarHistorialReservar(dni, mat, pza, ap, cMax, cMin, dMax, dMin, fMax, fMin);
     }
 }
