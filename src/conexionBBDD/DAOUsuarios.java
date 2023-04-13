@@ -47,9 +47,12 @@ public class DAOUsuarios extends AbstractDAO {
                     //consulta completa
                     resultado = new Usuario(rsUsuario.getString("dni"), rsUsuario.getString("nombre"),
                             rsUsuario.getString("telefono"), rsUsuario.getString("correo"),
-                            rsUsuario.getDate("fechaIngresoUSC").toLocalDate(), aplication.RolUsuario.valueOf(rsUsuario.getString("rol")),
+                            aplication.RolUsuario.valueOf(rsUsuario.getString("rol")),
                             rsUsuario.getInt("numeroInfracciones"));
                     
+                    if (rsUsuario.getObject("fechaIngresoUSC") != null) {
+                        resultado.setFechaIngreso(rsUsuario.getDate("fechaIngresoUSC").toLocalDate());
+                    }
                     if (rsUsuario.getObject("fechaVeto") != null) {
                         resultado.setFechaVeto(rsUsuario.getDate("fechaVeto").toLocalDate());
                     }

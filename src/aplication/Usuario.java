@@ -26,6 +26,19 @@ public class Usuario {
     public Usuario(String dni) {
         this.dni = dni;
     }
+    
+    public Usuario(String dni, String nombre, String telefono, String correo, RolUsuario rol, int numeroInfracciones) {
+        this.dni = dni;
+        this.nombre = nombre;
+        this.telefono = telefono;
+        this.correo = correo;
+        this.rol = rol;
+        this.numeroInfracciones = numeroInfracciones;
+        
+        this.fechaIngreso = null;
+        this.fechaVeto = null;
+        this.vehiculos = new ArrayList<Vehiculo>();
+    }
 
     public Usuario(String dni, String nombre, String telefono, String correo, LocalDate fechaIngreso, RolUsuario rol, int numeroInfracciones) {
         this.dni = dni;
@@ -93,6 +106,10 @@ public class Usuario {
         this.numeroInfracciones = numeroInfracciones;
     }
 
+    public void setFechaIngreso(LocalDate fechaIngreso) {
+        this.fechaIngreso = fechaIngreso;
+    }
+    
     public void setFechaVeto(LocalDate fechaVeto) {
         this.fechaVeto = fechaVeto;
     }

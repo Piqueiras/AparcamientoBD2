@@ -18,7 +18,7 @@ public class ModeloTablaAparcar extends AbstractTableModel{
     }
 
     public int getColumnCount (){
-        return 7;
+        return 8;
     }
 
     public int getRowCount(){
