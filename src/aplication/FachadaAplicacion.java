@@ -71,4 +71,8 @@ public class FachadaAplicacion {
     public List<PlazaReserva> obtenerPlazasReserva(String codigoAparcamiento, Integer  codigoPlaza, String tipoPlaza, boolean ocupadas){
         return fbd.obtenerPlazasReserva(codigoAparcamiento,codigoPlaza,tipoPlaza,ocupadas);
     }
+    
+    public void registrarUsuario(Usuario usuario){
+        fbd.registrarUsuario(usuario);
+    }
 }

@@ -24,6 +24,28 @@ public class Vehiculo {
     public String getMatricula() {
         return matricula;
     }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public Integer getAnoMatriculacion() {
+        return anoMatriculacion;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public Plaza getPlaza() {
+        return plaza;
+    }
+
+    public TipoPlaza getTipo() {
+        return tipo;
+    }
+    
+    
     
     
 }

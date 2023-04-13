@@ -88,6 +88,10 @@ public class FachadaBaseDatos {
     }
     
     public List<PlazaReserva> obtenerPlazasReserva(String codigoAparcamiento, Integer  codigoPlaza, String tipoPlaza, boolean ocupadas){
-            return daoPlazas.obtenerPlazasReserva(codigoAparcamiento,codigoPlaza,tipoPlaza,ocupadas);
+        return daoPlazas.obtenerPlazasReserva(codigoAparcamiento,codigoPlaza,tipoPlaza,ocupadas);
+    }
+    
+    public void registrarUsuario(Usuario usuario){
+        daoUsuarios.registrarUsuario(usuario);
     }
 }
