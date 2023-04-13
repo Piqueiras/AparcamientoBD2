@@ -12,6 +12,7 @@
 package gui;
 
 import aplication.Usuario;
+import aplication.RolUsuario;
 
 /**
  *
@@ -139,7 +140,7 @@ public class VAutentificacion extends javax.swing.JDialog {
         etiquetaFallo.setVisible(false);
         Usuario u = null;
         u = fa.comprobarAutentificacion(textoUsuario.getText());
-        if (u != null) {
+        if (u != null && u.getRol() == RolUsuario.Administracion) {
             fa.setUsuario(u);
             this.dispose();
         }

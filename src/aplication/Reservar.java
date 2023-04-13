@@ -12,7 +12,7 @@ import java.time.Duration;
  * @author alumnogreibd
  */
 public class Reservar {
-    private String matriculaVehiculo;
+    private Vehiculo vehiculo;
     private String codigoPlaza;
     private String idAparcamiento;
     private LocalDateTime fechaEntrada;
@@ -23,8 +23,8 @@ public class Reservar {
     private int segundos;
     private Double precio;
 
-    public Reservar(String matriculaVehiculo, Integer codigoPlaza, String idAparcamiento, LocalDateTime fechaEntrada, LocalDateTime fechaSalida, FachadaAplicacion fa) {
-        this.matriculaVehiculo = matriculaVehiculo;
+    public Reservar(Vehiculo vehiculo, Integer codigoPlaza, String idAparcamiento, LocalDateTime fechaEntrada, LocalDateTime fechaSalida, RolUsuario rol) {
+        this.vehiculo = vehiculo;
         this.codigoPlaza = codigoPlaza.toString();
         this.idAparcamiento = idAparcamiento;
         this.fechaEntrada = fechaEntrada;
@@ -35,11 +35,11 @@ public class Reservar {
         this.minutos = (int) (Duration.between(fechaEntrada, fechaSalida).toMinutes() % 60);
         this.segundos = (int) (Duration.between(fechaEntrada, fechaSalida).toSeconds() % 60);        
         
-        actualizarPrecio(fa);
+        actualizarPrecio(rol);
     }
 
-    public String getMatriculaVehiculo() {
-        return matriculaVehiculo;
+    public Vehiculo getVehiculo() {
+        return vehiculo;
     }
 
     public String getCodigoPlaza() {
@@ -78,9 +78,9 @@ public class Reservar {
         return precio;
     }
     
-    public final void actualizarPrecio(FachadaAplicacion fa) {
+    public final void actualizarPrecio(RolUsuario rol) {
         double mult = 7.5d;
-        if (fa.getUsuario().getRol().equals(RolUsuario.noUSC)) {
+        if (rol.equals(RolUsuario.noUSC)) {
             mult = 10d;
         }
         precio = (double) dias * mult;

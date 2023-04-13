@@ -105,7 +105,13 @@ public class VPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void ButtonReservarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonReservarActionPerformed
-        VReservar vreservar=new VReservar(this,true, fa);
+        VAviso aviso;
+        if(fa.getUsuario().getNumeroInfracciones()>=5){
+            aviso=new VAviso(this,true, "Tienes demasiadas infracciones como para reservar o aparcar.");
+            aviso.setVisible(true);
+            return;
+        }
+        VReservarAparcar vreservar=new VReservarAparcar(this,true, fa);
         vreservar.setVisible(true);
     }//GEN-LAST:event_ButtonReservarActionPerformed
     

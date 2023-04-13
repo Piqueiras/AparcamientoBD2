@@ -7,6 +7,7 @@ package conexionBBDD;
 import java.sql.*;
 import aplication.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -68,8 +69,12 @@ public class DAOUsuarios extends AbstractDAO {
     public List<Aparcar> ConsultarHistorialAparcar(String dni, String mat, String pza, String ap, String cMax, String cMin, String dMax, String dMin, String fMax, String fMin) {
         java.util.List<Aparcar> resultado = new java.util.ArrayList<>();
         Vehiculo vehiculoActual;
+        Usuario usuario;
+        RolUsuario rol;
         Aparcar aparcarActual;
         Connection con;
+        PreparedStatement stmUsuario = null;
+        ResultSet rsUsuario;
         PreparedStatement stmVehiculo = null;
         ResultSet rsVehiculo;
         PreparedStatement stmAparcar=null;
@@ -81,25 +86,42 @@ public class DAOUsuarios extends AbstractDAO {
 
         con=this.getConexion();
         
-        String consulta = "select matricula "
+        String consulta = "select dni, matricula "
                          + "from Vehiculos "
-                         + "where dni like \'" + dni + "\'";
+                         + "where dni like ";
+        
+        if (!dni.isEmpty()) {
+            consulta = consulta + "\'" + dni + "\'";
+        }
+        else {
+            consulta = consulta + "\'%\'";
+        }
         
         try{
             stmVehiculo = con.prepareStatement(consulta);
             rsVehiculo = stmVehiculo.executeQuery();
             
             while (rsVehiculo.next()) {
-                vehiculoActual = new Vehiculo(rsVehiculo.getString("matricula"));
+                usuario = new Usuario(rsVehiculo.getString("dni"));
+                vehiculoActual = new Vehiculo(rsVehiculo.getString("matricula"), usuario);
+                
+                consulta = "select rol from Usuarios where dni like \'" + usuario.getDni() + "\'";
+                
+                stmUsuario = con.prepareStatement(consulta);
+                rsUsuario = stmUsuario.executeQuery();
+                rsUsuario.next();
+                rol = RolUsuario.valueOf(rsUsuario.getString("rol"));
                 
                 consulta = "select matriculaVehiculo, codigoPlaza, idAparcamiento, fechaentrada, fechasalida " +
                            "from aparcar "+
                            "where matriculaVehiculo like \'";
                 
                 if (mat.isEmpty()) {
-                    mat = vehiculoActual.getMatricula();
+                    consulta = consulta + vehiculoActual.getMatricula() + "\'";
                 }
-                consulta = consulta + mat + "\'";
+                else{
+                    consulta = consulta + mat + "\'";
+                }
                 
                 if (!pza.isEmpty()) {
                     consulta = consulta + " and codigoPlaza = " + pza + " ";
@@ -138,9 +160,9 @@ public class DAOUsuarios extends AbstractDAO {
                         while (rsAparcar.next()) {
                             cAct = 0; //numero de condiciones de coste y duracion activas
                             cSat = 0; //numero de condiciones de coste y duracion que se cumplen
-                            aparcarActual = new Aparcar(rsAparcar.getString("matriculaVehiculo"), rsAparcar.getInt("codigoPlaza"),
+                            aparcarActual = new Aparcar(vehiculoActual, rsAparcar.getInt("codigoPlaza"),
                                                   rsAparcar.getString("idAparcamiento"), rsAparcar.getTimestamp("fechaentrada").toLocalDateTime(),
-                                                  rsAparcar.getTimestamp("fechasalida").toLocalDateTime(), this.getFachadaAplicacion());
+                                                  rsAparcar.getTimestamp("fechasalida").toLocalDateTime(), rol);
                             
                             //Para los parametros que no estan en la consulta porque son calculados y no estan en la tabla
                             if (!cMax.isEmpty()){
@@ -202,8 +224,12 @@ public class DAOUsuarios extends AbstractDAO {
     public List<Reservar> ConsultarHistorialReservar(String dni, String mat, String pza, String ap, String cMax, String cMin, String dMax, String dMin, String fMax, String fMin) {
         java.util.List<Reservar> resultado = new java.util.ArrayList<>();
         Vehiculo vehiculoActual;
+        Usuario usuario;
+        RolUsuario rol;
         Reservar reservarActual;
         Connection con;
+        PreparedStatement stmUsuario = null;
+        ResultSet rsUsuario;
         PreparedStatement stmVehiculo = null;
         ResultSet rsVehiculo;
         PreparedStatement stmReservar=null;
@@ -215,25 +241,42 @@ public class DAOUsuarios extends AbstractDAO {
 
         con=this.getConexion();
         
-        String consulta = "select matricula "
+        String consulta = "select dni, matricula "
                          + "from Vehiculos "
-                         + "where dni like \'" + dni + "\'";
+                         + "where dni like ";
+        
+        if (!dni.isEmpty()) {
+            consulta = consulta + "\'" + dni + "\'";
+        }
+        else {
+            consulta = consulta + "\'%\'";
+        }
         
         try{
             stmVehiculo = con.prepareStatement(consulta);
             rsVehiculo = stmVehiculo.executeQuery();
             
             while (rsVehiculo.next()) {
-                vehiculoActual = new Vehiculo(rsVehiculo.getString("matricula"));
+                usuario = new Usuario(rsVehiculo.getString("dni"));
+                vehiculoActual = new Vehiculo(rsVehiculo.getString("matricula"), usuario);
+                
+                consulta = "select rol from Usuarios where dni like \'" + usuario.getDni() + "\'";
+                
+                stmUsuario = con.prepareStatement(consulta);
+                rsUsuario = stmUsuario.executeQuery();
+                rsUsuario.next();
+                rol = RolUsuario.valueOf(rsUsuario.getString("rol"));
                 
                 consulta = "select matriculaVehiculo, codigoPlazaReserva, idAparcamiento, fechaInicio, fechaFin " +
                            "from reservar "+
                            "where matriculaVehiculo like \'";
                 
                 if (mat.isEmpty()) {
-                    mat = vehiculoActual.getMatricula();
+                    consulta = consulta + vehiculoActual.getMatricula() + "\'";
                 }
-                consulta = consulta + mat + "\'";
+                else{
+                    consulta = consulta + mat + "\'";
+                }
                 
                 if (!pza.isEmpty()) {
                     consulta = consulta + " and codigoPlazaReserva = " + pza + " ";
@@ -255,9 +298,9 @@ public class DAOUsuarios extends AbstractDAO {
                         while (rsReservar.next()) {
                             cAct = 0; //numero de condiciones de coste y duracion activas
                             cSat = 0; //numero de condiciones de coste y duracion que se cumplen
-                            reservarActual = new Reservar(rsReservar.getString("matriculaVehiculo"), rsReservar.getInt("codigoPlazaReserva"),
+                            reservarActual = new Reservar(vehiculoActual, rsReservar.getInt("codigoPlazaReserva"),
                                                   rsReservar.getString("idAparcamiento"), rsReservar.getTimestamp("fechaInicio").toLocalDateTime(),
-                                                  rsReservar.getTimestamp("fechaFin").toLocalDateTime(), this.getFachadaAplicacion());
+                                                  rsReservar.getTimestamp("fechaFin").toLocalDateTime(), rol);
                             
                             //Para los parametros que no estan en la consulta porque son calculados y no estan en la tabla
                             if (!cMax.isEmpty()){
@@ -314,5 +357,56 @@ public class DAOUsuarios extends AbstractDAO {
         }
         
         return resultado;
+    }
+
+    List<Vehiculo> obtenerVehiculos(String dni) {
+        String query;
+        PreparedStatement statement = null;
+        List<Vehiculo> vehiculos = new ArrayList<>();
+        // Crea una conexión a la base de datos
+        Connection connection = this.getConexion();
+        try {
+            // Crear un objeto PreparedStatement con la consulta
+            query = "SELECT * FROM Vehiculos WHERE DNI like ? ";
+            statement = connection.prepareStatement(query);
+            // Establecer los parámetros de la consulta
+            statement.setString(1, dni);
+
+            // Ejecutar la consulta y obtener un conjunto de resultados
+            ResultSet resultSet = statement.executeQuery();
+
+            // Recorrer los resultados y crear un objeto Plaza por cada fila
+            while (resultSet.next()) {
+                // Obtener los valores de cada columna en la fila actual
+                String matricula = resultSet.getString("matricula");
+                TipoPlaza tipo = TipoPlaza.valueOf(resultSet.getString("tipo"));
+                String marca = resultSet.getString("marca");
+                String modelo= resultSet.getString("modelo");
+                Integer anho= resultSet.getInt("anhomatriculacion");
+                String dni2=resultSet.getString("dni");
+                // Crear un objeto Plaza a partir de los valores obtenidos
+                Vehiculo ve = new Vehiculo(matricula, tipo, marca,modelo,anho);
+
+                // Añadir el objeto Plaza a la lista
+                vehiculos.add(ve);
+            }
+
+            // Cerrar los recursos (en orden inverso al que fueron abiertos)
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Imposible cerrar cursores");
+            }
+        }
+        // Devolver la lista de objetos Plaza
+        return vehiculos;
     }
 }

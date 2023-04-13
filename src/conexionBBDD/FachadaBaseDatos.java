@@ -16,8 +16,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Properties;
 import aplication.Usuario;
+import aplication.Vehiculo;
 import java.util.List;
 import conexionBBDD.DAOUsuarios;
+import java.util.Date;
 
 /**
  *
@@ -88,6 +90,14 @@ public class FachadaBaseDatos {
     }
     
     public List<PlazaReserva> obtenerPlazasReserva(String codigoAparcamiento, Integer  codigoPlaza, String tipoPlaza, boolean ocupadas){
-            return daoPlazas.obtenerPlazasReserva(codigoAparcamiento,codigoPlaza,tipoPlaza,ocupadas);
+        return daoPlazas.obtenerPlazasReserva(codigoAparcamiento,codigoPlaza,tipoPlaza,ocupadas);
+    }
+
+    public List<Vehiculo> obtenerVehiculos(String dni) {
+        return daoUsuarios.obtenerVehiculos(dni);
+    }
+
+    public boolean hacerReserva(String matricula, int plaza, String aparcamiento,  Date horaInicio, Date horaFin) {
+        return daoPlazas.hacerReserva(matricula, plaza, aparcamiento, horaInicio,horaFin);
     }
 }

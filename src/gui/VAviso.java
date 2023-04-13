@@ -26,6 +26,18 @@ public class VAviso extends javax.swing.JDialog {
                 });
     }
 
+     public VAviso(java.awt.Dialog parent, boolean modal, String txtExcepcion) {
+        super(parent, modal);
+        initComponents();
+        textoExcepcion.setText(txtExcepcion);
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

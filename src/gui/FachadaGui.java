@@ -23,9 +23,9 @@ public class FachadaGui {
     public void iniciaVista(){
       VAutentificacion va;
     
-      //va = new VAutentificacion(vp, true, fa);
+      va = new VAutentificacion(vp, true, fa);
       vp.setVisible(true);
-     // va.setVisible(true);
+      va.setVisible(true);
     }
     
     public void muestraExcepcion(String txtExcepcion){
@@ -35,10 +35,10 @@ public class FachadaGui {
        va.setVisible(true);
     }
     
-    public void historialPagos(String dni){
+    public void historialPagos(){
         VPagos vpagos;
         
-        vpagos=new VPagos(vp, true, fa, dni);
+        vpagos=new VPagos(vp, true, fa);
         vpagos.setVisible(true);
     }
 }

@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Properties;
 import java.util.List;
 
@@ -57,7 +58,7 @@ public class FachadaAplicacion {
     }
     
     public void historialPagos() {
-        fgui.historialPagos(this.u.getDni());
+        fgui.historialPagos();
     }
     
     public List<Aparcar> historialAparcar(String dni, String mat, String pza, String ap, String cMax, String cMin, String dMax, String dMin, String fMax, String fMin) {
@@ -70,5 +71,13 @@ public class FachadaAplicacion {
     
     public List<PlazaReserva> obtenerPlazasReserva(String codigoAparcamiento, Integer  codigoPlaza, String tipoPlaza, boolean ocupadas){
         return fbd.obtenerPlazasReserva(codigoAparcamiento,codigoPlaza,tipoPlaza,ocupadas);
+    }
+
+    public List<Vehiculo> obtenerVehiculos(String dni) {
+        return fbd.obtenerVehiculos(dni);
+    }
+
+    public boolean hacerReserva(String matricula, int plaza, String aparcamiento, Date horaInicio, Date horaFin){
+        return fbd.hacerReserva(matricula,plaza,aparcamiento,horaInicio,horaFin);
     }
 }

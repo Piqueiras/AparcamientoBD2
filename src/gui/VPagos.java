@@ -13,16 +13,14 @@ import aplication.*;
 public class VPagos extends javax.swing.JDialog {
     private VPrincipal padre;
     private FachadaAplicacion fa;
-    private String dni;
 
     /**
      * Creates new form VPagos
      */
-    public VPagos(java.awt.Frame parent, boolean modal, FachadaAplicacion fa, String dni) {
+    public VPagos(java.awt.Frame parent, boolean modal, FachadaAplicacion fa) {
         super(parent, modal);
         initComponents();
-        this.fa = fa;
-        this.dni = dni;        
+        this.fa = fa;    
     }
 
     /**
@@ -63,6 +61,8 @@ public class VPagos extends javax.swing.JDialog {
         jLabel11 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tablaReservar = new javax.swing.JTable();
+        jLabel12 = new javax.swing.JLabel();
+        buscarDni = new javax.swing.JTextField();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -155,6 +155,8 @@ public class VPagos extends javax.swing.JDialog {
         tablaReservar.setShowGrid(true);
         jScrollPane3.setViewportView(tablaReservar);
 
+        jLabel12.setText("DNI");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -201,8 +203,15 @@ public class VPagos extends javax.swing.JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(buscarFechaMax, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
                             .addComponent(buscarDurMax))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnBuscar))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnBuscar))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel12)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(buscarDni))))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel10)
@@ -232,7 +241,9 @@ public class VPagos extends javax.swing.JDialog {
                     .addComponent(jLabel7)
                     .addComponent(buscarDurMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8)
-                    .addComponent(buscarDurMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(buscarDurMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel12)
+                    .addComponent(buscarDni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnBuscar)
@@ -292,6 +303,7 @@ public class VPagos extends javax.swing.JDialog {
     private javax.swing.JTextField buscarAp;
     private javax.swing.JTextField buscarCosteMax;
     private javax.swing.JTextField buscarCosteMin;
+    private javax.swing.JTextField buscarDni;
     private javax.swing.JTextField buscarDurMax;
     private javax.swing.JTextField buscarDurMin;
     private javax.swing.JTextField buscarFechaMax;
@@ -301,6 +313,7 @@ public class VPagos extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -324,7 +337,7 @@ public class VPagos extends javax.swing.JDialog {
         
         ta = (ModeloTablaAparcar) tablaAparcar.getModel();
         tr = (ModeloTablaReservar) tablaReservar.getModel();
-        ta.setFilas(fa.historialAparcar(dni, buscarMat.getText(), buscarPlaza.getText(), buscarAp.getText(), buscarCosteMax.getText(), buscarCosteMin.getText(), buscarDurMax.getText(), buscarDurMin.getText(), buscarFechaMax.getText(), buscarFechaMin.getText()));
-        tr.setFilas(fa.historialReservar(dni, buscarMat.getText(), buscarPlaza.getText(), buscarAp.getText(), buscarCosteMax.getText(), buscarCosteMin.getText(), buscarDurMax.getText(), buscarDurMin.getText(), buscarFechaMax.getText(), buscarFechaMin.getText()));
+        ta.setFilas(fa.historialAparcar(buscarDni.getText(), buscarMat.getText(), buscarPlaza.getText(), buscarAp.getText(), buscarCosteMax.getText(), buscarCosteMin.getText(), buscarDurMax.getText(), buscarDurMin.getText(), buscarFechaMax.getText(), buscarFechaMin.getText()));
+        tr.setFilas(fa.historialReservar(buscarDni.getText(), buscarMat.getText(), buscarPlaza.getText(), buscarAp.getText(), buscarCosteMax.getText(), buscarCosteMin.getText(), buscarDurMax.getText(), buscarDurMin.getText(), buscarFechaMax.getText(), buscarFechaMin.getText()));
     }
 }

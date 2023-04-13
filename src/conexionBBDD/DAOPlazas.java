@@ -6,21 +6,22 @@ package conexionBBDD;
 
 import aplication.PlazaReserva;
 import aplication.Aparcamiento;
+import aplication.FachadaAplicacion;
 import aplication.TipoPlaza;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.LocalDate;
 
 /**
  *
  * @author alumnogreibd
  */
 public class DAOPlazas extends AbstractDAO {
-    
+    private FachadaAplicacion fa;
     public DAOPlazas (Connection conexion, aplication.FachadaAplicacion fa){
         super.setConexion(conexion);
         super.setFachadaAplicacion(fa);
+        this.fa=fa;
     }
     public List<PlazaReserva> obtenerPlazasReserva(String codigoAparcamiento, Integer codigoPlaza, String tipoPlaza, boolean ocupadas) {
     String query;
@@ -37,7 +38,7 @@ public class DAOPlazas extends AbstractDAO {
         if(!tipoPlaza.isEmpty()) query+= " AND p.tipo=?";
 
         /*Si ocupadas==false, voy a ver que no esten reservadas. Esto es, voy a acceder a la relacion PlazasReservar y ver que no existe esa plaza en una tupla con fechaFin>FechaActual*/
-        if(!ocupadas){ query+=" and not EXISTS(select* from Reservar r where r.codigoplazareserva=p.codigo and p.idAparcamiento=r.idAparcamiento)";
+        if(!ocupadas){ query+=" and not EXISTS(select* from Reservar r where r.codigoplazareserva=p.codigo and p.idAparcamiento=r.idAparcamiento and r.fechafin > NOW())";
 
         }
         statement = connection.prepareStatement(query);
@@ -86,5 +87,34 @@ public class DAOPlazas extends AbstractDAO {
     // Devolver la lista de objetos Plaza
     return plazas;
 }
+
+    boolean hacerReserva(String matricula, int plaza,String aparcamiento, java.util.Date horaInicio, java.util.Date horaFin) {
+        String query;
+        boolean exito=true;
+        PreparedStatement statement = null;
+        // Crea una conexión a la base de datos
+        Connection connection = this.getConexion();
+        try {
+            query = "INSERT INTO reservar (matriculaVehiculo, codigoPlazaReserva, idAparcamiento, fechaInicio, fechaFin) VALUES (?, ?, ?, ?, ?)";
+            statement = connection.prepareStatement(query);
+            
+            // Asignar los valores a los parámetros de la sentencia SQL
+            statement.setString(1, matricula);
+            statement.setInt(2, plaza);
+            statement.setString(3, aparcamiento);
+            statement.setTimestamp(4, new Timestamp(horaInicio.getTime()));
+            statement.setTimestamp(5, new Timestamp(horaFin.getTime()));
+
+            // Ejecutar la sentencia SQL INSERT
+            int filasAfectadas = statement.executeUpdate();
+            
+            // Retornar true si se insertó la reserva correctamente, false en caso contrario
+            return filasAfectadas > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+        
 
 }

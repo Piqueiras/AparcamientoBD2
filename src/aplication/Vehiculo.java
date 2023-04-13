@@ -20,10 +20,52 @@ public class Vehiculo {
     public Vehiculo(String matricula) {
         this.matricula = matricula;
     }
+    
+    public Vehiculo(String matricula, Usuario usuario) {
+        this.matricula = matricula;
+        this.usuario = usuario;
+    }
+
+    public Vehiculo(String matricula, TipoPlaza tipo, String marca, String modelo, Integer anoMatriculacion) {
+        this.matricula = matricula;
+        this.tipo = tipo;
+        this.marca = marca;
+        this.modelo = modelo;
+        this.anoMatriculacion = anoMatriculacion;
+
+    }
+    
+   
 
     public String getMatricula() {
         return matricula;
     }
+
+    public TipoPlaza getTipo() {
+        return tipo;
+    }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public Integer getAnoMatriculacion() {
+        return anoMatriculacion;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public Plaza getPlaza() {
+        return plaza;
+    }
+    
+    
     
     
 }
