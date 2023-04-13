@@ -69,15 +69,39 @@ public class FachadaAplicacion {
         return fbd.historialReservar(dni, mat, pza, ap, cMax, cMin, dMax, dMin, fMax, fMin);
     }
     
-    public List<PlazaReserva> obtenerPlazasReserva(String codigoAparcamiento, Integer  codigoPlaza, String tipoPlaza, boolean ocupadas){
+        public List<PlazaReserva> obtenerPlazasReserva(String codigoAparcamiento, Integer  codigoPlaza, String tipoPlaza, boolean ocupadas){
         return fbd.obtenerPlazasReserva(codigoAparcamiento,codigoPlaza,tipoPlaza,ocupadas);
     }
+    
+    public List<PlazaAparcar> obtenerPlazasAparcar(String codigoAparcamiento, Integer  codigoPlaza, String tipoPlaza, boolean ocupadas){
+        return fbd.obtenerPlazasAparcar(codigoAparcamiento,codigoPlaza,tipoPlaza,ocupadas);
+    }
 
-    public List<Vehiculo> obtenerVehiculos(String dni) {
+    public List<Vehiculo> obtenerVehiculosReserva(String dni) {
         return fbd.obtenerVehiculos(dni);
+    }
+        
+    public List<Vehiculo> obtenerVehiculosReserva() {
+        return fbd.obtenerVehiculos();
+    }
+    
+    public List<Vehiculo> obtenerVehiculosNoAparcados(String dni){
+        return fbd.obtenerVehiculosNoAparcados(dni);
+    }
+    
+    public List<Vehiculo> obtenerVehiculosNoAparcados(){
+        return fbd.obtenerVehiculosNoAparcados();
     }
 
     public boolean hacerReserva(String matricula, int plaza, String aparcamiento, Date horaInicio, Date horaFin){
         return fbd.hacerReserva(matricula,plaza,aparcamiento,horaInicio,horaFin);
+    }
+    
+    public String obtenerRol(String dni){
+        return fbd.obtenerRol(dni);
+    }
+
+    public boolean Aparcar(String matricula, int plaza, String aparcamiento) {
+        return fbd.Aparcar(matricula,plaza,aparcamiento);
     }
 }

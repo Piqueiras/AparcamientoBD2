@@ -359,7 +359,7 @@ public class DAOUsuarios extends AbstractDAO {
         return resultado;
     }
 
-    List<Vehiculo> obtenerVehiculos(String dni) {
+   List<Vehiculo> obtenerVehiculos() {
         String query;
         PreparedStatement statement = null;
         List<Vehiculo> vehiculos = new ArrayList<>();
@@ -367,10 +367,9 @@ public class DAOUsuarios extends AbstractDAO {
         Connection connection = this.getConexion();
         try {
             // Crear un objeto PreparedStatement con la consulta
-            query = "SELECT * FROM Vehiculos WHERE DNI like ? ";
+            query = "SELECT * FROM Vehiculos v where v.dni not in (select dni from usuarios where fechaveto is not NULL)";
             statement = connection.prepareStatement(query);
             // Establecer los parámetros de la consulta
-            statement.setString(1, dni);
 
             // Ejecutar la consulta y obtener un conjunto de resultados
             ResultSet resultSet = statement.executeQuery();
@@ -385,7 +384,7 @@ public class DAOUsuarios extends AbstractDAO {
                 Integer anho= resultSet.getInt("anhomatriculacion");
                 String dni2=resultSet.getString("dni");
                 // Crear un objeto Plaza a partir de los valores obtenidos
-                Vehiculo ve = new Vehiculo(matricula, tipo, marca,modelo,anho);
+                Vehiculo ve = new Vehiculo(matricula, tipo, marca,modelo,anho,dni2);
 
                 // Añadir el objeto Plaza a la lista
                 vehiculos.add(ve);
@@ -408,5 +407,199 @@ public class DAOUsuarios extends AbstractDAO {
         }
         // Devolver la lista de objetos Plaza
         return vehiculos;
+    }
+    List<Vehiculo> obtenerVehiculos(String dni) {
+        String query;
+        PreparedStatement statement = null;
+        List<Vehiculo> vehiculos = new ArrayList<>();
+        // Crea una conexión a la base de datos
+        Connection connection = this.getConexion();
+        try {
+            // Crear un objeto PreparedStatement con la consulta
+            query = "SELECT * FROM Vehiculos WHERE DNI like ? and dni not in (select dni from usuarios where fechaveto is not NULL)";
+            statement = connection.prepareStatement(query);
+            // Establecer los parámetros de la consulta
+            statement.setString(1, dni+"%");
+
+            // Ejecutar la consulta y obtener un conjunto de resultados
+            ResultSet resultSet = statement.executeQuery();
+
+            // Recorrer los resultados y crear un objeto Plaza por cada fila
+            while (resultSet.next()) {
+                // Obtener los valores de cada columna en la fila actual
+                String matricula = resultSet.getString("matricula");
+                TipoPlaza tipo = TipoPlaza.valueOf(resultSet.getString("tipo"));
+                String marca = resultSet.getString("marca");
+                String modelo= resultSet.getString("modelo");
+                Integer anho= resultSet.getInt("anhomatriculacion");
+                String dni2=resultSet.getString("dni");
+                // Crear un objeto Plaza a partir de los valores obtenidos
+                Vehiculo ve = new Vehiculo(matricula, tipo, marca,modelo,anho,dni2);
+
+                // Añadir el objeto Plaza a la lista
+                vehiculos.add(ve);
+            }
+
+            // Cerrar los recursos (en orden inverso al que fueron abiertos)
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Imposible cerrar cursores");
+            }
+        }
+        // Devolver la lista de objetos 
+        return vehiculos;
+    }
+List<Vehiculo> obtenerVehiculosNoAparcados() {
+        String query;
+        PreparedStatement statement = null;
+        List<Vehiculo> vehiculos = new ArrayList<>();
+        // Crea una conexión a la base de datos
+        Connection connection = this.getConexion();
+        try {
+            // Crear un objeto PreparedStatement con la consulta
+            query = "SELECT * FROM Vehiculos v where (v.dni not in (select dni from usuarios where fechaveto is not NULL)) and "
+                    + "(v.matricula not in(select matriculavehiculo from aparcar where fechasalida is NULL))";
+            statement = connection.prepareStatement(query);
+            // Establecer los parámetros de la consulta
+
+            // Ejecutar la consulta y obtener un conjunto de resultados
+            ResultSet resultSet = statement.executeQuery();
+
+            // Recorrer los resultados y crear un objeto Plaza por cada fila
+            while (resultSet.next()) {
+                // Obtener los valores de cada columna en la fila actual
+                String matricula = resultSet.getString("matricula");
+                TipoPlaza tipo = TipoPlaza.valueOf(resultSet.getString("tipo"));
+                String marca = resultSet.getString("marca");
+                String modelo= resultSet.getString("modelo");
+                Integer anho= resultSet.getInt("anhomatriculacion");
+                String dni2=resultSet.getString("dni");
+                // Crear un objeto Plaza a partir de los valores obtenidos
+                Vehiculo ve = new Vehiculo(matricula, tipo, marca,modelo,anho,dni2);
+
+                // Añadir el objeto Plaza a la lista
+                vehiculos.add(ve);
+            }
+
+            // Cerrar los recursos (en orden inverso al que fueron abiertos)
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Imposible cerrar cursores");
+            }
+        }
+        // Devolver la lista de objetos Plaza
+        return vehiculos;
+    }
+
+List<Vehiculo> obtenerVehiculosNoAparcados(String dni) {
+        String query;
+        PreparedStatement statement = null;
+        List<Vehiculo> vehiculos = new ArrayList<>();
+        // Crea una conexión a la base de datos
+        Connection connection = this.getConexion();
+        try {
+            // Crear un objeto PreparedStatement con la consulta
+            query = "SELECT * FROM Vehiculos WHERE DNI like ? and dni not in (select dni from usuarios where fechaveto is not NULL) and "
+                    + "(matricula not in(select matriculavehiculo from aparcar where fechasalida is NULL))";
+            statement = connection.prepareStatement(query);
+            // Establecer los parámetros de la consulta
+            statement.setString(1, dni+"%");
+
+            // Ejecutar la consulta y obtener un conjunto de resultados
+            ResultSet resultSet = statement.executeQuery();
+
+            // Recorrer los resultados y crear un objeto Plaza por cada fila
+            while (resultSet.next()) {
+                // Obtener los valores de cada columna en la fila actual
+                String matricula = resultSet.getString("matricula");
+                TipoPlaza tipo = TipoPlaza.valueOf(resultSet.getString("tipo"));
+                String marca = resultSet.getString("marca");
+                String modelo= resultSet.getString("modelo");
+                Integer anho= resultSet.getInt("anhomatriculacion");
+                String dni2=resultSet.getString("dni");
+                // Crear un objeto Plaza a partir de los valores obtenidos
+                Vehiculo ve = new Vehiculo(matricula, tipo, marca,modelo,anho,dni2);
+
+                // Añadir el objeto Plaza a la lista
+                vehiculos.add(ve);
+            }
+
+            // Cerrar los recursos (en orden inverso al que fueron abiertos)
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Imposible cerrar cursores");
+            }
+        }
+        // Devolver la lista de objetos 
+        return vehiculos;
+    }
+
+        
+    public String obtenerRol(String dni){
+            String rol=null;
+             String query;
+            PreparedStatement statement = null;
+            // Crea una conexión a la base de datos
+            Connection connection = this.getConexion();
+            try {
+                // Crear un objeto PreparedStatement con la consulta
+                query = "SELECT * FROM Usuarios WHERE DNI like ? ";
+                statement = connection.prepareStatement(query);
+                // Establecer los parámetros de la consulta
+                statement.setString(1, dni);
+
+                // Ejecutar la consulta y obtener un conjunto de resultados
+                ResultSet resultSet = statement.executeQuery();
+
+                // Recorrer los resultados y crear un objeto Plaza por cada fila
+                while (resultSet.next()) {
+                    // Obtener los valores de cada columna en la fila actual
+                     rol = resultSet.getString("rol");
+
+                }
+
+                // Cerrar los recursos (en orden inverso al que fueron abiertos)
+                resultSet.close();
+                statement.close();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+                this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
+            } finally {
+                try {
+                    if (statement != null) {
+                        statement.close();
+                    }
+                } catch (SQLException e) {
+                    System.out.println("Imposible cerrar cursores");
+                }
+            }
+            return rol;
     }
 }

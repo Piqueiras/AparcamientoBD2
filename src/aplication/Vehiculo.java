@@ -35,7 +35,15 @@ public class Vehiculo {
 
     }
     
-   
+       public Vehiculo(String matricula, TipoPlaza tipo, String marca, String modelo, Integer anoMatriculacion, String dni) {
+        this.matricula = matricula;
+        this.tipo = tipo;
+        this.marca = marca;
+        this.modelo = modelo;
+        this.anoMatriculacion = anoMatriculacion;
+        this.usuario=new Usuario(dni);
+
+    }
 
     public String getMatricula() {
         return matricula;

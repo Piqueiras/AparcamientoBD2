@@ -59,7 +59,7 @@ public class VPrincipal extends javax.swing.JFrame {
             }
         });
 
-        ButtonReservar.setText("Reservar");
+        ButtonReservar.setText("Reservar/Aparcar");
         ButtonReservar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ButtonReservarActionPerformed(evt);
@@ -76,7 +76,7 @@ public class VPrincipal extends javax.swing.JFrame {
                 .addComponent(btnGestionPagos)
                 .addGap(18, 18, 18)
                 .addComponent(ButtonReservar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 321, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 267, Short.MAX_VALUE)
                 .addComponent(btnSalir)
                 .addContainerGap())
         );

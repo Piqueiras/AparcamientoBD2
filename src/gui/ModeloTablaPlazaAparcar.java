@@ -4,7 +4,8 @@
  */
 package gui;
 
-import aplication.Vehiculo;
+import aplication.PlazaAparcar;
+import aplication.PlazaReserva;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
@@ -13,12 +14,12 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author alumnogreibd
  */
-public class ModeloTablaVehiculo  extends AbstractTableModel{
-    
-    private List<Vehiculo> data;
-    private String[] columnNames = {"Matricula", "Tipo", "Marca", "Modelo", "AnoMatriculacion", "Dni"}; //OJO falta usuario y plaza
+public class ModeloTablaPlazaAparcar extends AbstractTableModel {
 
-    public ModeloTablaVehiculo(){
+    private List<PlazaAparcar> data;
+    private String[] columnNames = {"Aparcamiento", "Código Plaza", "Tipo Plaza"};
+
+    public ModeloTablaPlazaAparcar(){
             this.data= new ArrayList<>();
     }
 
@@ -42,14 +43,9 @@ public class ModeloTablaVehiculo  extends AbstractTableModel{
         Object resultado=null;
 
         switch (col){
-            case 0: resultado=data.get(row).getMatricula(); break;
-            case 1: resultado=data.get(row).getTipo();break;
-            case 2: resultado=data.get(row).getMarca();break;
-            case 3: resultado=data.get(row).getModelo();break;
-            case 4: resultado=data.get(row).getAnoMatriculacion();break;
-            case 5: if(data.get(row).getUsuario()!=null)resultado=data.get(row).getUsuario().getDni();
-            else resultado="";
-            break;
+            case 0: resultado=data.get(row).getAparcamiento().getId(); break;
+            case 1: resultado=data.get(row).getCodigo(); break;
+            case 2: resultado=data.get(row).getTipo();break;
         }
         return resultado;
     }
@@ -61,20 +57,18 @@ public class ModeloTablaVehiculo  extends AbstractTableModel{
             case 0: clase= java.lang.String.class; break;
             case 1: clase= java.lang.String.class; break;
             case 2: clase=java.lang.String.class; break;
-            case 3: clase=java.lang.String.class; break;
-            case 4: clase=java.lang.String.class; break;
-            case 5: clase=java.lang.String.class; break;
-
         }
         return clase;
     }
     
-    public void setFilas(java.util.List<Vehiculo> v){
-        this.data=v;
+    public void setFilas(java.util.List<PlazaAparcar> plazas){
+        this.data=plazas;
         fireTableDataChanged();
     }
     
-        public Vehiculo obtenerPlazaReservar(int i){
+        public PlazaAparcar obtenerPlazaReservar(int i){
         return this.data.get(i);
     }
+
 }
+

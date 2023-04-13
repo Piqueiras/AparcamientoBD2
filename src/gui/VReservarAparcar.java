@@ -39,10 +39,15 @@ public class VReservarAparcar extends javax.swing.JDialog {
         txtAparcamiento1 = new java.awt.Label();
         tipoPlazaINPUT = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tablaPlazasReserva = new javax.swing.JTable();
+        jTableReservar = new javax.swing.JTable();
         ButtonBuscar = new javax.swing.JButton();
         reservarButton = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTableAparcar = new javax.swing.JTable();
+        AvisoSeleccionaPlaza1 = new java.awt.Label();
+        AvisoSeleccionaPlaza2 = new java.awt.Label();
+        jButtonAparcar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -64,10 +69,10 @@ public class VReservarAparcar extends javax.swing.JDialog {
             }
         });
 
-        tablaPlazasReserva.setModel(new gui.ModeloTablaPlaza());
-        jScrollPane1.setViewportView(tablaPlazasReserva);
+        jTableReservar.setModel(new gui.ModeloTablaPlazaReserva());
+        jScrollPane1.setViewportView(jTableReservar);
 
-        ButtonBuscar.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+        ButtonBuscar.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
         ButtonBuscar.setText("Buscar");
         ButtonBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -75,6 +80,7 @@ public class VReservarAparcar extends javax.swing.JDialog {
             }
         });
 
+        reservarButton.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
         reservarButton.setText("Reservar");
         reservarButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -89,36 +95,67 @@ public class VReservarAparcar extends javax.swing.JDialog {
             }
         });
 
+        jTableAparcar.setModel(new gui.ModeloTablaPlazaAparcar());
+        jScrollPane2.setViewportView(jTableAparcar);
+
+        AvisoSeleccionaPlaza1.setForeground(new java.awt.Color(255, 51, 51));
+
+        AvisoSeleccionaPlaza2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        AvisoSeleccionaPlaza2.setForeground(new java.awt.Color(255, 51, 51));
+
+        jButtonAparcar.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+        jButtonAparcar.setText("Aparcar");
+        jButtonAparcar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAparcarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 679, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(reservarButton)
+                        .addGap(30, 30, 30)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtAparcamiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(aparcamientoINPUT, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(19, 19, 19)
-                                .addComponent(txtCodigoPlaza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(codigoPlazaINPUT, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(22, 22, 22)
-                        .addComponent(txtAparcamiento1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tipoPlazaINPUT, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(ButtonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(387, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(txtAparcamiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(aparcamientoINPUT, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(19, 19, 19)
+                                        .addComponent(txtCodigoPlaza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(codigoPlazaINPUT, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(22, 22, 22))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(281, 281, 281)
+                                        .addComponent(reservarButton)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(AvisoSeleccionaPlaza2, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(txtAparcamiento1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(tipoPlazaINPUT, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(61, 61, 61)
+                                        .addComponent(ButtonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(0, 18, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(324, 324, 324)
+                .addComponent(jButtonAparcar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(AvisoSeleccionaPlaza1, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -134,13 +171,21 @@ public class VReservarAparcar extends javax.swing.JDialog {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(tipoPlazaINPUT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(ButtonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(41, 41, 41)
-                .addComponent(reservarButton)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(reservarButton)
+                    .addComponent(AvisoSeleccionaPlaza2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 273, Short.MAX_VALUE)
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonAparcar)
+                    .addComponent(AvisoSeleccionaPlaza1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
-                .addContainerGap())
+                .addContainerGap(10, Short.MAX_VALUE))
         );
 
         pack();
@@ -155,39 +200,51 @@ public class VReservarAparcar extends javax.swing.JDialog {
     }//GEN-LAST:event_tipoPlazaINPUTActionPerformed
 
     private void ButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonBuscarActionPerformed
-         ModeloTablaPlaza m;
+         ModeloTablaPlazaReserva m;
+         ModeloTablaPlazaAparcar mA;
 
-        m=(ModeloTablaPlaza) tablaPlazasReserva.getModel();
-        
+        m=(ModeloTablaPlazaReserva) jTableReservar.getModel();
+        mA=(ModeloTablaPlazaAparcar) jTableAparcar.getModel();
         //Control de errores
         String str = codigoPlazaINPUT.getText();
         int num;
         if (str.isEmpty()) {
             num = -1; // o cualquier otro valor predeterminado
         } else {
-            num = Integer.parseInt(str);
+            try{num = Integer.parseInt(str);}catch(Exception e){
+                 AvisoSeleccionaPlaza2.setText("El codigo de la plaza debe ser un numero");
+                return;
+            }
+            
         }
+        AvisoSeleccionaPlaza2.setText("");
         m.setFilas(fa.obtenerPlazasReserva(aparcamientoINPUT.getText(),num,tipoPlazaINPUT.getText(), false));
         if (m.getRowCount() > 0) {
-            tablaPlazasReserva.setRowSelectionInterval(0, 0);
+            jTableReservar.setRowSelectionInterval(0, 0);
+        }
+        mA.setFilas(fa.obtenerPlazasAparcar(aparcamientoINPUT.getText(),num,tipoPlazaINPUT.getText(), false));
+        if (m.getRowCount() > 0) {
+            jTableAparcar.setRowSelectionInterval(0, 0);
         }
     }//GEN-LAST:event_ButtonBuscarActionPerformed
 
     private void reservarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reservarButtonActionPerformed
-        VAviso aviso;
-        VSeleccionarVehiculo vselec;
-        int fila=tablaPlazasReserva.getSelectedRow();
+       // VAviso aviso;
+        VHacerReserva vselec;
+        int fila=jTableReservar.getSelectedRow();
         if(fila==-1){
-            aviso=new VAviso(this,true, "No has seleccionado ninguna plaza");
-            aviso.setVisible(true);
+            //aviso=new VAviso(this,true, "No has seleccionado ninguna plaza");
+            //aviso.setVisible(true);
+            AvisoSeleccionaPlaza2.setText("No has seleccionado ninguna plaza");
             return;
         }
+            AvisoSeleccionaPlaza2.setText("");
 
-        String ap= tablaPlazasReserva.getValueAt(fila, 0).toString();
-        int plaza= Integer.parseInt(tablaPlazasReserva.getValueAt (fila, 1).toString());
-        String tipo= tablaPlazasReserva.getValueAt(fila, 2).toString();
+        String ap= jTableReservar.getValueAt(fila, 0).toString();
+        int plaza= Integer.parseInt(jTableReservar.getValueAt (fila, 1).toString());
+        String tipo= jTableReservar.getValueAt(fila, 2).toString();
 
-        vselec=new VSeleccionarVehiculo(this,true, fa, ap, plaza, tipo);
+        vselec=new VHacerReserva(this,true, fa, ap, plaza, tipo);
         vselec.setVisible(true);
     }//GEN-LAST:event_reservarButtonActionPerformed
 
@@ -196,19 +253,42 @@ public class VReservarAparcar extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButtonAparcarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAparcarActionPerformed
+    VAparcar vselec;
+        int fila=jTableAparcar.getSelectedRow();
+        if(fila==-1){
+            //aviso=new VAviso(this,true, "No has seleccionado ninguna plaza");
+            //aviso.setVisible(true);
+            AvisoSeleccionaPlaza1.setText("No has seleccionado ninguna plaza");
+            return;
+        }
+            AvisoSeleccionaPlaza1.setText("");
+
+        String ap= jTableAparcar.getValueAt(fila, 0).toString();
+        int plaza= Integer.parseInt(jTableAparcar.getValueAt (fila, 1).toString());
+        String tipo= jTableAparcar.getValueAt(fila, 2).toString();
+
+        vselec=new VAparcar(this,true, fa, ap, plaza, tipo);
+        vselec.setVisible(true);    }//GEN-LAST:event_jButtonAparcarActionPerformed
+
     /**
      * @param args the command line arguments
      */
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private java.awt.Label AvisoSeleccionaPlaza1;
+    private java.awt.Label AvisoSeleccionaPlaza2;
     private javax.swing.JButton ButtonBuscar;
     private javax.swing.JTextField aparcamientoINPUT;
     private javax.swing.JTextField codigoPlazaINPUT;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButtonAparcar;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTableAparcar;
+    private javax.swing.JTable jTableReservar;
     private javax.swing.JButton reservarButton;
-    private javax.swing.JTable tablaPlazasReserva;
     private javax.swing.JTextField tipoPlazaINPUT;
     private java.awt.Label txtAparcamiento;
     private java.awt.Label txtAparcamiento1;

@@ -7,6 +7,7 @@ package conexionBBDD;
 
 //import aplication.<nombreClase>;
 import aplication.Aparcar;
+import aplication.PlazaAparcar;
 import aplication.PlazaReserva;
 import aplication.Reservar;
 import java.io.FileInputStream;
@@ -89,15 +90,40 @@ public class FachadaBaseDatos {
         return daoUsuarios.ConsultarHistorialReservar(dni, mat, pza, ap, cMax, cMin, dMax, dMin, fMax, fMin);
     }
     
+     
     public List<PlazaReserva> obtenerPlazasReserva(String codigoAparcamiento, Integer  codigoPlaza, String tipoPlaza, boolean ocupadas){
         return daoPlazas.obtenerPlazasReserva(codigoAparcamiento,codigoPlaza,tipoPlaza,ocupadas);
     }
+    
+    public List<PlazaAparcar> obtenerPlazasAparcar(String codigoAparcamiento, Integer  codigoPlaza, String tipoPlaza, boolean ocupadas){
+        return daoPlazas.obtenerPlazasAparcar(codigoAparcamiento,codigoPlaza,tipoPlaza,ocupadas);
+    }
 
+    public List<Vehiculo> obtenerVehiculos() {
+        return daoUsuarios.obtenerVehiculos();
+    }
     public List<Vehiculo> obtenerVehiculos(String dni) {
         return daoUsuarios.obtenerVehiculos(dni);
+    }
+    
+    public List<Vehiculo> obtenerVehiculosNoAparcados(){
+        return daoUsuarios.obtenerVehiculosNoAparcados();
+    }
+    
+    public List<Vehiculo> obtenerVehiculosNoAparcados(String dni){
+        return daoUsuarios.obtenerVehiculosNoAparcados(dni);
     }
 
     public boolean hacerReserva(String matricula, int plaza, String aparcamiento,  Date horaInicio, Date horaFin) {
         return daoPlazas.hacerReserva(matricula, plaza, aparcamiento, horaInicio,horaFin);
     }
+    
+    public String obtenerRol(String dni){
+        return daoUsuarios.obtenerRol(dni);
+    }
+    
+    public boolean Aparcar(String matricula, int plaza, String aparcamiento) {
+        return daoPlazas.Aparcar(matricula,plaza,aparcamiento);
+    }
+    
 }
