@@ -41,6 +41,9 @@ public class VPrincipal extends javax.swing.JFrame {
         addPlaza = new javax.swing.JButton();
         elimPlaza = new javax.swing.JButton();
         addUsuario = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        registrarinfrBtn = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -89,6 +92,13 @@ public class VPrincipal extends javax.swing.JFrame {
                 addUsuarioActionPerformed(evt);
             }
         });
+
+        registrarinfrBtn.setText("Registrar infracción");
+        registrarinfrBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                registrarinfrBtnActionPerformed(evt);
+            }
+        });
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -102,6 +112,21 @@ public class VPrincipal extends javax.swing.JFrame {
                 .addComponent(ButtonReservar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
                 .addComponent(btnSalir)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnGestionPagos)
+                        .addGap(18, 18, 18)
+                        .addComponent(ButtonReservar)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                        .addComponent(btnSalir))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(registrarinfrBtn)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -122,6 +147,9 @@ public class VPrincipal extends javax.swing.JFrame {
                 .addGap(67, 67, 67)
                 .addComponent(addUsuario)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                .addContainerGap(438, Short.MAX_VALUE)
+                .addComponent(registrarinfrBtn)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalir)
                     .addComponent(btnGestionPagos)
@@ -170,6 +198,12 @@ public class VPrincipal extends javax.swing.JFrame {
         VNuevoUsuario vNuevoUsuario=new VNuevoUsuario(this,true, fa);
         vNuevoUsuario.setVisible(true);
     }//GEN-LAST:event_addUsuarioActionPerformed
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void registrarinfrBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarinfrBtnActionPerformed
+        VRegistroInfracciones vregistroinfracciones = new VRegistroInfracciones(fa);
+        vregistroinfracciones.setVisible(true);
+    }//GEN-LAST:event_registrarinfrBtnActionPerformed
     
     /**
     * @param args the command line argumentss
@@ -183,6 +217,7 @@ public class VPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnSalir;
     private javax.swing.JButton elimPlaza;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JButton registrarinfrBtn;
     // End of variables declaration//GEN-END:variables
 
 }

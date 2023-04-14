@@ -7,6 +7,7 @@ package conexionBBDD;
 import java.sql.*;
 import aplication.*;
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -662,5 +663,173 @@ List<Vehiculo> obtenerVehiculosNoAparcados(String dni) {
                 try {stmUsuario.close();} catch (SQLException e){System.out.println("Imposible cerrar cursores");}
             }
         return exito;
+        /**
+     * 
+     * @param dni 
+     * Suma unha infracción ao usuario cuxo dni é [dni]
+     * FUNCIONA
+     */
+    public void registrarInfraccion(String dni){
+        Connection con;
+        con = this.getConexion();
+        
+        PreparedStatement stm=null;
+        String consulta = "UPDATE Usuarios SET numeroinfracciones = numeroinfracciones +1 WHERE dni = ?";
+        try{
+            stm = con.prepareStatement(consulta);
+            stm.setString(1, dni);
+            stm.executeUpdate();
+        }
+         catch(SQLException error){
+             System.out.println(error.getMessage());
+        }finally{
+            try{stm.close();}catch(SQLException e){System.out.println("No se pueden cerrar cursores");}
+        }
+    }
+    /**
+     * 
+     * @param dni
+     * Registra un veto na data na que se está automáticamente (é dicir, sen pasarlle a data)
+     * FUNCIONA
+     */
+    public void registrarVeto(String dni){
+        Connection con;
+        con = this.getConexion();
+        
+        PreparedStatement stm = null;
+        String consulta = "UPDATE Usuarios SET fechaveto = ? WHERE dni = ?";
+        try{
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            stm = con.prepareStatement(consulta);
+            stm.setString(2,dni);
+            stm.setTimestamp(1, timestamp);
+            stm.executeUpdate();
+        }
+          catch(SQLException error){
+             System.out.println(error.getMessage());
+        }finally{
+            try{stm.close();}catch(SQLException e){System.out.println("No se pueden cerrar cursores");}
+        }
+    }
+    /**
+     * 
+     * @param dni 
+     * Pon a NULL a fechaveto do Usuario con dni [dni]
+     * FUNCIONA
+     */
+    public void quitarVeto(String dni){
+        Connection con;
+        con = this.getConexion();
+        PreparedStatement stm = null;
+        String consulta = "UPDATE Usuarios SET fechaveto = NULL WHERE dni = ?";
+        try{
+            stm = con.prepareStatement(consulta);
+            stm.setString(1,dni);
+            stm.executeUpdate();
+        }
+          catch(SQLException error){
+             System.out.println(error.getMessage());
+        }finally{
+            try{stm.close();}catch(SQLException e){System.out.println("No se pueden cerrar cursores");}
+        }
+    }
+    /**
+     * 
+     * @param dni 
+     * Pon o numero de infraccions a cero
+     * FUNCIONA
+     */
+    public void quitarTodasInfracciones(String dni){
+        Connection con;
+        con = this.getConexion();
+        
+        PreparedStatement stm=null;
+        String consulta = "UPDATE Usuarios SET numeroinfracciones = 0 WHERE dni = ?";
+        try{
+            stm = con.prepareStatement(consulta);
+            stm.setString(1, dni);
+            stm.executeUpdate();
+        }
+         catch(SQLException error){
+             System.out.println(error.getMessage());
+        }finally{
+            try{stm.close();}catch(SQLException e){System.out.println("No se pueden cerrar cursores");}
+        }
+    }
+    /**
+     * 
+     * @param dni
+     * @return -1 si ocorreu algún fallo ou un numero do 0 ao 5 
+     * FUNCIONA
+     */
+    public int mostrarNumeroInfracciones(String dni){
+        Connection con;
+        int dev;
+        dev = -1;
+        con = this.getConexion();
+        PreparedStatement stm = null;
+        String consulta = "SELECT numeroinfracciones FROM Usuarios WHERE dni = ?";
+        try{
+            stm = con.prepareStatement(consulta);
+            stm.setString(1, dni);
+            ResultSet resultado  = stm.executeQuery();
+            if(resultado.next()){ //poño un if e non un while porque en principio solo hai unha tupla
+                dev = resultado.getInt("numeroinfracciones");
+            }
+        } catch(SQLException error){
+             System.out.println(error.getMessage());
+        }finally{
+            try{stm.close();}catch(SQLException e){System.out.println("No se pueden cerrar cursores");}
+        }      
+        return dev;
+    }
+    /**
+     * 
+     * @param matricula
+     * @return un Usuario propietario do vehiculo con matricula [matricula]
+     */
+    public Usuario obtenerUsuario(String matricula){
+        Connection con;
+        con=this.getConexion();
+        PreparedStatement stm = null;
+        LocalDate fechaveto = null;
+        LocalDate fechaingreso = null;
+        
+        Usuario usuario = null;
+        
+        String consulta = "SELECT u.* FROM vehiculos v, usuarios u WHERE v.dni = u.dni AND v.matricula = ?";
+        try{
+            stm = con.prepareStatement(consulta);
+            stm.setString(1,matricula);
+            ResultSet resultado = stm.executeQuery();
+            if(resultado.next()){
+                RolUsuario rolUsuario = null;
+                if(resultado.getString("rol").equals("Administracion"))
+                    rolUsuario = RolUsuario.Administracion;
+                else if (resultado.getString("rol").equals("Docente")) {
+                    rolUsuario = RolUsuario.Docente;
+                }
+                else if(resultado.getString("rol").equals("Alumno")){
+                    rolUsuario = RolUsuario.Alumno;
+                }
+                else if(resultado.getString("rol").equals("noUSC")){
+                    rolUsuario = RolUsuario.noUSC;
+                }
+                if (resultado.getTimestamp("fechaveto")!=null) {
+                    fechaveto = resultado.getTimestamp("fechaveto").toLocalDateTime().toLocalDate();
+                }
+                 if (resultado.getTimestamp("fechaingresousc")!=null) {
+                    fechaingreso = resultado.getTimestamp("fechaingresousc").toLocalDateTime().toLocalDate();
+                }
+                usuario = new Usuario(resultado.getString("dni"),resultado.getString("nombre"),resultado.getString("telefono"),
+                resultado.getString("correo"), fechaingreso, rolUsuario,
+                        fechaveto,resultado.getInt("numeroinfracciones"));
+            }
+        }catch(SQLException error){
+             System.out.println(error.getMessage());
+        }finally{
+            try{stm.close();}catch(SQLException e){System.out.println("No se pueden cerrar cursores");}
+        }  
+        return usuario;
     }
 }

@@ -123,5 +123,22 @@ public class FachadaAplicacion {
         
     public boolean registrarUsuario(Usuario usuario){
         return fbd.registrarUsuario(usuario);
+    
+    /**
+     * @param matricula
+     * @return o usuario propietario do vehiculo con matricula [matricula]
+     */
+    public Usuario obtenerUsuario(String matricula){
+        return fbd.obtenerUsuario(matricula);
+    }
+     /**
+     * @param dni
+     * @return numero de infracciones desde que se quitou, en caso de que o houbese, o ultimo veto
+     */
+    public int registrarInfraccion(String dni){
+        return fbd.registrarInfraccion(dni);
+    }
+    public int mostrarNumeroInfracciones(String dni){
+        return fbd.mostrarNumeroInfracciones(dni);
     }
 }

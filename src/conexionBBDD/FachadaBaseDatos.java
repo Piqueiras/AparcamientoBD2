@@ -145,5 +145,29 @@ public class FachadaBaseDatos {
     public boolean eliminarPlazaReserva(int codigoAparcamiento){
         return daoPlazas.eliminarPlazaReserva(codigoAparcamiento);
     }
-    
+     /**
+     * 
+     * @param dni 
+     * Debería registrar unha infraccion e no caso de ter cinco, deberíase poñer un veto.
+     * Devolve o numero de infracciones desde que si quitou, no caso de telo, o último veto
+     */
+    public int registrarInfraccion(String dni){
+        this.daoUsuarios.registrarInfraccion(dni);
+        if(this.daoUsuarios.mostrarNumeroInfracciones(dni)==5){
+            this.daoUsuarios.registrarVeto(dni);
+            this.daoUsuarios.quitarTodasInfracciones(dni);
+            return 5;
+        }
+        return this.daoUsuarios.mostrarNumeroInfracciones(dni);
+    }
+    /**
+     * Hai que implementar un método que sexa actualizar no que cada vez que se abra a aplicacion, 
+     * se comprobe cantos dias pasaron do veto e ao cumplir x dias, pois facer un quitarVeto e quitarInfracciones
+     */
+    public Usuario obtenerUsuario(String matricula){
+        return this.daoUsuarios.obtenerUsuario(matricula);
+    }
+    public int mostrarNumeroInfracciones(String dni){
+        return this.daoUsuarios.mostrarNumeroInfracciones(dni);
+    }
 }
