@@ -95,8 +95,8 @@ public class FachadaBaseDatos {
         return daoPlazas.obtenerPlazasReserva(codigoAparcamiento,codigoPlaza,tipoPlaza,ocupadas);
     }
     
-    public void registrarUsuario(Usuario usuario){
-        daoUsuarios.registrarUsuario(usuario);
+    public boolean registrarUsuario(Usuario usuario){
+        return daoUsuarios.registrarUsuario(usuario);
     }
     
     public List<PlazaAparcar> obtenerPlazasAparcar(String codigoAparcamiento, Integer  codigoPlaza, String tipoPlaza, boolean ocupadas){
@@ -130,7 +130,7 @@ public class FachadaBaseDatos {
         return daoPlazas.Aparcar(matricula,plaza,aparcamiento);
     }
     
-        public boolean anadirPlaza(String codigoAparcamiento, int codigoPlaza, String tipoPlaza) {
+    public boolean anadirPlaza(String codigoAparcamiento, int codigoPlaza, String tipoPlaza) {
         return daoPlazas.anadirPlaza(codigoAparcamiento,codigoPlaza,tipoPlaza);
     }
     

@@ -126,4 +126,26 @@ public class Usuario {
         this.vehiculos.addAll(vehiculos);
     }
     
+    public void incorporarVehiculos(java.util.List<Vehiculo> vehiculos){
+        try {
+            for (Vehiculo vehiculo : vehiculos) {
+                System.out.println(vehiculo);
+                vehiculo.setUsuario(this);
+                this.vehiculos.add(vehiculo);
+            }
+        } catch (ExcepcionAparcamiento e) {}
+    }
+
+    @Override
+    public String toString() {
+        String res;
+        res = "DNI: " + this.dni + ", Nombre: " + this.nombre + ", Rol: " + this.rol + ", Vehiculos: [";
+        for (Vehiculo vehiculo : this.vehiculos) {
+            res += vehiculo.toString();
+        }
+        res+="]";
+        return res;
+    }
+    
+    
 }

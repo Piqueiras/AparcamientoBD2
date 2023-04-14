@@ -72,5 +72,33 @@ public class Vehiculo {
     public Plaza getPlaza() {
         return plaza;
     }
+    
+    public void setUsuario(Usuario usuario) throws ExcepcionAparcamiento{
+    	if (this.usuario != null) {
+        	throw new ExcepcionAparcamiento("No se puede cambiar el usuario de un vehiculo");
+    	}
+    	this.usuario = usuario;
+	}
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj==null) {
+            return false;
+        } else if (obj==this) {
+            return true;
+        } else if (obj instanceof Vehiculo) {
+            Vehiculo o = (Vehiculo) obj;
+            return this.matricula.equals(o.matricula);
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return this.matricula + " (" + this.marca + " : " + this.modelo + ") ";
+    }
+    
+    
+
+    
 }

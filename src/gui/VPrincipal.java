@@ -38,8 +38,8 @@ public class VPrincipal extends javax.swing.JFrame {
         btnGestionPagos = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
         ButtonReservar = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        addPlaza = new javax.swing.JButton();
+        elimPlaza = new javax.swing.JButton();
         addUsuario = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
 
@@ -69,17 +69,20 @@ public class VPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Anadir Plaza");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        addPlaza.setText("Anadir Plaza");
+        addPlaza.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                addPlazaActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Eliminar Plaza");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        elimPlaza.setText("Eliminar Plaza");
+        elimPlaza.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                elimPlazaActionPerformed(evt);
+            }
+        });
+
         addUsuario.setText("Añadir usuario");
         addUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -92,32 +95,37 @@ public class VPrincipal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(layout.createSequentialGroup()
+                .addGap(12, 12, 12)
                 .addComponent(btnGestionPagos)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(ButtonReservar)
-                .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addGap(18, 18, 18)
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                .addComponent(addUsuario)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 181, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
                 .addComponent(btnSalir)
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(addUsuario)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(addPlaza)
+                        .addComponent(elimPlaza)))
+                .addGap(51, 51, 51))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(479, Short.MAX_VALUE)
+                .addGap(107, 107, 107)
+                .addComponent(addPlaza)
+                .addGap(18, 18, 18)
+                .addComponent(elimPlaza)
+                .addGap(67, 67, 67)
+                .addComponent(addUsuario)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalir)
                     .addComponent(btnGestionPagos)
-                    .addComponent(ButtonReservar)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
-                    .addComponent(addUsuario))
+                    .addComponent(ButtonReservar))
                 .addContainerGap())
         );
 
@@ -145,21 +153,22 @@ public class VPrincipal extends javax.swing.JFrame {
         vreservar.setVisible(true);
     }//GEN-LAST:event_ButtonReservarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void addPlazaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPlazaActionPerformed
         
         VAnadir vanadir=new VAnadir(this,true, fa);
         vanadir.setVisible(true);
          
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_addPlazaActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void elimPlazaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_elimPlazaActionPerformed
         
         VEliminar veliminar=new VEliminar(this,true, fa);
         veliminar.setVisible(true);
   
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_elimPlazaActionPerformed
     private void addUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUsuarioActionPerformed
-        // TODO add your handling code here:
+        VNuevoUsuario vNuevoUsuario=new VNuevoUsuario(this,true, fa);
+        vNuevoUsuario.setVisible(true);
     }//GEN-LAST:event_addUsuarioActionPerformed
     
     /**
@@ -168,11 +177,11 @@ public class VPrincipal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonReservar;
+    private javax.swing.JButton addPlaza;
     private javax.swing.JButton addUsuario;
     private javax.swing.JButton btnGestionPagos;
     private javax.swing.JButton btnSalir;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton elimPlaza;
     private javax.swing.JMenuBar jMenuBar1;
     // End of variables declaration//GEN-END:variables
 
