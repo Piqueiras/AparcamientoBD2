@@ -663,7 +663,8 @@ List<Vehiculo> obtenerVehiculosNoAparcados(String dni) {
                 try {stmUsuario.close();} catch (SQLException e){System.out.println("Imposible cerrar cursores");}
             }
         return exito;
-        /**
+    }
+    /**
      * 
      * @param dni 
      * Suma unha infracción ao usuario cuxo dni é [dni]

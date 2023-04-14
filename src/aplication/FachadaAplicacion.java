@@ -123,6 +123,7 @@ public class FachadaAplicacion {
         
     public boolean registrarUsuario(Usuario usuario){
         return fbd.registrarUsuario(usuario);
+    }
     
     /**
      * @param matricula
