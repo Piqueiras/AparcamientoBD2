@@ -104,4 +104,20 @@ public class FachadaAplicacion {
     public boolean Aparcar(String matricula, int plaza, String aparcamiento) {
         return fbd.Aparcar(matricula,plaza,aparcamiento);
     }
+    
+    public boolean anadirPlaza(String codigoAparcamiento, int codigoPlaza, String tipoPlaza) {
+        return fbd.anadirPlaza(codigoAparcamiento,codigoPlaza,tipoPlaza);
+    }
+    
+    public boolean anadirPlazaReserva(String codigoAparcamiento, int codigoPlaza, String tipoPlaza) {
+        return fbd.anadirPlazaReserva(codigoAparcamiento, codigoPlaza, tipoPlaza);
+    }
+    
+    public boolean eliminarPlazaAparcar(int codigoAparcamiento){
+        return fbd.eliminarPlazaAparcar(codigoAparcamiento);
+    }
+    
+    public boolean eliminarPlazaReserva(int codigoAparcamiento){
+        return fbd.eliminarPlazaReserva(codigoAparcamiento);
+    }
 }

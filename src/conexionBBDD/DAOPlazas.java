@@ -207,4 +207,134 @@ public  boolean hacerReserva(String matricula, int plaza,String aparcamiento, ja
             return false;
         }
     }
+    
+    public boolean anadirPlaza(String codigoAparcamiento, int codigoPlaza, String tipoPlaza) {
+        String query;
+        boolean exito=true;
+        PreparedStatement statement = null;
+        // Crea una conexión a la base de datos
+        Connection connection = this.getConexion();
+        try {
+            query = "INSERT INTO PlazasAparcar (codigo, tipo, idAparcamiento) VALUES (?, ?, ?)";
+            statement = connection.prepareStatement(query);
+            
+            // Asignar los valores a los parámetros de la sentencia SQL
+            statement.setInt(1, codigoPlaza);
+            
+            switch (tipoPlaza) {
+                case "Coche":
+                    statement.setString(2, "C");
+                    break;
+                case "Moto":
+                    statement.setString(2, "M");
+                    break;
+                case "Vehiculo Grande":
+                    statement.setString(2, "G");
+                    break;
+                default:
+                        break;
+            }
+
+            statement.setString(3, codigoAparcamiento);
+            
+            // Ejecutar la sentencia SQL INSERT
+            int filasAfectadas = statement.executeUpdate();
+            
+            // Retornar true si se insertó la reserva correctamente, false en caso contrario
+            return filasAfectadas > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+public boolean anadirPlazaReserva(String codigoAparcamiento, int codigoPlaza, String tipoPlaza) {
+        String query;
+        boolean exito=true;
+        PreparedStatement statement = null;
+        // Crea una conexión a la base de datos
+        Connection connection = this.getConexion();
+        try {
+            query = "INSERT INTO PlazasReserva (codigo, tipo, idAparcamiento) VALUES (?, ?, ?)";
+            statement = connection.prepareStatement(query);
+            
+            // Asignar los valores a los parámetros de la sentencia SQL
+            statement.setInt(1, codigoPlaza);
+            
+            switch (tipoPlaza) {
+                case "Coche":
+                    statement.setString(2, "C");
+                    break;
+                case "Moto":
+                    statement.setString(2, "M");
+                    break;
+                case "Vehiculo Grande":
+                    statement.setString(2, "G");
+                    break;
+                default:
+                        break;
+            }
+
+            statement.setString(3, codigoAparcamiento);
+            
+            // Ejecutar la sentencia SQL INSERT
+            int filasAfectadas = statement.executeUpdate();
+            
+            // Retornar true si se insertó la reserva correctamente, false en caso contrario
+            return filasAfectadas > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean eliminarPlazaAparcar(int codigo) {
+        String query;
+        boolean exito=true;
+        PreparedStatement statement = null;
+        // Crea una conexión a la base de datos
+        Connection connection = this.getConexion();
+        try {
+            
+            query = "DELETE FROM PlazasAparcar WHERE codigo = ?";
+            statement = connection.prepareStatement(query);
+            
+            // Asignar los valores a los parámetros de la sentencia SQL
+            statement.setObject(1, codigo, Types.INTEGER);
+            
+            // Ejecutar la sentencia SQL INSERT
+            int filasAfectadas = statement.executeUpdate();
+            
+            // Retornar true si se insertó la reserva correctamente, false en caso contrario
+            return filasAfectadas > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public boolean eliminarPlazaReserva(int codigo) {
+        String query;
+        boolean exito=true;
+        PreparedStatement statement = null;
+        // Crea una conexión a la base de datos
+        Connection connection = this.getConexion();
+        try {
+            
+            query = "DELETE FROM PlazasReserva WHERE codigo = ?";
+            statement = connection.prepareStatement(query);
+            
+            // Asignar los valores a los parámetros de la sentencia SQL
+            statement.setObject(1, codigo, Types.INTEGER);
+            
+            // Ejecutar la sentencia SQL INSERT
+            int filasAfectadas = statement.executeUpdate();
+            
+            // Retornar true si se insertó la reserva correctamente, false en caso contrario
+            return filasAfectadas > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

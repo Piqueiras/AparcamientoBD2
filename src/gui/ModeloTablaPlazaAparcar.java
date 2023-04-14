@@ -66,7 +66,7 @@ public class ModeloTablaPlazaAparcar extends AbstractTableModel {
         fireTableDataChanged();
     }
     
-        public PlazaAparcar obtenerPlazaReservar(int i){
+        public PlazaAparcar obtenerPlazaAparcar(int i){
         return this.data.get(i);
     }
 

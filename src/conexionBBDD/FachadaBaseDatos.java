@@ -126,4 +126,20 @@ public class FachadaBaseDatos {
         return daoPlazas.Aparcar(matricula,plaza,aparcamiento);
     }
     
+        public boolean anadirPlaza(String codigoAparcamiento, int codigoPlaza, String tipoPlaza) {
+        return daoPlazas.anadirPlaza(codigoAparcamiento,codigoPlaza,tipoPlaza);
+    }
+    
+    public boolean anadirPlazaReserva(String codigoAparcamiento, int codigoPlaza, String tipoPlaza) {
+        return daoPlazas.anadirPlazaReserva(codigoAparcamiento, codigoPlaza, tipoPlaza);
+    }
+    
+    public boolean eliminarPlazaAparcar(int codigoAparcamiento){
+        return daoPlazas.eliminarPlazaAparcar(codigoAparcamiento);
+    }
+    
+    public boolean eliminarPlazaReserva(int codigoAparcamiento){
+        return daoPlazas.eliminarPlazaReserva(codigoAparcamiento);
+    }
+    
 }
