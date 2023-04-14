@@ -119,5 +119,8 @@ public class FachadaAplicacion {
     
     public boolean eliminarPlazaReserva(int codigoAparcamiento){
         return fbd.eliminarPlazaReserva(codigoAparcamiento);
+        
+    public void registrarUsuario(Usuario usuario){
+        fbd.registrarUsuario(usuario);
     }
 }

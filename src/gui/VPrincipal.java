@@ -40,6 +40,7 @@ public class VPrincipal extends javax.swing.JFrame {
         ButtonReservar = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        addUsuario = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -79,6 +80,10 @@ public class VPrincipal extends javax.swing.JFrame {
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
+        addUsuario.setText("Añadir usuario");
+        addUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addUsuarioActionPerformed(evt);
             }
         });
         setJMenuBar(jMenuBar1);
@@ -97,6 +102,8 @@ public class VPrincipal extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jButton2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addComponent(addUsuario)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 181, Short.MAX_VALUE)
                 .addComponent(btnSalir)
                 .addContainerGap())
         );
@@ -110,6 +117,7 @@ public class VPrincipal extends javax.swing.JFrame {
                     .addComponent(ButtonReservar)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
+                    .addComponent(addUsuario))
                 .addContainerGap())
         );
 
@@ -150,6 +158,9 @@ public class VPrincipal extends javax.swing.JFrame {
         veliminar.setVisible(true);
   
     }//GEN-LAST:event_jButton2ActionPerformed
+    private void addUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUsuarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_addUsuarioActionPerformed
     
     /**
     * @param args the command line argumentss
@@ -157,6 +168,7 @@ public class VPrincipal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonReservar;
+    private javax.swing.JButton addUsuario;
     private javax.swing.JButton btnGestionPagos;
     private javax.swing.JButton btnSalir;
     private javax.swing.JButton jButton1;

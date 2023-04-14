@@ -72,8 +72,5 @@ public class Vehiculo {
     public Plaza getPlaza() {
         return plaza;
     }
-    
-    
-    
-    
+
 }

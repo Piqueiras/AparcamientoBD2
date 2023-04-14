@@ -41,4 +41,8 @@ public class FachadaGui {
         vpagos=new VPagos(vp, true, fa);
         vpagos.setVisible(true);
     }
+    
+    public void registrarUsuario(Usuario usuario){
+        
+    }
 }

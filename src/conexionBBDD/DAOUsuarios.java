@@ -591,6 +591,47 @@ List<Vehiculo> obtenerVehiculosNoAparcados(String dni) {
                 // Cerrar los recursos (en orden inverso al que fueron abiertos)
                 resultSet.close();
                 statement.close();
+    public void registrarUsuario(Usuario usuario){
+        Connection con=this.getConexion();
+        PreparedStatement stmUsuario=null;
+
+        try {
+            stmUsuario=con.prepareStatement("INSERT INTO Usuarios (dni, nombre, telefono, correo, fechaIngresoUSC, rol, fechaVeto, numeroInfracciones) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            
+            stmUsuario.setString(1, usuario.getDni());
+            stmUsuario.setString(2, usuario.getNombre());
+            stmUsuario.setString(3, usuario.getTelefono());
+            stmUsuario.setString(4, usuario.getCorreo());
+            stmUsuario.setDate(5, java.sql.Date.valueOf(usuario.getFechaIngreso()));
+            stmUsuario.setString(6, usuario.getRol().toString());
+            stmUsuario.setDate(7, java.sql.Date.valueOf(usuario.getFechaVeto()));
+            stmUsuario.setInt(8, usuario.getNumeroInfracciones());
+            
+            int filasAfectadas = stmUsuario.executeUpdate();
+            
+            for (Vehiculo vehiculo : usuario.getVehiculos()) {
+                PreparedStatement stmVehiculo=null;
+                try {
+                    stmVehiculo=con.prepareStatement("INSERT INTO Vehiculos (matricula, tipo, marca, modelo, anhoMatriculacion, dni) VALUES (?, ?, ?, ?, ?, ?)");
+
+                    stmVehiculo.setString(1, vehiculo.getMatricula());
+                    stmVehiculo.setString(2, vehiculo.getTipo().toString());
+                    stmVehiculo.setString(3, vehiculo.getMarca());
+                    stmVehiculo.setString(4, vehiculo.getModelo());
+                    stmVehiculo.setInt(5, vehiculo.getAnoMatriculacion());
+                    stmVehiculo.setString(6, usuario.getDni());
+
+                    filasAfectadas += stmUsuario.executeUpdate();
+                } 
+                catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                    this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
+                } 
+                finally {
+                    try {stmVehiculo.close();} catch (SQLException e){System.out.println("Imposible cerrar cursores");}
+                }
+            }
+            
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
                 this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
@@ -604,5 +645,8 @@ List<Vehiculo> obtenerVehiculosNoAparcados(String dni) {
                 }
             }
             return rol;
+                try {stmUsuario.close();} catch (SQLException e){System.out.println("Imposible cerrar cursores");}
+            }
+        
     }
 }
