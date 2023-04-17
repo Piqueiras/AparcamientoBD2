@@ -9,7 +9,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Properties;
 import java.util.List;
 
@@ -142,4 +144,17 @@ public class FachadaAplicacion {
     public int mostrarNumeroInfracciones(String dni){
         return fbd.mostrarNumeroInfracciones(dni);
     }
+    
+    public Timestamp[] statsTmedioAparcar() {
+        return fbd.statsTmedioAparcar();
+    }
+
+    public List<HashMap<String, Object>> statsVecesUsuario() {
+        return fbd.statsVecesUsuario();
+    }
+
+    public HashMap<String, List<HashMap<String, Object>>> statsPlazas() {
+        return fbd.statsPlazas();
+    }
+            
 }

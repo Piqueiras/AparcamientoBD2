@@ -42,6 +42,7 @@ public class VPrincipal extends javax.swing.JFrame {
         elimPlaza = new javax.swing.JButton();
         registrarinfrBtn = new javax.swing.JButton();
         addUsuario = new javax.swing.JButton();
+        stats = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -97,6 +98,13 @@ public class VPrincipal extends javax.swing.JFrame {
                 addUsuarioActionPerformed(evt);
             }
         });
+
+        stats.setLabel("Estadísticas");
+        stats.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                statsActionPerformed(evt);
+            }
+        });
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -106,20 +114,24 @@ public class VPrincipal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(btnGestionPagos)
                         .addGap(18, 18, 18)
-                        .addComponent(ButtonReservar)
+                        .addComponent(ButtonReservar))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(registrarinfrBtn)
                         .addGap(18, 18, 18)
+                        .addComponent(addUsuario)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(addPlaza)
                         .addGap(18, 18, 18)
                         .addComponent(elimPlaza)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
                         .addComponent(btnSalir))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(registrarinfrBtn)
-                        .addGap(18, 18, 18)
-                        .addComponent(addUsuario)
+                        .addComponent(stats)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -129,7 +141,8 @@ public class VPrincipal extends javax.swing.JFrame {
                 .addContainerGap(438, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(registrarinfrBtn)
-                    .addComponent(addUsuario))
+                    .addComponent(addUsuario)
+                    .addComponent(stats))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalir)
@@ -189,6 +202,12 @@ public class VPrincipal extends javax.swing.JFrame {
         vNuevoUsuario.setVisible(true);
     }//GEN-LAST:event_addUsuarioActionPerformed
 
+    private void statsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statsActionPerformed
+        VEstadisticas vEstadisticas = new VEstadisticas(this, true, fa);
+        vEstadisticas.setVisible(true);
+    }//GEN-LAST:event_statsActionPerformed
+
+    
     /**
      * @param args the command line argumentss
      */
@@ -202,6 +221,7 @@ public class VPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton elimPlaza;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JButton registrarinfrBtn;
+    private javax.swing.JButton stats;
     // End of variables declaration//GEN-END:variables
 
 }

@@ -20,7 +20,9 @@ import aplication.Usuario;
 import aplication.Vehiculo;
 import java.util.List;
 import conexionBBDD.DAOUsuarios;
+import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  *
@@ -170,4 +172,17 @@ public class FachadaBaseDatos {
     public int mostrarNumeroInfracciones(String dni){
         return this.daoUsuarios.mostrarNumeroInfracciones(dni);
     }
+    
+    public Timestamp[] statsTmedioAparcar() {
+        return daoPlazas.statsTmedioAparcar();
+    }
+
+    public List<HashMap<String, Object>> statsVecesUsuario() {
+        return daoPlazas.statsVecesUsuario();
+    }
+
+    public HashMap<String, List<HashMap<String, Object>>> statsPlazas() {
+        return daoPlazas.statsPlazas();
+    }
+            
 }
