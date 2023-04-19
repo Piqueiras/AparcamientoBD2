@@ -21,17 +21,19 @@ public class Aparcar {
     private int minutos;
     private int segundos;
     private Double precio;
+    private RolUsuario rol;
 
-    public Aparcar(Vehiculo vehiculo, Integer codigoPlaza, String idAparcamiento, LocalDateTime fechaEntrada, LocalDateTime fechaSalida, RolUsuario rol) {
+    public Aparcar(Vehiculo vehiculo, Integer codigoPlaza, String idAparcamiento, LocalDateTime fechaEntrada, RolUsuario rol) {
         this.vehiculo = vehiculo;
         this.codigoPlaza = codigoPlaza.toString();
         this.idAparcamiento = idAparcamiento;
         this.fechaEntrada = fechaEntrada;
-        this.fechaSalida = fechaSalida;
+        this.rol = rol;
         
-        this.horas = (int) Duration.between(fechaEntrada, fechaSalida).toHours();
-        this.minutos = (int) (Duration.between(fechaEntrada, fechaSalida).toMinutes() % 60);
-        this.segundos = (int) (Duration.between(fechaEntrada, fechaSalida).toSeconds() % 60);        
+        this.fechaSalida = null;
+        this.horas = 0;
+        this.minutos = 0;
+        this.segundos = 0;
         
         actualizarPrecio(rol);
     }
@@ -71,11 +73,28 @@ public class Aparcar {
     public Double getPrecio() {
         return precio;
     }
+
+    public void setFechaSalida(LocalDateTime fechaSalida) {
+        this.fechaSalida = fechaSalida;
+        
+        if(this.fechaEntrada != null && this.fechaSalida != null){
+            this.horas = (int) Duration.between(fechaEntrada, fechaSalida).toHours();
+            this.minutos = (int) (Duration.between(fechaEntrada, fechaSalida).toMinutes() % 60);
+            this.segundos = (int) (Duration.between(fechaEntrada, fechaSalida).toSeconds() % 60);        
+        
+            actualizarPrecio(this.rol);
+        }
+    }
     
     public final void actualizarPrecio(RolUsuario rol) {
         double mult = 0.5d;
         if (rol.equals(RolUsuario.noUSC)) {
             mult = 1d;
+        }
+        if (this.fechaSalida == null) {
+            this.horas = (int) Duration.between(fechaEntrada, LocalDateTime.now()).toHours();
+            this.minutos = (int) Duration.between(fechaEntrada, LocalDateTime.now()).toMinutes() % 60;
+            this.segundos = (int) Duration.between(fechaEntrada, LocalDateTime.now()).toSeconds() % 60;
         }
         precio = (double) horas * mult;
             if (minutos > 0 || segundos > 0) {

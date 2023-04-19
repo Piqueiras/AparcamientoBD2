@@ -70,10 +70,14 @@ public class ModeloTablaReservar extends AbstractTableModel{
         switch (col){
             case 0: resultado=reservas.get(row).getVehiculo().getUsuario().getDni(); break;
             case 1: resultado=reservas.get(row).getVehiculo().getMatricula(); break;
-            case 2: resultado=reservas.get(row).getCodigoPlaza().toString(); break;
+            case 2: resultado=reservas.get(row).getCodigoPlaza(); break;
             case 3: resultado=reservas.get(row).getIdAparcamiento();break;
-            case 4: resultado=reservas.get(row).getFechaEntrada().toString().replaceAll("T", " "); break;
-            case 5: resultado=reservas.get(row).getFechaSalida().toString().replaceAll("T", " "); break;
+            case 4: resultado=reservas.get(row).getFechaEntrada().toString(); break;
+            case 5: if(reservas.get(row).getFechaSalida() != null) {
+                        resultado=reservas.get(row).getFechaSalida().toString().replaceAll("T", " ");
+                    } else {
+                        resultado=null;
+                    } break;
             case 6: resultado=reservas.get(row).getDias() + " d, " + reservas.get(row).getHoras() + " h, " + reservas.get(row).getMinutos() + "min y " + reservas.get(row).getSegundos() + " s"; break;
             case 7: resultado=reservas.get(row).getPrecio().toString() + " €"; break;
         }

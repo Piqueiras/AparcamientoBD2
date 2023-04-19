@@ -70,10 +70,14 @@ public class ModeloTablaAparcar extends AbstractTableModel{
         switch (col){
             case 0: resultado=aparcamientos.get(row).getVehiculo().getUsuario().getDni(); break;
             case 1: resultado=aparcamientos.get(row).getVehiculo().getMatricula(); break;
-            case 2: resultado=aparcamientos.get(row).getCodigoPlaza().toString(); break;
+            case 2: resultado=aparcamientos.get(row).getCodigoPlaza(); break;
             case 3: resultado=aparcamientos.get(row).getIdAparcamiento();break;
             case 4: resultado=aparcamientos.get(row).getFechaEntrada().toString().replaceAll("T", " "); break;
-            case 5: resultado=aparcamientos.get(row).getFechaSalida().toString().replaceAll("T", " "); break;
+            case 5: if(aparcamientos.get(row).getFechaSalida() != null) {
+                        resultado=aparcamientos.get(row).getFechaSalida().toString().replaceAll("T", " ");
+                    } else {
+                        resultado=null;
+                    } break;
             case 6: resultado=aparcamientos.get(row).getHoras() + " h, " + aparcamientos.get(row).getMinutos() + "min y " + aparcamientos.get(row).getSegundos() + " s"; break;
             case 7: resultado=aparcamientos.get(row).getPrecio().toString() + " €"; break;
         }

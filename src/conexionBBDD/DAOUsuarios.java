@@ -36,16 +36,10 @@ public class DAOUsuarios extends AbstractDAO {
                                             "from Usuarios "+
                                             "where dni like ? ");
             
-            //consulta corta
-            //stmUsuario=con.prepareStatement("select dni "+
-            //                                "from Usuarios "+
-            //                                "where dni like ? ");
-            
             stmUsuario.setString(1, dni);
             rsUsuario=stmUsuario.executeQuery();
             if (rsUsuario.next())
                 {
-                    //consulta completa
                     resultado = new Usuario(rsUsuario.getString("dni"), rsUsuario.getString("nombre"),
                             rsUsuario.getString("telefono"), rsUsuario.getString("correo"),
                             aplication.RolUsuario.valueOf(rsUsuario.getString("rol")),
@@ -57,9 +51,6 @@ public class DAOUsuarios extends AbstractDAO {
                     if (rsUsuario.getObject("fechaVeto") != null) {
                         resultado.setFechaVeto(rsUsuario.getDate("fechaVeto").toLocalDate());
                     }
-                    
-                    //consulta corta
-                    //resultado = new Usuario(rsUsuario.getString("dni"));
                 }
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
@@ -133,22 +124,6 @@ public class DAOUsuarios extends AbstractDAO {
                 if (!ap.isEmpty()) {
                     consulta = consulta + " and idAparcamiento like \'" + ap + "\'";
                 }
-                /*if (!cMax.isEmpty()) {
-                    consulta = consulta + " and precio <= " + cMax;
-                }
-                if (!cMin.isEmpty()) {
-                    consulta = consulta + " and precio >= " + cMin;
-                }
-                if (!dMax.isEmpty()) {
-                    aux = dMax.replaceAll(" ", "");
-                    partes = aux.split("[hms]");
-                    consulta = consulta + " and tiempo <= \'" + partes[0] + "-" + partes[1] + "-" + partes[2] + "\'";
-                }
-                if (!dMin.isEmpty()) {
-                    aux = dMin.replaceAll(" ", "");
-                    partes = aux.split("[hms]");
-                    consulta = consulta + " and tiempo >= \'" + partes[0] + "-" + partes[1] + "-" + partes[2] + "\'";
-                }*/
                 if (!fMax.isEmpty()) {
                     consulta = consulta + " and fechaSalida <= \'" + fMax + "\'";
                 }
@@ -165,8 +140,12 @@ public class DAOUsuarios extends AbstractDAO {
                             cAct = 0; //numero de condiciones de coste y duracion activas
                             cSat = 0; //numero de condiciones de coste y duracion que se cumplen
                             aparcarActual = new Aparcar(vehiculoActual, rsAparcar.getInt("codigoPlaza"),
-                                                  rsAparcar.getString("idAparcamiento"), rsAparcar.getTimestamp("fechaentrada").toLocalDateTime(),
-                                                  rsAparcar.getTimestamp("fechasalida").toLocalDateTime(), rol);
+                                                  rsAparcar.getString("idAparcamiento"),
+                                                    rsAparcar.getTimestamp("fechaentrada").toLocalDateTime(), rol);
+                            
+                            if (rsAparcar.getObject("fechasalida") != null) {
+                                aparcarActual.setFechaSalida(rsAparcar.getTimestamp("fechasalida").toLocalDateTime());
+                            }
                             
                             //Para los parametros que no estan en la consulta porque son calculados y no estan en la tabla
                             if (!cMax.isEmpty()){
@@ -303,8 +282,13 @@ public class DAOUsuarios extends AbstractDAO {
                             cAct = 0; //numero de condiciones de coste y duracion activas
                             cSat = 0; //numero de condiciones de coste y duracion que se cumplen
                             reservarActual = new Reservar(vehiculoActual, rsReservar.getInt("codigoPlazaReserva"),
-                                                  rsReservar.getString("idAparcamiento"), rsReservar.getTimestamp("fechaInicio").toLocalDateTime(),
-                                                  rsReservar.getTimestamp("fechaFin").toLocalDateTime(), rol);
+                                                  rsReservar.getString("idAparcamiento"),
+                                                    rsReservar.getTimestamp("fechaInicio").toLocalDateTime(),
+                                                     rsReservar.getTimestamp("fechaFin").toLocalDateTime(), rol);
+                            
+                            if (rsReservar.getObject("fechaFin") != null) {
+                                reservarActual.setFechaSalida(rsReservar.getTimestamp("fechaFin").toLocalDateTime());
+                            }
                             
                             //Para los parametros que no estan en la consulta porque son calculados y no estan en la tabla
                             if (!cMax.isEmpty()){

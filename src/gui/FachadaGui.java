@@ -6,6 +6,7 @@ package gui;
 
 import java.util.List;
 import aplication.*;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -18,6 +19,7 @@ public class FachadaGui {
    public FachadaGui(aplication.FachadaAplicacion fa){
      this.fa=fa;
      this.vp = new VPrincipal(fa);
+     //ImageIcon backgroundIcon = new ImageIcon("");
    }
     
     public void iniciaVista(){

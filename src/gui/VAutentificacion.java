@@ -71,6 +71,7 @@ public class VAutentificacion extends javax.swing.JDialog {
 
         jLabel1.setText("DNI");
 
+        textoUsuario.setText("777888999");
         textoUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 textoUsuarioActionPerformed(evt);
