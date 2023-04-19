@@ -176,26 +176,17 @@ public class VEstadisticas extends javax.swing.JDialog {
     //Calcula todas las estadísticas
     private void calcStats() {
         //Tmedios
-        Timestamp[] tmedio = new Timestamp[2];
+        String[] tmedio = new String[2];
         tmedio = fa.statsTmedioAparcar();
 
-        DateTimeFormatter formatter = null; // definir el formato deseado
-        LocalDateTime localDateTime = null; // convertir el Timestamp en un LocalDateTime
-        String horaMinSeg = null;
 
         if (tmedio[0] != null) {
-            formatter = DateTimeFormatter.ofPattern("HH:mm:ss"); // definir el formato deseado
-            localDateTime = tmedio[0].toLocalDateTime(); // convertir el Timestamp en un LocalDateTime
-            horaMinSeg = localDateTime.format(formatter); // imprimir solo la hora, los minutos y los segundos en el formato deseado
-            jTextField1.setText(horaMinSeg);
+            jTextField1.setText(tmedio[0]);
         }
 
         if (tmedio[1] != null) {
-            localDateTime = tmedio[1].toLocalDateTime(); // repetir el proceso para el segundo Timestamp
-            horaMinSeg = localDateTime.format(formatter);
-            jTextField2.setText(horaMinSeg);
+            jTextField2.setText(tmedio[1]);
         }
-
         //Stats Users
         ModeloTablaEstadisticaUsuarios m = new ModeloTablaEstadisticaUsuarios();
         m.setFilas(fa.statsVecesUsuario());

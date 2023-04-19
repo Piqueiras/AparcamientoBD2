@@ -354,12 +354,12 @@ public class DAOPlazas extends AbstractDAO {
         }
     }
 
-    public Timestamp[] statsTmedioAparcar() {
+    public String[] statsTmedioAparcar() {
         String query;
 
         //out[0] -> tmedio usc users
         //out[1] -> tmedio non usc users
-        Timestamp[] out = new Timestamp[2];
+        String[] out = new String[2];
 
         try {
             query
@@ -377,8 +377,19 @@ public class DAOPlazas extends AbstractDAO {
             while (rs.next()) {
                 //Coger data
                 int rol = rs.getInt("rol");
-                Timestamp time = rs.getTimestamp("tiempomedioaparcado");
-                
+
+                //Obtiene el resultado de tiempo en formato crudo
+                String timeRaw = rs.getString("tiempomedioaparcado").replace(" days", "d");
+                String time = null;
+
+                //En caso de que en el resultado aparezca un '.' (que de el resultado con ms), se quita el punto y todo lo que esté a posteriori
+                int index = timeRaw.indexOf(".");
+                if (index < 0) {
+                    time = timeRaw;
+                } else {
+                    time = timeRaw.substring(0, index);
+                }
+
                 //Asginar valor el array según el rol
                 out[rol] = time;
             }
@@ -412,7 +423,6 @@ public class DAOPlazas extends AbstractDAO {
                     + "GROUP BY TvecesAparcadovecesReservado.nombre, TvecesAparcadovecesReservado.dni "
                     + "ORDER BY vecesaparcado DESC, vecesreservado DESC";
 
-            
             // Crea una conexión a la base de datos
             Connection connection = this.getConexion();
             Statement stmt = connection.createStatement();
@@ -440,11 +450,10 @@ public class DAOPlazas extends AbstractDAO {
         return out;
     }
 
-    
     public HashMap<String, List<HashMap<String, Object>>> statsPlazas() {
         String query;
         HashMap<String, List<HashMap<String, Object>>> datos = new HashMap<>();
-        
+
         try {
             query = "SELECT 'MásAparcadas' AS categoria, p1.codigo AS plaza, p1.tipo AS tipo, COUNT(1) AS veces\n"
                     + "FROM plazasaparcar p1, aparcar a1\n"

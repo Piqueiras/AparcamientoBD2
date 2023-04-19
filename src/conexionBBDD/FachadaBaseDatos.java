@@ -173,7 +173,7 @@ public class FachadaBaseDatos {
         return this.daoUsuarios.mostrarNumeroInfracciones(dni);
     }
     
-    public Timestamp[] statsTmedioAparcar() {
+    public String[] statsTmedioAparcar() {
         return daoPlazas.statsTmedioAparcar();
     }
 

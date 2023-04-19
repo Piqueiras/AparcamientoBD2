@@ -145,7 +145,7 @@ public class FachadaAplicacion {
         return fbd.mostrarNumeroInfracciones(dni);
     }
     
-    public Timestamp[] statsTmedioAparcar() {
+    public String[] statsTmedioAparcar() {
         return fbd.statsTmedioAparcar();
     }
 
