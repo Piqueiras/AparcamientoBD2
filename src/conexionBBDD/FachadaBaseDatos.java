@@ -162,10 +162,13 @@ public class FachadaBaseDatos {
         }
         return this.daoUsuarios.mostrarNumeroInfracciones(dni);
     }
-    /**
-     * Hai que implementar un método que sexa actualizar no que cada vez que se abra a aplicacion, 
-     * se comprobe cantos dias pasaron do veto e ao cumplir x dias, pois facer un quitarVeto e quitarInfracciones
-     */
+    //FALTAAAAA FACER
+    
+    public void Actualizar(){
+        //tería que facer unha función que devolvera todas as fechas veto xunto cos dnis de cada un (un select)
+        //calcular a diferencia entre a fecha actual e a fecha dos vetos
+        //si é maior a 14 entonces eliminase o veto
+    }
     public Usuario obtenerUsuario(String matricula){
         return this.daoUsuarios.obtenerUsuario(matricula);
     }

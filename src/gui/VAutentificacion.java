@@ -13,6 +13,7 @@ package gui;
 
 import aplication.Usuario;
 import aplication.RolUsuario;
+import java.awt.Color;
 
 /**
  *
@@ -21,12 +22,15 @@ import aplication.RolUsuario;
 public class VAutentificacion extends javax.swing.JDialog {
 
     aplication.FachadaAplicacion fa;
+    VPrincipal vp;
     
     /** Creates new form VAutentificacion */
     public VAutentificacion(java.awt.Frame parent, boolean modal, aplication.FachadaAplicacion fa) {
         super(parent, modal);
         this.fa=fa;
+        this.vp = (VPrincipal) parent;
         initComponents();
+        getContentPane().setBackground(Color.WHITE);
         etiquetaFallo.setVisible(false);
         this.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
@@ -144,6 +148,8 @@ public class VAutentificacion extends javax.swing.JDialog {
         if (u != null && u.getRol() == RolUsuario.Administracion) {
             fa.setUsuario(u);
             this.dispose();
+            this.vp.setVisible(true);
+            this.vp.etiquetaBienvenida.setText("¡Bienvenida/o señor/a "+ u.getNombre()+"!");
         }
         else etiquetaFallo.setVisible(true);
     }//GEN-LAST:event_btnAceptarActionPerformed
