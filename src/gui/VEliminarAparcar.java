@@ -199,13 +199,12 @@ public class VEliminarAparcar extends javax.swing.JDialog {
             try{   
             code = Integer.parseInt(codeS);       
             }catch (Exception e){
-                aviso=new VAviso(this,true, "El codigo de la plaza debe ser un numero");
+                aviso=new VAviso(this,false, "El codigo de la plaza debe ser un numero");
                 aviso.setVisible(true);
                 return;
             }
         }
         
-        //FALTA COMRPOBAR QUE NO EXISTA
          
         m.setFilas(fa.obtenerPlazasAparcar(aparc,code,tipoPlaza, true));
         if (m.getRowCount() > 0) {

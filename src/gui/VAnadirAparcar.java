@@ -201,6 +201,11 @@ public class VAnadirAparcar extends javax.swing.JDialog {
             this.dispose();
             return;
         }
+        else{
+            aviso=new VAviso(this,true, "ERROR: revise que el aparcamiento exista o que el número de plaza no esté siendo utilizado");
+            aviso.setVisible(true);
+            return;
+        }
     }//GEN-LAST:event_anadirActionPerformed
 
     /**
