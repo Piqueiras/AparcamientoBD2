@@ -207,7 +207,7 @@ public class VEliminarReservar extends javax.swing.JDialog {
             }
         }
          
-        m.setFilas(fa.obtenerPlazasReserva(aparc,code,tipoPlaza, true));
+        m.setFilas(fa.obtenerPlazasReserva(aparc,code,tipoPlaza, false));
         if (m.getRowCount() > 0) {
             tablaPlazasReserva.setRowSelectionInterval(0, 0);
         }      

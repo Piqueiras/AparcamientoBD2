@@ -4,12 +4,14 @@
  */
 
 package aplication;
+import conexionBBDD.FachadaBaseDatos;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Properties;
@@ -23,10 +25,19 @@ public class FachadaAplicacion {
     gui.FachadaGui fgui;
     conexionBBDD.FachadaBaseDatos fbd;
     Usuario u;
+    ArrayList<String> usuariosSalvados = new ArrayList<>();
     
     public FachadaAplicacion() {
       fgui=new gui.FachadaGui(this);
       fbd=new conexionBBDD.FachadaBaseDatos(this);
+    }
+
+    public FachadaBaseDatos getFbd() {
+        return fbd;
+    }
+
+    public ArrayList<String> getUsuariosSalvados() {
+        return usuariosSalvados;
     }
     
     public Usuario getUsuario () {
@@ -41,6 +52,8 @@ public class FachadaAplicacion {
         FachadaAplicacion fa;
 
         fa= new FachadaAplicacion();
+        fa.usuariosSalvados = fa.Actualizar(); //Actualiza os vetos
+        
         fa.iniciaInterfazUsuario();
     }
 
@@ -155,6 +168,14 @@ public class FachadaAplicacion {
 
     public HashMap<String, List<HashMap<String, Object>>> statsPlazas() {
         return fbd.statsPlazas();
+    }
+    /**
+     * Actualiza os vetos:
+     * Recorrrendoos usuarios con vetos, si pasan máis de catorce días entre o veto do usuario
+     * e o dia que se abre a aplicacion, entonces elimínase o veto.
+     */
+    public ArrayList<String> Actualizar(){
+        return this.fbd.Actualizar();
     }
             
 }

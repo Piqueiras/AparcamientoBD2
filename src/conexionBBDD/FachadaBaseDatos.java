@@ -21,6 +21,9 @@ import aplication.Vehiculo;
 import java.util.List;
 import conexionBBDD.DAOUsuarios;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -78,6 +81,10 @@ public class FachadaBaseDatos {
             System.out.println(e.getMessage());
             fa.muestraExcepcion(e.getMessage());
         }
+    }
+
+    public DAOUsuarios getDaoUsuarios() {
+        return daoUsuarios;
     }
 
     public Usuario validarUsuario(String dni){
@@ -162,13 +169,7 @@ public class FachadaBaseDatos {
         }
         return this.daoUsuarios.mostrarNumeroInfracciones(dni);
     }
-    //FALTAAAAA FACER
     
-    public void Actualizar(){
-        //tería que facer unha función que devolvera todas as fechas veto xunto cos dnis de cada un (un select)
-        //calcular a diferencia entre a fecha actual e a fecha dos vetos
-        //si é maior a 14 entonces eliminase o veto
-    }
     public Usuario obtenerUsuario(String matricula){
         return this.daoUsuarios.obtenerUsuario(matricula);
     }
@@ -186,6 +187,24 @@ public class FachadaBaseDatos {
 
     public HashMap<String, List<HashMap<String, Object>>> statsPlazas() {
         return daoPlazas.statsPlazas();
+    }
+    /**
+     * 
+     * @return lista cos nomes dos usuarios cuxo veto foi quitado a causa de que 
+     * pasaron 14 dias dende o veto ata o dia en que se abriu a aplicacion
+     */
+    public ArrayList<String> Actualizar(){
+        ArrayList<String> usuariosSalvados = new ArrayList<>();//será a lista de nombres dos usuario aos cales se lles quitou o veto
+        ArrayList<Usuario> usuarios = this.daoUsuarios.buscarUsuariosConVeto();
+        
+        LocalDate ahora = LocalDate.now();
+        for(Usuario u : usuarios ){
+            if(ChronoUnit.DAYS.between( u.getFechaVeto(),ahora)>14){
+                this.daoUsuarios.quitarVeto(u.getDni());
+                usuariosSalvados.add(u.getNombre());
+            }
+        }
+        return usuariosSalvados;
     }
             
 }

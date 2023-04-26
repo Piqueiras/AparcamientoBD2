@@ -326,6 +326,7 @@ public class VPrincipal extends javax.swing.JFrame {
             aviso.setLocationRelativeTo(null);
             return;
         }
+        this.fa.getFbd().getDaoUsuarios().beginTransaction();
         VReservarAparcar vreservar = new VReservarAparcar(this, true, fa);
         vreservar.setLocationRelativeTo(null);
         vreservar.setVisible(true);
@@ -351,6 +352,7 @@ public class VPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_statsActionPerformed
 
     private void confPlazasbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confPlazasbtnActionPerformed
+        this.fa.getFbd().getDaoUsuarios().beginTransactionSerializable();
         confPlazas.getContentPane().setBackground(Color.white);
         confPlazas.setLocationRelativeTo(null);
         confPlazas.setVisible(true);

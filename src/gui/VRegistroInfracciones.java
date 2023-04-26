@@ -109,6 +109,12 @@ public class VRegistroInfracciones extends javax.swing.JFrame {
 
         listaActividad.setModel(new ModeloListaStrings());
         listaActividad.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        ModeloListaStrings listactividad;
+        listactividad = (ModeloListaStrings) this.listaActividad.getModel();
+        for(int i = 0; i< this.fa.getUsuariosSalvados().size();i++){
+            String texto = "Se ha quitado el veto de "+this.fa.getUsuariosSalvados().get(i)+", ya que han pasado más de 14 días desde el veto";
+            listactividad.nuevoElemento(texto);
+        }
         listaActividad.setName(""); // NOI18N
         jScrollPane2.setViewportView(listaActividad);
 

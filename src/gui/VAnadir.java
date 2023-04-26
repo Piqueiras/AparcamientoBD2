@@ -115,6 +115,7 @@ public class VAnadir extends javax.swing.JDialog {
     }//GEN-LAST:event_reservarActionPerformed
 
     private void volverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volverActionPerformed
+        this.fa.getFbd().getDaoUsuarios().commitTransaction();
         this.dispose();
     }//GEN-LAST:event_volverActionPerformed
  

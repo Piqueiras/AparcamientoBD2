@@ -102,6 +102,7 @@ public class VEliminar extends javax.swing.JDialog {
 
     private void volverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volverActionPerformed
                this.dispose();
+               this.fa.getFbd().getDaoUsuarios().commitTransaction();
     }//GEN-LAST:event_volverActionPerformed
 
     private void reservarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reservarActionPerformed

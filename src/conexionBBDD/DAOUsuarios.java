@@ -817,4 +817,105 @@ List<Vehiculo> obtenerVehiculosNoAparcados(String dni) {
         }  
         return usuario;
     }
+    /**
+     * 
+     * @return unha lista cos usuarios que teñen veto actual (orientado a actualización dos vetos)
+     */
+        public ArrayList<Usuario>  buscarUsuariosConVeto(){
+        Connection con;
+        con = this.getConexion();
+        
+        LocalDate fechaveto = null;
+        LocalDate fechaingreso = null;
+        
+        ArrayList<Usuario> dev = new ArrayList<>();
+        Statement stm=null;
+        String consulta = "SELECT * FROM Usuarios WHERE fechaveto is not NULL";
+        try{
+            stm = con.createStatement();
+            ResultSet resultado = stm.executeQuery(consulta);
+
+            while(resultado.next()){
+                RolUsuario rolUsuario = null;
+                if(resultado.getString("rol").equals("Administracion"))
+                    rolUsuario = RolUsuario.Administracion;
+                else if (resultado.getString("rol").equals("Docente")) {
+                    rolUsuario = RolUsuario.Docente;
+                }
+                else if(resultado.getString("rol").equals("Alumno")){
+                    rolUsuario = RolUsuario.Alumno;
+                }
+                else if(resultado.getString("rol").equals("noUSC")){
+                    rolUsuario = RolUsuario.noUSC;
+                }
+                if (resultado.getTimestamp("fechaveto")!=null) {
+                    fechaveto = resultado.getTimestamp("fechaveto").toLocalDateTime().toLocalDate();
+                }
+                 if (resultado.getTimestamp("fechaingresousc")!=null) {
+                    fechaingreso = resultado.getTimestamp("fechaingresousc").toLocalDateTime().toLocalDate();
+                }
+                dev.add(new Usuario(resultado.getString("dni"),resultado.getString("nombre"),resultado.getString("telefono"),
+                resultado.getString("correo"), fechaingreso, rolUsuario,
+                        fechaveto,resultado.getInt("numeroinfracciones")));
+            }
+        }
+         catch(SQLException error){
+             System.out.println(error.getMessage());
+        }finally{
+            try{stm.close();}catch(SQLException e){System.out.println("No se pueden cerrar cursores");}
+            return dev;
+        }
+    }
+    public void commitTransaction(){
+        java.sql.Connection con;
+        con = this.getConexion();
+        
+        Statement stm=null;
+        String consulta = "commit;";
+        try{
+            stm = con.createStatement();
+            stm.executeQuery(consulta);
+        }
+         catch(SQLException error){
+             if(error.getErrorCode() == 4001){
+                 System.out.println("Prodúxose un error polo isolation level serializable");  
+             }else{
+             System.out.println(error.getMessage());
+             }
+        }finally{
+            try{stm.close();}catch(SQLException e){System.out.println("No se pueden cerrar cursores");}////FALTAME COLLER A EXCEPCION
+        }
+    }
+    public void beginTransaction(){
+        java.sql.Connection con;
+        con = this.getConexion();
+        
+        Statement stm=null;
+        String consulta = "begin transaction;";
+        try{
+            stm = con.createStatement();
+            stm.executeQuery(consulta);
+        }
+         catch(SQLException error){
+             System.out.println(error.getMessage());
+        }finally{
+            try{stm.close();}catch(SQLException e){System.out.println("No se pueden cerrar cursores");}////FALTAME COLLER A EXCEPCION
+        }
+    }
+    public void beginTransactionSerializable(){
+        java.sql.Connection con;
+        con = this.getConexion();
+        
+        Statement stm=null;
+        String consulta = "begin transaction isolation level serializable;";
+        try{
+            stm = con.createStatement();
+            stm.executeQuery(consulta);
+        }
+         catch(SQLException error){
+             System.out.println(error.getMessage());
+        }finally{
+            try{stm.close();}catch(SQLException e){System.out.println("No se pueden cerrar cursores");}////FALTAME COLLER A EXCEPCION
+        }
+    }
 }
