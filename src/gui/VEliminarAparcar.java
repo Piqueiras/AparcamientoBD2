@@ -170,7 +170,6 @@ public class VEliminarAparcar extends javax.swing.JDialog {
         
         String aparc = aparcamientoIN.getText();
 
-        //FALTA COMRPOBAR QUE EXISTA
         
 
         String plaza = (String) vehiculoIN.getSelectedItem();
@@ -206,7 +205,7 @@ public class VEliminarAparcar extends javax.swing.JDialog {
         }
         
          
-        m.setFilas(fa.obtenerPlazasAparcar(aparc,code,tipoPlaza, true));
+        m.setFilas(fa.obtenerPlazasAparcar(aparc,code,tipoPlaza, false));
         if (m.getRowCount() > 0) {
             tablaPlazasReserva.setRowSelectionInterval(0, 0);
         }      

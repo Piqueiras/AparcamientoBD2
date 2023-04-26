@@ -44,7 +44,7 @@ public class DAOPlazas extends AbstractDAO {
         Connection connection = this.getConexion();
         try {
             // Crear un objeto PreparedStatement con la consulta
-            query = "SELECT codigo, tipo, idAparcamiento FROM PlazasReserva p WHERE p.idAparcamiento like ? ";
+            query = "SELECT codigo, tipo, idAparcamiento FROM PlazasReserva p WHERE p.idAparcamiento like ? and p.idAparcamiento not like 'PARK0' ";
 
             if (codigoPlaza != -1) {
                 query += " AND  p.codigo=? ";
@@ -143,7 +143,7 @@ public class DAOPlazas extends AbstractDAO {
         Connection connection = this.getConexion();
         try {
             // Crear un objeto PreparedStatement con la consulta
-            query = "SELECT codigo, tipo, idAparcamiento FROM PlazasAparcar p WHERE p.idAparcamiento like ? ";
+            query = "SELECT codigo, tipo, idAparcamiento FROM PlazasAparcar p WHERE p.idAparcamiento like ? and p.idAparcamiento not like 'PARK0' ";
 
             if (codigoPlaza != -1) {
                 query += " AND  p.codigo=? ";

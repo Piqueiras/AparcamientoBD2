@@ -337,7 +337,11 @@ private static boolean estanSeparadosPorMasDe7Dias(Date fecha1, Date fecha2) {
         if(exito){//reserva exitosa
             JOptionPane.showMessageDialog(this,"Reserva realizada con éxito.");
             this.dispose();
-        }    
+        }    else {
+        aviso=new VAviso(this,true, "Fallo al realizar la reserva. Pruebe a volver a buscar las plazas.");
+            aviso.setVisible(true);
+            
+        }
     }//GEN-LAST:event_hacerReservaButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

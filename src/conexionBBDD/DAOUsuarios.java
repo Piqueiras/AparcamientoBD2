@@ -459,7 +459,7 @@ public class DAOUsuarios extends AbstractDAO {
         Connection connection = this.getConexion();
         try {
             // Crear un objeto PreparedStatement con la consulta
-            query = "SELECT * FROM Vehiculos v where v.dni not in (select dni from usuarios where fechaveto is not NULL)";
+            query = "SELECT * FROM Vehiculos v where v.dni not in (select dni from usuarios where fechaveto is not NULL) and matricula not like '0000AAA'";
             statement = connection.prepareStatement(query);
             // Establecer los parámetros de la consulta
 
@@ -514,7 +514,7 @@ public class DAOUsuarios extends AbstractDAO {
         Connection connection = this.getConexion();
         try {
             // Crear un objeto PreparedStatement con la consulta
-            query = "SELECT * FROM Vehiculos WHERE DNI like ? and dni not in (select dni from usuarios where fechaveto is not NULL)";
+            query = "SELECT * FROM Vehiculos WHERE DNI like ? and dni not in (select dni from usuarios where fechaveto is not NULL) and matricula not like '0000AAA'";
             statement = connection.prepareStatement(query);
             // Establecer los parámetros de la consulta
             statement.setString(1, dni+"%");
@@ -570,7 +570,7 @@ public class DAOUsuarios extends AbstractDAO {
         try {
             // Crear un objeto PreparedStatement con la consulta
             query = "SELECT * FROM Vehiculos v where (v.dni not in (select dni from usuarios where fechaveto is not NULL)) and "
-                    + "(v.matricula not in(select matriculavehiculo from aparcar where fechasalida is NULL))";
+                    + "(v.matricula not in(select matriculavehiculo from aparcar where fechasalida is NULL)) and matricula not like '0000AAA'";
             statement = connection.prepareStatement(query);
             // Establecer los parámetros de la consulta
 
@@ -625,7 +625,7 @@ public List<Vehiculo> obtenerVehiculosNoAparcados(String dni) {
         try {
             // Crear un objeto PreparedStatement con la consulta
             query = "SELECT * FROM Vehiculos WHERE DNI like ? and dni not in (select dni from usuarios where fechaveto is not NULL) and "
-                    + "(matricula not in(select matriculavehiculo from aparcar where fechasalida is NULL))";
+                    + "(matricula not in(select matriculavehiculo from aparcar where fechasalida is NULL)) matricula not like '0000AAA'";
             statement = connection.prepareStatement(query);
             // Establecer los parámetros de la consulta
             statement.setString(1, dni+"%");

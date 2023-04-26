@@ -225,6 +225,7 @@ public class VAparcar extends javax.swing.JDialog{
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        VAviso aviso;
         int fila=tablaVehiculos.getSelectedRow();
         if(fila==-1){
             //aviso=new VAviso(this,true, "No has seleccionado ningun vehiculo");
@@ -240,7 +241,11 @@ public class VAparcar extends javax.swing.JDialog{
             JOptionPane.showMessageDialog(this,"Transaccion realizada con éxito.");
             this.dispose();
             return;
-        }    
+        }    else {
+        aviso=new VAviso(this,true, "Fallo al realizar la reserva. Pruebe a volver a buscar las plazas.");
+            aviso.setVisible(true);
+            
+        }
             
     }//GEN-LAST:event_jButton2ActionPerformed
 

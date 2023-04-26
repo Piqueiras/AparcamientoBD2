@@ -172,7 +172,6 @@ public class VEliminarReservar extends javax.swing.JDialog {
         
         String aparc = aparcamientoIN.getText();
 
-        //FALTA COMRPOBAR QUE EXISTA
         
 
         String plaza = (String) vehiculoIN.getSelectedItem();
