@@ -80,7 +80,7 @@ public class DAOUsuarios extends AbstractDAO {
         //Se devuelve la instancia de Usuario
         return resultado;
     }
-
+    
     /**
      * Este metodo obtiene todas las tuplas de la tabla Aparcar de la base de
      * datos que cumplan las condiciones especificadas. Los datos de cada tupla
@@ -104,15 +104,8 @@ public class DAOUsuarios extends AbstractDAO {
      */
     public List<Aparcar> ConsultarHistorialAparcar(String dni, String mat, String pza, String ap, String cMax, String cMin, String dMax, String dMin, String fMax, String fMin) {
         java.util.List<Aparcar> resultado = new java.util.ArrayList<>();
-        Vehiculo vehiculoActual;
-        Usuario usuario;
-        RolUsuario rol;
         Aparcar aparcarActual;
         Connection con;
-        PreparedStatement stmUsuario = null;
-        ResultSet rsUsuario;
-        PreparedStatement stmVehiculo = null;
-        ResultSet rsVehiculo;
         PreparedStatement stmAparcar = null;
         ResultSet rsAparcar;
         String partes[];
@@ -123,149 +116,106 @@ public class DAOUsuarios extends AbstractDAO {
         //Se obtiene la consexión con la base de datos
         con = this.getConexion();
 
-        //Con esta consulta, obtenemos los vehiculos de un determinado usuario, usando su dni.
-        //Posteriormente, obtendremos todos los aparcamientos que ha realizado cada vehiculo que se obtiene en esta consulta.
-        String consulta = "select dni, matricula "
-                + "from Vehiculos "
-                + "where dni like ";
+        //Con esta consulta, obtenemos todas las tuplas de la tabla aparcar.
+        //Posteriormente, aplicaremos las restricciones.
+        String consulta = "select u.dni, u.rol, v.matricula, a.codigoPlaza, a.idAparcamiento, a.fechaentrada, a.fechasalida "
+                + "from Usuarios u, Vehiculos v, aparcar a "
+                + "where u.dni = v.dni and v.matricula = a.matriculaVehiculo ";
 
-        //Si se introduce un dni en la caja de busqueda, se busca con ese dni. Si no, se obtienen todas las tuplas de la tabla.
+        //Debemos comprobar si se han introducido parametros de busqueda. Comenzamos con los no calculados.
+        //Simplemente, si se ha introducido algun parametro, se anhade la condicion a la consulta.
         if (!dni.isEmpty()) {
-            consulta = consulta + "\'" + dni + "\'";    //Busqueda por dni concreto
-        } else {
-            consulta = consulta + "\'%\'";              //Busqueda con cualquier dni
+            consulta = consulta + " and u.dni like \'" + dni + "\' ";
         }
-
-        //Busqueda por matricula, en caso de que se haya introducido una
         if (!mat.isEmpty()) {
-            consulta = consulta + "and matricula like \'" + mat + "\'";
+            consulta = consulta + " and v.matricula like \'" + mat + "\' ";
+        }
+        if (!pza.isEmpty()) {
+            consulta = consulta + " and a.codigoPlaza = " + pza + " ";
+        }
+        if (!ap.isEmpty()) {
+            consulta = consulta + " and a.idAparcamiento like \'" + ap + "\' ";
+        }
+        if (!fMax.isEmpty()) {
+            consulta = consulta + " and a.fechaSalida <= \'" + fMax + "\' ";
+        }
+        if (!fMin.isEmpty()) {
+            consulta = consulta + " and a.fechaEntrada >= \'" + fMin + "\' ";
         }
 
         try {
-            //Ejecutamos la consulta. El resultado sera un conjunto de vehiculos, por lo que llamamos al resultSet rsVehiculo.
-            stmVehiculo = con.prepareStatement(consulta);
-            rsVehiculo = stmVehiculo.executeQuery();
+            //Ahora ejecutamos la nueva consulta para obtener los aparcamientos, con todas las restricciones especificadas
+            stmAparcar = con.prepareStatement(consulta);
+            rsAparcar = stmAparcar.executeQuery();
 
-            //Ahora debemos ejecutar un bucle sobre el resultSet para obtener los aparcamientos de cada vehiculo.
-            //Cada iteracion del bucle obtendra los aparcamientos de un vehiculo.
-            while (rsVehiculo.next()) {
-                //Necesitaremos el rol del duenho del vehiculo, para asi poder calcular el precio adecuado. Creamos pues el usuario.
-                usuario = new Usuario(rsVehiculo.getString("dni"));
+            //Ejecutamos un bucle para todas las tuplas de aparcamientos obtenidas
+            while (rsAparcar.next()) {
+                //Creamos una instancia de Aparcar que guarde todos los datos de la tupla
+                aparcarActual = new Aparcar(new Vehiculo(rsAparcar.getString("matricula"), new Usuario(rsAparcar.getString("dni"))),
+                        rsAparcar.getInt("codigoPlaza"),
+                        rsAparcar.getString("idAparcamiento"),
+                        rsAparcar.getTimestamp("fechaentrada").toLocalDateTime(), 
+                        RolUsuario.valueOf(rsAparcar.getString("rol")));
 
-                //Creamos un nuevo vehiculo con la matricula dada y el usuario que acabamos de crear.
-                //Recordemos que si se ha introducido una matricula en los parametros de busqueda, se creara con esa, pues sera el unico resultado en el resultSet
-                //Usaremos este vehiculo para obtener sus aparcamientos.
-                vehiculoActual = new Vehiculo(rsVehiculo.getString("matricula"), usuario);
-
-                //Obtenemos el rol del duenho del vehiculo.
-                consulta = "select rol from Usuarios where dni like \'" + usuario.getDni() + "\'";
-
-                //Ejecutamos la consulta. El resultado sera simplemente el rol del usuario
-                stmUsuario = con.prepareStatement(consulta);
-                rsUsuario = stmUsuario.executeQuery();
-                rsUsuario.next();
-
-                //Guardamos el rol que acabamos de obtener
-                rol = RolUsuario.valueOf(rsUsuario.getString("rol"));
-
-                //Ahora comenzaremos el proceso para obtener los aparcamientos del vehiculo que hemos creado anteriormente.
-                //Queremos todos los datos de la tabla. Comenzamos buscando con la matricula, pues esta sera siempre un parametro de busqueda.
-                //La matricula con la que buscaremos siempre sera la del vehiculo que hemos creado.
-                consulta = "select matriculaVehiculo, codigoPlaza, idAparcamiento, fechaentrada, fechasalida "
-                        + "from aparcar "
-                        + "where matriculaVehiculo like \'" + vehiculoActual.getMatricula() + "\'";
-
-                //Debemos comprobar si se han introducido otros parametros de busqueda. Comenzamos con los no calculados.
-                //Simplemente, si se ha introducido algun parametro, se anhade la condicion a la consulta.
-                if (!pza.isEmpty()) {
-                    consulta = consulta + " and codigoPlaza = " + pza + " ";
-                }
-                if (!ap.isEmpty()) {
-                    consulta = consulta + " and idAparcamiento like \'" + ap + "\'";
-                }
-                if (!fMax.isEmpty()) {
-                    consulta = consulta + " and fechaSalida <= \'" + fMax + "\'";
-                }
-                if (!fMin.isEmpty()) {
-                    consulta = consulta + " and fechaEntrada >= \'" + fMin + "\'";
+                //fechasalida puede ser null. Si se diese el caso, .toLocalDateTime() lanzaria una excepcion y no se podría seguir con el proceso.
+                //Para evitarlo, controlamos que sea null, y solo si no lo es realizamos la conversion
+                if (rsAparcar.getObject("fechasalida") != null) {
+                    aparcarActual.setFechaSalida(rsAparcar.getTimestamp("fechasalida").toLocalDateTime());
                 }
 
-                try {
-                    //Ahora ejecutamos la nueva consulta para obtener los aparcamientos, con todas las restricciones especificadas
-                    stmAparcar = con.prepareStatement(consulta);
-                    rsAparcar = stmAparcar.executeQuery();
+                //Ahora tenemos que aplicar las restricciones de coste y duracion. Como estos parametros no estan en la tabla, no se pueden aplicar en la consulta.
+                //En su lugar, se controlan aqui. Al crear aparcarActual, ya se han calculado tanto el precio como la duracion.
+                cAct = 0; //numero de condiciones de coste y duracion activas (es decir, numero de parametros de coste y duracion usados para buscar)
+                cSat = 0; //numero de condiciones de coste y duracion que se cumplen
 
-                    //Ejecutamos un bucle para todas las tuplas de aparcamientos obtenidas
-                    while (rsAparcar.next()) {
-                        //Creamos una instancia de Aparcar que guarde todos los datos de la tupla
-                        aparcarActual = new Aparcar(vehiculoActual, rsAparcar.getInt("codigoPlaza"),
-                                rsAparcar.getString("idAparcamiento"),
-                                rsAparcar.getTimestamp("fechaentrada").toLocalDateTime(), rol);
-
-                        //fechasalida puede ser null. Si se diese el caso, .toLocalDateTime() lanzaria una excepcion y no se podría seguir con el proceso.
-                        //Para evitarlo, controlamos que sea null, y solo si no lo es realizamos la conversion
-                        if (rsAparcar.getObject("fechasalida") != null) {
-                            aparcarActual.setFechaSalida(rsAparcar.getTimestamp("fechasalida").toLocalDateTime());
-                        }
-
-                        //Ahora tenemos que aplicar las restricciones de coste y duracion. Como estos parametros no estan en la tabla, no se pueden aplicar en la consulta.
-                        //En su lugar, se controlan aqui. Al crear aparcar, ya se han calculado tanto el precio como la duracion.
-                        cAct = 0; //numero de condiciones de coste y duracion activas (es decir, numero de parametros de coste y duracion usados para buscar)
-                        cSat = 0; //numero de condiciones de coste y duracion que se cumplen
-
-                        if (!cMax.isEmpty()) {
-                            if (aparcarActual.getPrecio() <= Double.valueOf(cMax)) {
-                                cSat += 1;
-                            }
-                            cAct += 1;
-                        }
-                        if (!cMin.isEmpty()) {
-                            if (aparcarActual.getPrecio() >= Double.valueOf(cMin)) {
-                                cSat += 1;
-                            }
-                            cAct += 1;
-                        }
-                        if (!dMax.isEmpty()) {
-                            aux = dMax.replaceAll(" ", "");
-                            partes = aux.split("[dhms]");
-                            if ((aparcarActual.getHoras() < Integer.valueOf(partes[0]) * 24)
-                                    || (aparcarActual.getHoras() == (Integer.valueOf(partes[0]) * 24) && aparcarActual.getHoras() < Integer.valueOf(partes[1]))
-                                    || (aparcarActual.getHoras() == (Integer.valueOf(partes[0]) * 24) && aparcarActual.getHoras() == Integer.valueOf(partes[1]) && aparcarActual.getMinutos() < Integer.valueOf(partes[2]))
-                                    || (aparcarActual.getHoras() == (Integer.valueOf(partes[0]) * 24) && aparcarActual.getHoras() == Integer.valueOf(partes[1]) && aparcarActual.getMinutos() == Integer.valueOf(partes[2]) && aparcarActual.getSegundos() <= Integer.valueOf(partes[3]))) {
-                                cSat += 1;
-                            }
-                            cAct += 1;
-                        }
-                        if (!dMin.isEmpty()) {
-                            aux = dMin.replaceAll(" ", "");
-                            partes = aux.split("[dhms]");
-                            if ((aparcarActual.getHoras() > Integer.valueOf(partes[0]) * 24)
-                                    || (aparcarActual.getHoras() == (Integer.valueOf(partes[0]) * 24) && aparcarActual.getHoras() > Integer.valueOf(partes[1]))
-                                    || (aparcarActual.getHoras() == (Integer.valueOf(partes[0]) * 24) && aparcarActual.getHoras() == Integer.valueOf(partes[1]) && aparcarActual.getMinutos() > Integer.valueOf(partes[2]))
-                                    || (aparcarActual.getHoras() == (Integer.valueOf(partes[0]) * 24) && aparcarActual.getHoras() == Integer.valueOf(partes[1]) && aparcarActual.getMinutos() == Integer.valueOf(partes[2]) && aparcarActual.getSegundos() >= Integer.valueOf(partes[3]))) {
-                                cSat += 1;
-                            }
-                            cAct += 1;
-                        }
-
-                        //Finalmente, si se cumplen todas las condiciones, se anhade la instancia de aparcar a la lista
-                        if (cSat == cAct) {
-                            resultado.add(aparcarActual);
-                        }
+                if (!cMax.isEmpty()) {
+                    if (aparcarActual.getPrecio() <= Double.valueOf(cMax)) {
+                        cSat += 1;
                     }
-                } catch (SQLException e) {
-                    System.out.println(e.getMessage());
-                    this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
-                } finally {
-                    stmAparcar.close();
+                    cAct += 1;
+                }
+                if (!cMin.isEmpty()) {
+                    if (aparcarActual.getPrecio() >= Double.valueOf(cMin)) {
+                        cSat += 1;
+                    }
+                    cAct += 1;
+                }
+                if (!dMax.isEmpty()) {
+                    aux = dMax.replaceAll(" ", "");
+                    partes = aux.split("[dhms]");
+                    if (partes.length != 4) throw(new java.lang.NumberFormatException());
+                    if ((aparcarActual.getHoras() < Integer.parseInt(partes[0]) * 24)
+                            || (aparcarActual.getHoras() == (Integer.parseInt(partes[0]) * 24) && aparcarActual.getHoras() < Integer.parseInt(partes[1]))
+                            || (aparcarActual.getHoras() == (Integer.parseInt(partes[0]) * 24) && aparcarActual.getHoras() == Integer.parseInt(partes[1]) && aparcarActual.getMinutos() < Integer.parseInt(partes[2]))
+                            || (aparcarActual.getHoras() == (Integer.parseInt(partes[0]) * 24) && aparcarActual.getHoras() == Integer.parseInt(partes[1]) && aparcarActual.getMinutos() == Integer.parseInt(partes[2]) && aparcarActual.getSegundos() <= Integer.parseInt(partes[3]))) {
+                        cSat += 1;
+                    }
+                    cAct += 1;
+                }
+                if (!dMin.isEmpty()) {
+                    aux = dMin.replaceAll(" ", "");
+                    partes = aux.split("[dhms]");
+                    if (partes.length != 4) throw(new java.lang.NumberFormatException());
+                    if ((aparcarActual.getHoras() > Integer.parseInt(partes[0]) * 24)
+                            || (aparcarActual.getHoras() == (Integer.parseInt(partes[0]) * 24) && aparcarActual.getHoras() > Integer.parseInt(partes[1]))
+                            || (aparcarActual.getHoras() == (Integer.parseInt(partes[0]) * 24) && aparcarActual.getHoras() == Integer.parseInt(partes[1]) && aparcarActual.getMinutos() > Integer.parseInt(partes[2]))
+                            || (aparcarActual.getHoras() == (Integer.parseInt(partes[0]) * 24) && aparcarActual.getHoras() == Integer.parseInt(partes[1]) && aparcarActual.getMinutos() == Integer.parseInt(partes[2]) && aparcarActual.getSegundos() >= Integer.parseInt(partes[3]))) {
+                        cSat += 1;
+                    }
+                    cAct += 1;
+                }
+
+                //Finalmente, si se cumplen todas las condiciones, se anhade la instancia de aparcar a la lista
+                if (cSat == cAct) {
+                    resultado.add(aparcarActual);
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | java.lang.NumberFormatException e) {
             System.out.println(e.getMessage());
-            this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
+            this.getFachadaAplicacion().muestraExcepcion("Formato incorrecto");
         } finally {
             try {
-                stmVehiculo.close();
+                stmAparcar.close();
             } catch (SQLException e) {
                 System.out.println("Imposible cerrar cursores");
             }
@@ -274,7 +224,7 @@ public class DAOUsuarios extends AbstractDAO {
         //Se devuelve una lista con todas las tuplas de aparcar que satisfacen todas las condiciones
         return resultado;
     }
-
+    
     /**
      * Este metodo obtiene todas las tuplas de la tabla Reservar de la base de
      * datos que cumplan las condiciones especificadas. Los datos de cada tupla
@@ -297,15 +247,8 @@ public class DAOUsuarios extends AbstractDAO {
      */
     public List<Reservar> ConsultarHistorialReservar(String dni, String mat, String pza, String ap, String cMax, String cMin, String dMax, String dMin, String fMax, String fMin) {
         java.util.List<Reservar> resultado = new java.util.ArrayList<>();
-        Vehiculo vehiculoActual;
-        Usuario usuario;
-        RolUsuario rol;
         Reservar reservarActual;
         Connection con;
-        PreparedStatement stmUsuario = null;
-        ResultSet rsUsuario;
-        PreparedStatement stmVehiculo = null;
-        ResultSet rsVehiculo;
         PreparedStatement stmReservar = null;
         ResultSet rsReservar;
         String partes[];
@@ -316,150 +259,105 @@ public class DAOUsuarios extends AbstractDAO {
         //Se obtiene la consexión con la base de datos
         con = this.getConexion();
 
-        //Con esta consulta, obtenemos los vehiculos de un determinado usuario, usando su dni.
-        //Posteriormente, obtendremos todos las reservas que ha realizado cada vehiculo que se obtiene en esta consulta.
-        String consulta = "select dni, matricula "
-                + "from Vehiculos "
-                + "where dni like ";
+        //Con esta consulta, obtenemos todas las tuplas de la tabla reservar.
+        //Posteriormente, aplicaremos las restricciones.
+        String consulta = "select u.dni, u.rol, v.matricula, r.codigoPlazaReserva, r.idAparcamiento, r.fechaInicio, r.fechaFin "
+                + "from Usuarios u, Vehiculos v, reservar r "
+                + "where u.dni = v.dni and v.matricula = r.matriculaVehiculo ";
 
-        //Si se introduce un dni en la caja de busqueda, se busca con ese dni. Si no, se obtienen todas las tuplas de la tabla.
+        //Debemos comprobar si se han introducido parametros de busqueda. Comenzamos con los no calculados.
+        //Simplemente, si se ha introducido algun parametro, se anhade la condicion a la consulta.
         if (!dni.isEmpty()) {
-            consulta = consulta + "\'" + dni + "\'";    //Busqueda por dni concreto
-        } else {
-            consulta = consulta + "\'%\'";              //Busqueda con cualquier dni
+            consulta = consulta + " and u.dni like \'" + dni + "\' ";
         }
-
-        //Busqueda por matricula, en caso de que se haya introducido una
         if (!mat.isEmpty()) {
-            consulta = consulta + "and matricula like \'" + mat + "\'";
+            consulta = consulta + " and v.matricula like \'" + mat + "\' ";
+        }
+        if (!pza.isEmpty()) {
+            consulta = consulta + " and r.codigoPlazaReserva = " + pza + " ";
+        }
+        if (!ap.isEmpty()) {
+            consulta = consulta + " and r.idAparcamiento like \'" + ap + "\' ";
+        }
+        if (!fMax.isEmpty()) {
+            consulta = consulta + " and r.fechaInicio <= \'" + fMax + "\' ";
+        }
+        if (!fMin.isEmpty()) {
+            consulta = consulta + " and r.fechaFin >= \'" + fMin + "\' ";
         }
 
         try {
-            //Ejecutamos la consulta. El resultado sera un conjunto de vehiculos, por lo que llamamos al resultSet rsVehiculo.
-            stmVehiculo = con.prepareStatement(consulta);
-            rsVehiculo = stmVehiculo.executeQuery();
+            //Ahora ejecutamos la nueva consulta para obtener las reservas, con todas las restricciones especificadas
+            stmReservar = con.prepareStatement(consulta);
+            rsReservar = stmReservar.executeQuery();
 
-            //Ahora debemos ejecutar un bucle sobre el resultSet para obtener las reservas de cada vehiculo.
-            //Cada iteracion del bucle obtendra las reservas de un vehiculo.
-            while (rsVehiculo.next()) {
-                //Necesitaremos el rol del duenho del vehiculo, para asi poder calcular el precio adecuado. Creamos pues el usuario.
-                usuario = new Usuario(rsVehiculo.getString("dni"));
+            //Ejecutamos un bucle para todas las tuplas de reservas obtenidas
+            while (rsReservar.next()) {
+                //Creamos una instancia de Reservar que guarde todos los datos de la tupla
+                reservarActual = new Reservar(new Vehiculo(rsReservar.getString("matricula"), new Usuario(rsReservar.getString("dni"))),
+                        rsReservar.getInt("codigoPlazaReserva"),
+                        rsReservar.getString("idAparcamiento"),
+                        rsReservar.getTimestamp("fechaInicio").toLocalDateTime(), 
+                        RolUsuario.valueOf(rsReservar.getString("rol")));
 
-                //Creamos un nuevo vehiculo con la matricula dada y el usuario que acabamos de crear.
-                //Recordemos que si se ha introducido una matricula en los parametros de busqueda, se creara con esa, pues sera el unico resultado en el resultSet
-                //Usaremos este vehiculo para obtener sus reservas.
-                vehiculoActual = new Vehiculo(rsVehiculo.getString("matricula"), usuario);
-
-                //Obtenemos el rol del duenho del vehiculo.
-                consulta = "select rol from Usuarios where dni like \'" + usuario.getDni() + "\'";
-
-                //Ejecutamos la consulta. El resultado sera simplemente el rol del usuario
-                stmUsuario = con.prepareStatement(consulta);
-                rsUsuario = stmUsuario.executeQuery();
-                rsUsuario.next();
-
-                //Guardamos el rol que acabamos de obtener
-                rol = RolUsuario.valueOf(rsUsuario.getString("rol"));
-
-                //Ahora comenzaremos el proceso para obtener las reservas del vehiculo que hemos creado anteriormente.
-                //Queremos todos los datos de la tabla. Comenzamos buscando con la matricula, pues esta sera siempre un parametro de busqueda.
-                //La matricula con la que buscaremos siempre sera la del vehiculo que hemos creado.
-                consulta = "select matriculaVehiculo, codigoPlazaReserva, idAparcamiento, fechaInicio, fechaFin "
-                        + "from reservar "
-                        + "where matriculaVehiculo like \'" + vehiculoActual.getMatricula() + "\'";
-
-                //Debemos comprobar si se han introducido otros parametros de busqueda. Comenzamos con los no calculados.
-                //Simplemente, si se ha introducido algun parametro, se anhade la condicion a la consulta.
-                if (!pza.isEmpty()) {
-                    consulta = consulta + " and codigoPlazaReserva = " + pza + " ";
-                }
-                if (!ap.isEmpty()) {
-                    consulta = consulta + " and idAparcamiento like \'" + ap + "\'";
-                }
-                if (!fMax.isEmpty()) {
-                    consulta = consulta + " and fechaInicio <= \'" + fMax + "\'";
-                }
-                if (!fMin.isEmpty()) {
-                    consulta = consulta + " and fechaFin >= \'" + fMin + "\'";
+                //fechaFin puede ser null. Si se diese el caso, .toLocalDateTime() lanzaria una excepcion y no se podría seguir con el proceso.
+                //Para evitarlo, controlamos que sea null, y solo si no lo es realizamos la conversion
+                if (rsReservar.getObject("fechaFin") != null) {
+                    reservarActual.setFechaSalida(rsReservar.getTimestamp("fechaFin").toLocalDateTime());
                 }
 
-                try {
-                    //Ahora ejecutamos la nueva consulta para obtener las reservas, con todas las restricciones especificadas
-                    stmReservar = con.prepareStatement(consulta);
-                    rsReservar = stmReservar.executeQuery();
+                //Ahora tenemos que aplicar las restricciones de coste y duracion. Como estos parametros no estan en la tabla, no se pueden aplicar en la consulta.
+                //En su lugar, se controlan aqui. Al crear reservarActual, ya se han calculado tanto el precio como la duracion.
+                cAct = 0; //numero de condiciones de coste y duracion activas (es decir, numero de parametros de coste y duracion usados para buscar)
+                cSat = 0; //numero de condiciones de coste y duracion que se cumplen
 
-                    //Ejecutamos un bucle para todas las tuplas de reservas obtenidas
-                    while (rsReservar.next()) {
-                        //Creamos una instancia de reservar que guarde todos los datos de la tupla
-                        reservarActual = new Reservar(vehiculoActual, rsReservar.getInt("codigoPlazaReserva"),
-                                rsReservar.getString("idAparcamiento"),
-                                rsReservar.getTimestamp("fechaInicio").toLocalDateTime(),
-                                rsReservar.getTimestamp("fechaFin").toLocalDateTime(), rol);
-
-                        //fechafin puede ser null. Si se diese el caso, .toLocalDateTime() lanzaria una excepcion y no se podría seguir con el proceso.
-                        //Para evitarlo, controlamos que sea null, y solo si no lo es realizamos la conversion
-                        if (rsReservar.getObject("fechaFin") != null) {
-                            reservarActual.setFechaSalida(rsReservar.getTimestamp("fechaFin").toLocalDateTime());
-                        }
-
-                        //Ahora tenemos que aplicar las restricciones de coste y duracion. Como estos parametros no estan en la tabla, no se pueden aplicar en la consulta.
-                        //En su lugar, se controlan aqui. Al crear reservar, ya se han calculado tanto el precio como la duracion.
-                        cAct = 0; //numero de condiciones de coste y duracion activas (es decir, numero de parametros de coste y duracion usados para buscar)
-                        cSat = 0; //numero de condiciones de coste y duracion que se cumplen
-
-                        if (!cMax.isEmpty()) {
-                            if (reservarActual.getPrecio() <= Double.valueOf(cMax)) {
-                                cSat += 1;
-                            }
-                            cAct += 1;
-                        }
-                        if (!cMin.isEmpty()) {
-                            if (reservarActual.getPrecio() >= Double.valueOf(cMin)) {
-                                cSat += 1;
-                            }
-                            cAct += 1;
-                        }
-                        if (!dMax.isEmpty()) {
-                            aux = dMax.replaceAll(" ", "");
-                            partes = aux.split("[dhms]");
-                            if ((reservarActual.getDias() < Integer.valueOf(partes[0]))
-                                    || (reservarActual.getDias() == Integer.valueOf(partes[0]) && reservarActual.getHoras() < Integer.valueOf(partes[1]))
-                                    || (reservarActual.getDias() == Integer.valueOf(partes[0]) && reservarActual.getHoras() == Integer.valueOf(partes[1]) && reservarActual.getMinutos() < Integer.valueOf(partes[2]))
-                                    || (reservarActual.getDias() == Integer.valueOf(partes[0]) && reservarActual.getHoras() == Integer.valueOf(partes[1]) && reservarActual.getMinutos() == Integer.valueOf(partes[2]) && reservarActual.getSegundos() <= Integer.valueOf(partes[3]))) {
-                                cSat += 1;
-                            }
-                            cAct += 1;
-                        }
-                        if (!dMin.isEmpty()) {
-                            aux = dMin.replaceAll(" ", "");
-                            partes = aux.split("[dhms]");
-                            if ((reservarActual.getDias() > Integer.valueOf(partes[0]))
-                                    || (reservarActual.getDias() == Integer.valueOf(partes[0]) && reservarActual.getHoras() > Integer.valueOf(partes[1]))
-                                    || (reservarActual.getDias() == Integer.valueOf(partes[0]) && reservarActual.getHoras() == Integer.valueOf(partes[1]) && reservarActual.getMinutos() > Integer.valueOf(partes[2]))
-                                    || (reservarActual.getDias() == Integer.valueOf(partes[0]) && reservarActual.getHoras() == Integer.valueOf(partes[1]) && reservarActual.getMinutos() == Integer.valueOf(partes[2]) && reservarActual.getSegundos() >= Integer.valueOf(partes[3]))) {
-                                cSat += 1;
-                            }
-                            cAct += 1;
-                        }
-                        //Finalmente, si se cumplen todas las condiciones, se anhade la instancia de reservar a la lista
-                        if (cSat == cAct) {
-                            resultado.add(reservarActual);
-                        }
+                if (!cMax.isEmpty()) {
+                    if (reservarActual.getPrecio() <= Double.valueOf(cMax)) {
+                        cSat += 1;
                     }
-                } catch (SQLException e) {
-                    System.out.println(e.getMessage());
-                    this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
-                } finally {
-                    stmReservar.close();
+                    cAct += 1;
+                }
+                if (!cMin.isEmpty()) {
+                    if (reservarActual.getPrecio() >= Double.valueOf(cMin)) {
+                        cSat += 1;
+                    }
+                    cAct += 1;
+                }
+                if (!dMax.isEmpty()) {
+                    aux = dMax.replaceAll(" ", "");
+                    partes = aux.split("[dhms]");
+                    if (partes.length != 4) throw(new java.lang.NumberFormatException());
+                    if ((reservarActual.getHoras() < Integer.parseInt(partes[0]) * 24)
+                            || (reservarActual.getHoras() == (Integer.parseInt(partes[0]) * 24) && reservarActual.getHoras() < Integer.parseInt(partes[1]))
+                            || (reservarActual.getHoras() == (Integer.parseInt(partes[0]) * 24) && reservarActual.getHoras() == Integer.parseInt(partes[1]) && reservarActual.getMinutos() < Integer.parseInt(partes[2]))
+                            || (reservarActual.getHoras() == (Integer.parseInt(partes[0]) * 24) && reservarActual.getHoras() == Integer.parseInt(partes[1]) && reservarActual.getMinutos() == Integer.parseInt(partes[2]) && reservarActual.getSegundos() <= Integer.parseInt(partes[3]))) {
+                        cSat += 1;
+                    }
+                    cAct += 1;
+                }
+                if (!dMin.isEmpty()) {
+                    aux = dMin.replaceAll(" ", "");
+                    partes = aux.split("[dhms]");
+                    if (partes.length != 4) throw(new java.lang.NumberFormatException());
+                    if ((reservarActual.getHoras() > Integer.parseInt(partes[0]) * 24)
+                            || (reservarActual.getHoras() == (Integer.parseInt(partes[0]) * 24) && reservarActual.getHoras() > Integer.parseInt(partes[1]))
+                            || (reservarActual.getHoras() == (Integer.parseInt(partes[0]) * 24) && reservarActual.getHoras() == Integer.parseInt(partes[1]) && reservarActual.getMinutos() > Integer.parseInt(partes[2]))
+                            || (reservarActual.getHoras() == (Integer.parseInt(partes[0]) * 24) && reservarActual.getHoras() == Integer.parseInt(partes[1]) && reservarActual.getMinutos() == Integer.parseInt(partes[2]) && reservarActual.getSegundos() >= Integer.parseInt(partes[3]))) {
+                        cSat += 1;
+                    }
+                    cAct += 1;
                 }
 
+                //Finalmente, si se cumplen todas las condiciones, se anhade la instancia de reservar a la lista
+                if (cSat == cAct) {
+                    resultado.add(reservarActual);
+                }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | java.lang.NumberFormatException e) {
             System.out.println(e.getMessage());
-            this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
         } finally {
             try {
-                stmVehiculo.close();
+                stmReservar.close();
             } catch (SQLException e) {
                 System.out.println("Imposible cerrar cursores");
             }
@@ -467,6 +365,38 @@ public class DAOUsuarios extends AbstractDAO {
 
         //Se devuelve una lista con todas las tuplas de reservar que satisfacen todas las condiciones
         return resultado;
+    }
+    
+    /**
+     * Este metodo recibe la clave primaria de una tupla de Aparcar y le asigna al campo 'fechasalida' la fecha y hora actual, indicando asi que el vehiculo ya no
+     * se encuentra estacionado.
+     * @param mat - Matricula del vehiculo
+     * @param pza - Plaza donde esta aparcado el vehiculo
+     * @param ap - Aparcamiento donde esta aparcado el vehiculo
+     * @param fi - Fecha de entrada del vehiculo
+     */
+    public void retirarVehiculo(String mat, String pza, String ap, String fi) {
+        Connection con;
+        PreparedStatement stmAparcar = null;
+        
+        //Se obtiene la consexión con la base de datos
+        con = this.getConexion();
+
+        //Con esta consulta, obtenemos todas las tuplas de la tabla reservar.
+        //Posteriormente, aplicaremos las restricciones.
+        String actualizacion = "update Aparcar "
+                           + "set fechasalida = \'" + LocalDateTime.now().toString().replaceAll("T", " ") + "\' "
+                           + "where matriculaVehiculo like \'" + mat + "\' "
+                           + "and codigoPlaza = " + pza + " "
+                           + "and idAparcamiento like \'" + ap + "\' "
+                           + "and fechaentrada = \'" + fi + "\' ";
+        try {
+            System.out.println(actualizacion);
+            stmAparcar = con.prepareStatement(actualizacion);
+            stmAparcar.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }      
     }
 
     /**

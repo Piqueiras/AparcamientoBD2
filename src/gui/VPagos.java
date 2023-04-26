@@ -21,7 +21,9 @@ public class VPagos extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.fa = fa;    
-        this.aviso.setVisible(false);
+        this.avisoResultado.setVisible(false);
+        this.avisoVehiculoNoAparcado.setVisible(false);
+        this.avisoVehiculoNoSeleccionado.setVisible(false);
     }
 
     /**
@@ -64,7 +66,7 @@ public class VPagos extends javax.swing.JDialog {
         tablaReservar = new javax.swing.JTable();
         jLabel12 = new javax.swing.JLabel();
         buscarDni = new javax.swing.JTextField();
-        aviso = new javax.swing.JLabel();
+        avisoResultado = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
@@ -72,6 +74,9 @@ public class VPagos extends javax.swing.JDialog {
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
+        btnRetirarVehiculo = new javax.swing.JButton();
+        avisoVehiculoNoSeleccionado = new javax.swing.JLabel();
+        avisoVehiculoNoAparcado = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -157,7 +162,7 @@ public class VPagos extends javax.swing.JDialog {
         jLabel9.setText("Plaza");
 
         jLabel10.setFont(new java.awt.Font("sansserif", 1, 16)); // NOI18N
-        jLabel10.setText("Aparcamientos");
+        jLabel10.setText("Estacionamientos");
 
         jLabel11.setFont(new java.awt.Font("sansserif", 1, 16)); // NOI18N
         jLabel11.setText("Reservas");
@@ -168,8 +173,8 @@ public class VPagos extends javax.swing.JDialog {
 
         jLabel12.setText("DNI");
 
-        aviso.setForeground(new java.awt.Color(255, 0, 0));
-        aviso.setText("No se encontraron resultados");
+        avisoResultado.setForeground(new java.awt.Color(255, 0, 0));
+        avisoResultado.setText("No se encontraron resultados");
 
         jLabel13.setBackground(new java.awt.Color(153, 153, 255));
         jLabel13.setFont(new java.awt.Font("sansserif", 1, 13)); // NOI18N
@@ -226,6 +231,19 @@ public class VPagos extends javax.swing.JDialog {
         jLabel19.setToolTipText("Formato: aaaa-mm-dd");
         jLabel19.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jLabel19.setOpaque(true);
+
+        btnRetirarVehiculo.setText("Retirar Vehículo");
+        btnRetirarVehiculo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRetirarVehiculoActionPerformed(evt);
+            }
+        });
+
+        avisoVehiculoNoSeleccionado.setForeground(new java.awt.Color(255, 0, 0));
+        avisoVehiculoNoSeleccionado.setText("No se ha seleccionado ningún vehículo");
+
+        avisoVehiculoNoAparcado.setForeground(new java.awt.Color(255, 0, 0));
+        avisoVehiculoNoAparcado.setText("Este vehiculo no se encuentra aparcado");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -296,14 +314,20 @@ public class VPagos extends javax.swing.JDialog {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(buscarDni, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(aviso)
+                                .addComponent(avisoResultado)
                                 .addGap(30, 30, 30)
                                 .addComponent(btnBuscar))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel11)
-                            .addComponent(jLabel10))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(jLabel11)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(avisoVehiculoNoAparcado)
+                        .addGap(18, 18, 18)
+                        .addComponent(avisoVehiculoNoSeleccionado)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnRetirarVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -340,12 +364,16 @@ public class VPagos extends javax.swing.JDialog {
                     .addComponent(buscarFechaMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
                     .addComponent(buscarFechaMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(aviso)
+                    .addComponent(avisoResultado)
                     .addComponent(btnBuscar)
                     .addComponent(jLabel18)
                     .addComponent(jLabel19))
-                .addGap(24, 24, 24)
-                .addComponent(jLabel10)
+                .addGap(23, 23, 23)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(btnRetirarVehiculo)
+                    .addComponent(avisoVehiculoNoSeleccionado)
+                    .addComponent(avisoVehiculoNoAparcado))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -354,7 +382,7 @@ public class VPagos extends javax.swing.JDialog {
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnVolver)
-                .addContainerGap(7, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -398,11 +426,18 @@ public class VPagos extends javax.swing.JDialog {
         buscarPagos();
     }//GEN-LAST:event_btnBuscarActionPerformed
 
+    private void btnRetirarVehiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetirarVehiculoActionPerformed
+        retirarVehiculo();
+    }//GEN-LAST:event_btnRetirarVehiculoActionPerformed
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel aviso;
+    private javax.swing.JLabel avisoResultado;
+    private javax.swing.JLabel avisoVehiculoNoAparcado;
+    private javax.swing.JLabel avisoVehiculoNoSeleccionado;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnRetirarVehiculo;
     private javax.swing.JButton btnVolver;
     private javax.swing.JTextField buscarAp;
     private javax.swing.JTextField buscarCosteMax;
@@ -449,7 +484,9 @@ public class VPagos extends javax.swing.JDialog {
      * Tambien inicializa las JTable en las que se van a mostrar los datos, y las rellena.
      */
     public void buscarPagos () {
-        this.aviso.setVisible(false);
+        this.avisoResultado.setVisible(false);
+        this.avisoVehiculoNoAparcado.setVisible(false);
+        this.avisoVehiculoNoSeleccionado.setVisible(false);
         
         ModeloTablaAparcar ta;
         ModeloTablaReservar tr;
@@ -460,7 +497,32 @@ public class VPagos extends javax.swing.JDialog {
         tr.setFilas(fa.historialReservar(buscarDni.getText(), buscarMat.getText(), buscarPlaza.getText(), buscarAp.getText(), buscarCosteMax.getText(), buscarCosteMin.getText(), buscarDurMax.getText(), buscarDurMin.getText(), buscarFechaMax.getText(), buscarFechaMin.getText()));
     
         if(ta.getRowCount() == 0 && tr.getRowCount() == 0) {
-            this.aviso.setVisible(true);
+            this.avisoResultado.setVisible(true);
         }
+    }
+    
+    /**
+     * Este metodo se ejecuta al pulsar el boton 'Retirar Vehiculo'. Actualiza en la base de datos la tupla, asignandole al campo 'fechasalida' el momento actual.
+     */
+    public void retirarVehiculo () {
+        this.avisoResultado.setVisible(false);
+        this.avisoVehiculoNoAparcado.setVisible(false);
+        this.avisoVehiculoNoSeleccionado.setVisible(false);
+        
+        int fila = tablaAparcar.getSelectedRow();
+        if (fila == -1) {
+            avisoVehiculoNoSeleccionado.setVisible(true);
+            return;
+        }
+        if (tablaAparcar.getValueAt(fila, 5) != null) {
+            avisoVehiculoNoAparcado.setVisible(true);
+            return;
+        }
+        fa.retirarVehiculo(tablaAparcar.getValueAt(fila, 1).toString(),
+                tablaAparcar.getValueAt(fila, 2).toString(),
+                tablaAparcar.getValueAt(fila, 3).toString(),
+                tablaAparcar.getValueAt(fila, 4).toString());
+        
+        buscarPagos();
     }
 }

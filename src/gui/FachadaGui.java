@@ -45,6 +45,7 @@ public class FachadaGui {
        VAviso va;
        
        va = new VAviso(vp, true, txtExcepcion);
+       va.setLocationRelativeTo(null);
        va.setVisible(true);
     }
     
@@ -55,7 +56,7 @@ public class FachadaGui {
     public void historialPagos(){
         VPagos vpagos;
         
-        vpagos=new VPagos(vp, true, fa);
+        vpagos=new VPagos(vp, true, fa);       
         vpagos.setLocationRelativeTo(null);
         vpagos.setVisible(true);
     }

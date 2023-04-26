@@ -130,6 +130,17 @@ public class FachadaBaseDatos {
         return daoUsuarios.ConsultarHistorialReservar(dni, mat, pza, ap, cMax, cMin, dMax, dMin, fMax, fMin);
     }
     
+    /**
+     * Este metodo recibe la clave primaria de una tupla de Aparcar y llama a un metodo que actualiza en la base de datos la tupla,
+     * asignandole al campo 'fechasalida' el momento actual. Es llamado por FachadaAplicacion.
+     * @param mat - Matricula del vehiculo
+     * @param pza - Plaza donde esta aparcado el vehiculo
+     * @param ap - Aparcamiento donde esta aparcado el vehiculo
+     * @param fi - Fecha de entrada del vehiculo
+     */
+    public void retirarVehiculo(String mat, String pza, String ap, String fi) {
+        daoUsuarios.retirarVehiculo(mat, pza, ap, fi);
+    }
      
     public List<PlazaReserva> obtenerPlazasReserva(String codigoAparcamiento, Integer  codigoPlaza, String tipoPlaza, boolean ocupadas){
         return daoPlazas.obtenerPlazasReserva(codigoAparcamiento,codigoPlaza,tipoPlaza,ocupadas);

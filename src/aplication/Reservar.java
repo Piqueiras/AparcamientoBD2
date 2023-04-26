@@ -24,14 +24,14 @@ public class Reservar {
     private Double precio;
     private RolUsuario rol;
 
-    public Reservar(Vehiculo vehiculo, Integer codigoPlaza, String idAparcamiento, LocalDateTime fechaEntrada, LocalDateTime fechaSalida, RolUsuario rol) {
+    public Reservar(Vehiculo vehiculo, Integer codigoPlaza, String idAparcamiento, LocalDateTime fechaEntrada, RolUsuario rol) {
         this.vehiculo = vehiculo;
         this.codigoPlaza = codigoPlaza.toString();
         this.idAparcamiento = idAparcamiento;
         this.fechaEntrada = fechaEntrada;
-        this.fechaSalida = fechaSalida;
         this.rol = rol;
         
+        this.fechaSalida = null;
         this.dias = 0;
         this.horas = 0;
         this.minutos = 0;
