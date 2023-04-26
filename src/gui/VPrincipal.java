@@ -326,7 +326,7 @@ public class VPrincipal extends javax.swing.JFrame {
             aviso.setLocationRelativeTo(null);
             return;
         }
-        this.fa.getFbd().getDaoUsuarios().beginTransaction();
+        
         VReservarAparcar vreservar = new VReservarAparcar(this, true, fa);
         vreservar.setLocationRelativeTo(null);
         vreservar.setVisible(true);
@@ -352,21 +352,23 @@ public class VPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_statsActionPerformed
 
     private void confPlazasbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confPlazasbtnActionPerformed
-        this.fa.getFbd().getDaoUsuarios().beginTransactionSerializable();
+              
         confPlazas.getContentPane().setBackground(Color.white);
         confPlazas.setLocationRelativeTo(null);
         confPlazas.setVisible(true);
     }//GEN-LAST:event_confPlazasbtnActionPerformed
 
     private void addPlazabtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPlazabtnActionPerformed
-        
+         this.confPlazas.dispose();
         VAnadir vanadir = new VAnadir(this, true, fa);
         vanadir.setLocationRelativeTo(null);
         vanadir.setVisible(true);
+       
     }//GEN-LAST:event_addPlazabtnActionPerformed
 
     private void elimPlazabtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_elimPlazabtnActionPerformed
-                VEliminar veliminar = new VEliminar(this, true, fa);
+        this.confPlazas.dispose();        
+        VEliminar veliminar = new VEliminar(this, true, fa);
                 veliminar.setLocationRelativeTo(null);
         veliminar.setVisible(true);
     }//GEN-LAST:event_elimPlazabtnActionPerformed

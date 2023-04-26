@@ -60,6 +60,7 @@ public class VAviso extends javax.swing.JDialog {
             }
         });
 
+        textoExcepcion.setEditable(false);
         textoExcepcion.setColumns(20);
         textoExcepcion.setForeground(new java.awt.Color(244, 44, 44));
         textoExcepcion.setRows(5);

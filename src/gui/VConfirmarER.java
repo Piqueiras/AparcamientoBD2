@@ -5,6 +5,7 @@
 package gui;
 
 import aplication.FachadaAplicacion;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 /**
@@ -171,19 +172,39 @@ public class VConfirmarER extends javax.swing.JDialog {
         VAviso aviso;
                 
         boolean exito=false;
-         
-        exito= fa.eliminarPlazaAparcar(this.getPlaza());
-        
-        if(exito){
-            JOptionPane.showMessageDialog(this,"Plaza eliminada con éxito.");
-            this.dispose();
-            return;
+        try{
+            exito= fa.eliminarPlazaAparcar(this.getPlaza());
+
+            if(exito){
+                JOptionPane.showMessageDialog(this,"Plaza eliminada con éxito.");
+                this.dispose();
+                return;
+            }
+            else{
+                aviso=new VAviso(this,true, "ERROR: no se ha podido eliminar la plaza seleccionada");
+                aviso.setLocationRelativeTo(null);
+                aviso.setVisible(true);
+                return;
+            }
+            }catch(SQLException error){
+              if("40001".equals(error.getSQLState())){            
+                //primeiro, mostrar o mensaje de error
+                aviso=new VAviso(this,true, "ERROR debido al modo serializable: \n\t .Hay otra transacción en curso que ha modificado la misma plaza "
+                        + "\n \t .Inténtelo de nuevo");
+                aviso.setLocationRelativeTo(null);
+                aviso.setVisible(true);
+
+                this.dispose();
+             
+                return;
+            }else{
+                aviso=new VAviso(this,true, "ERROR: no se ha podido eliminar la plaza seleccionada");
+                aviso.setLocationRelativeTo(null);
+                aviso.setVisible(true);
+                return;
+            }
         }
-        else{
-            aviso=new VAviso(this,true, "ERROR: no se ha podido eliminar la plaza seleccionada");
-            aviso.setVisible(true);
-            return;
-        }
+       
     }//GEN-LAST:event_eliminarActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

@@ -200,7 +200,12 @@ public class VReservarAparcar extends javax.swing.JDialog {
     }//GEN-LAST:event_tipoPlazaINPUTActionPerformed
 
     private void ButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonBuscarActionPerformed
-         ModeloTablaPlazaReserva m;
+        //reinicio de la transacción:
+        this.fa.getFbd().getDaoUsuarios().commitTransaction(); //acaba la transacción anterior
+        this.fa.getFbd().getDaoUsuarios().beginTransaction(); //inicia una nueva transaccion
+        
+        
+        ModeloTablaPlazaReserva m;
          ModeloTablaPlazaAparcar mA;
 
         m=(ModeloTablaPlazaReserva) jTableReservar.getModel();

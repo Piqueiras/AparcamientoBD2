@@ -1111,7 +1111,7 @@ public class DAOUsuarios extends AbstractDAO {
             stm = con.createStatement();
             stm.executeQuery(consulta);
         } catch (SQLException error) {
-            if (error.getErrorCode() == 4001) { //Comprueba que no se haya producido un error por realizar varias transacciones a la vez
+            if ("40001".equals(error.getSQLState())) { //Comprueba que no se haya producido un error por el modo serializable
                 System.out.println("Prodúxose un error polo isolation level serializable");
             } else {
                 System.out.println(error.getMessage());
@@ -1144,7 +1144,7 @@ public class DAOUsuarios extends AbstractDAO {
                 stm.close();
             } catch (SQLException e) {
                 System.out.println("No se pueden cerrar cursores");
-            }////FALTAME COLLER A EXCEPCION
+            }
         }
     }
 
@@ -1164,7 +1164,7 @@ public class DAOUsuarios extends AbstractDAO {
                 stm.close();
             } catch (SQLException e) {
                 System.out.println("No se pueden cerrar cursores");
-            }////FALTAME COLLER A EXCEPCION
+            }
         }
     }
 }

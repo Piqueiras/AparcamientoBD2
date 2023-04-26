@@ -178,12 +178,20 @@ public class FachadaBaseDatos {
         return daoPlazas.anadirPlazaReserva(codigoAparcamiento, codigoPlaza, tipoPlaza);
     }
     
-    public boolean eliminarPlazaAparcar(int codigoAparcamiento){
-        return daoPlazas.eliminarPlazaAparcar(codigoAparcamiento);
+    public boolean eliminarPlazaAparcar(int codigoAparcamiento) throws SQLException{
+        try{
+            return daoPlazas.eliminarPlazaAparcar(codigoAparcamiento);
+        }catch(SQLException e){
+            throw e;
+        }
     }
     
-    public boolean eliminarPlazaReserva(int codigoAparcamiento){
-        return daoPlazas.eliminarPlazaReserva(codigoAparcamiento);
+    public boolean eliminarPlazaReserva(int codigoAparcamiento) throws SQLException{
+        try{
+            return daoPlazas.eliminarPlazaReserva(codigoAparcamiento);
+        }catch(SQLException e){
+            throw e;
+        }
     }
      /**
      * 

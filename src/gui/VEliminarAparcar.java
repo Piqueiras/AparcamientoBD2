@@ -44,9 +44,9 @@ public class VEliminarAparcar extends javax.swing.JDialog {
         codigoIN = new javax.swing.JTextPane();
         buscar = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        tablaPlazasReserva = new javax.swing.JTable();
+        tablaPlazasAparcar = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
-        ELIMINAR = new javax.swing.JButton();
+        eliminar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -74,8 +74,8 @@ public class VEliminarAparcar extends javax.swing.JDialog {
             }
         });
 
-        tablaPlazasReserva.setModel(new ModeloTablaPlazaAparcar());
-        jScrollPane3.setViewportView(tablaPlazasReserva);
+        tablaPlazasAparcar.setModel(new ModeloTablaPlazaAparcar());
+        jScrollPane3.setViewportView(tablaPlazasAparcar);
 
         jButton1.setText("Volver");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -84,10 +84,10 @@ public class VEliminarAparcar extends javax.swing.JDialog {
             }
         });
 
-        ELIMINAR.setText("ELIMINAR");
-        ELIMINAR.addActionListener(new java.awt.event.ActionListener() {
+        eliminar.setText("ELIMINAR");
+        eliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ELIMINARActionPerformed(evt);
+                eliminarActionPerformed(evt);
             }
         });
 
@@ -121,7 +121,7 @@ public class VEliminarAparcar extends javax.swing.JDialog {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ELIMINAR, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(251, 251, 251)
                         .addComponent(jButton1)))
                 .addContainerGap())
@@ -148,7 +148,7 @@ public class VEliminarAparcar extends javax.swing.JDialog {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(ELIMINAR, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 13, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -161,10 +161,13 @@ public class VEliminarAparcar extends javax.swing.JDialog {
     }//GEN-LAST:event_vehiculoINActionPerformed
 
     private void buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarActionPerformed
+        //reinicio de la transacción:
+        this.fa.getFbd().getDaoUsuarios().commitTransaction(); //acaba la transacción anterior
+        this.fa.getFbd().getDaoUsuarios().beginTransactionSerializable(); //inicia una nueva transaccion
         
         ModeloTablaPlazaAparcar m;
 
-        m=(ModeloTablaPlazaAparcar) tablaPlazasReserva.getModel();
+        m=(ModeloTablaPlazaAparcar) tablaPlazasAparcar.getModel();
         
         VAviso aviso;
         
@@ -207,46 +210,50 @@ public class VEliminarAparcar extends javax.swing.JDialog {
          
         m.setFilas(fa.obtenerPlazasAparcar(aparc,code,tipoPlaza, false));
         if (m.getRowCount() > 0) {
-            tablaPlazasReserva.setRowSelectionInterval(0, 0);
+            tablaPlazasAparcar.setRowSelectionInterval(0, 0);
         }      
         
     }//GEN-LAST:event_buscarActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         this.dispose();
+        this.fa.getFbd().getDaoUsuarios().commitTransaction();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void ELIMINARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ELIMINARActionPerformed
+    private void eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarActionPerformed
         
         VAviso aviso;
         
-        int fila=tablaPlazasReserva.getSelectedRow();
+        int fila=tablaPlazasAparcar.getSelectedRow();
         if(fila==-1){
             aviso=new VAviso(this,true, "No has seleccionado ninguna plaza");
             aviso.setVisible(true);
             return;
         }
 
-        String ap= tablaPlazasReserva.getValueAt(fila, 0).toString();
-        int plaza= Integer.parseInt(tablaPlazasReserva.getValueAt (fila, 1).toString());
-        String tipo= tablaPlazasReserva.getValueAt(fila, 2).toString();
+        String ap= tablaPlazasAparcar.getValueAt(fila, 0).toString();
+        int plaza= Integer.parseInt(tablaPlazasAparcar.getValueAt (fila, 1).toString());
+        String tipo= tablaPlazasAparcar.getValueAt(fila, 2).toString();
         
         VConfirmarER vconf;
         
         vconf=new VConfirmarER(this,true, fa, ap, plaza, tipo);        
         vconf.setVisible(true);
-     
-    }//GEN-LAST:event_ELIMINARActionPerformed
+        
+     //cada vez que se elimina un plaza y se cierra la ventana de confirmación, entonces se reinicia la tabla de búsquedas
+        tablaPlazasAparcar.setModel(new ModeloTablaPlazaReserva());
+        
+    }//GEN-LAST:event_eliminarActionPerformed
 
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton ELIMINAR;
     private javax.swing.JTextPane aparcamientoIN;
     private javax.swing.JButton buscar;
     private javax.swing.JTextPane codigoIN;
+    private javax.swing.JButton eliminar;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -254,7 +261,7 @@ public class VEliminarAparcar extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable tablaPlazasReserva;
+    private javax.swing.JTable tablaPlazasAparcar;
     private javax.swing.JComboBox<String> vehiculoIN;
     // End of variables declaration//GEN-END:variables
 }

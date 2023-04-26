@@ -5,7 +5,12 @@
 package gui;
 
 import aplication.FachadaAplicacion;
+import aplication.PlazaReserva;
 import javax.swing.JOptionPane;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -157,18 +162,37 @@ public class VConfirmarER2 extends javax.swing.JDialog {
         VAviso aviso;
         
         boolean exito=false;
-         
-        exito= fa.eliminarPlazaReserva(this.getPlaza());
-        
-        if(exito){
-            JOptionPane.showMessageDialog(this,"Plaza eliminada con éxito.");
-            this.dispose();
-            return;
-        }
-        else{
-            aviso=new VAviso(this,true, "ERROR: no se ha podido eliminar la plaza seleccionada");
-            aviso.setVisible(true);
-            return;
+        try{
+            exito= fa.eliminarPlazaReserva(this.getPlaza());
+
+            if(exito){
+                JOptionPane.showMessageDialog(this,"Plaza eliminada con éxito.");
+                this.dispose();
+                return;
+            }
+            else{
+                aviso=new VAviso(this,true, "ERROR: no se ha podido eliminar la plaza seleccionada");
+                aviso.setLocationRelativeTo(null);
+                aviso.setVisible(true);
+                return;
+            }
+        }catch(SQLException error){
+              if("40001".equals(error.getSQLState())){  //en caso de ser el error por el modo serializable          
+                //primeiro, mostrar o mensaje de error
+                aviso=new VAviso(this,true, "ERROR debido al modo serializable: \n\t .Hay otra transacción en curso que ha modificado la misma plaza "
+                        + "\n \t .Inténtelo de nuevo");
+                aviso.setLocationRelativeTo(null);
+                aviso.setVisible(true);
+
+                this.dispose();
+             
+                return;
+            }else{ //en caso de ser otro error cualquiera
+                aviso=new VAviso(this,true, "ERROR: no se ha podido eliminar la plaza seleccionada");
+                aviso.setLocationRelativeTo(null);
+                aviso.setVisible(true);
+                return;
+            }
         }
         
     }//GEN-LAST:event_eliminarActionPerformed

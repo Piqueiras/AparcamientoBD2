@@ -9,6 +9,7 @@ import aplication.Aparcamiento;
 import aplication.FachadaAplicacion;
 import aplication.PlazaAparcar;
 import aplication.TipoPlaza;
+import gui.VAviso;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -323,7 +324,7 @@ public class DAOPlazas extends AbstractDAO {
         }
     }
 
-    public boolean eliminarPlazaAparcar(int codigo) {
+    public boolean eliminarPlazaAparcar(int codigo) throws SQLException {
         String query;
         boolean exito = true;
         PreparedStatement statement = null;
@@ -343,12 +344,12 @@ public class DAOPlazas extends AbstractDAO {
             // Retornar true si se insertó la reserva correctamente, false en caso contrario
             return filasAfectadas > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+                e.printStackTrace();
+                throw e;
         }
     }
-
-    public boolean eliminarPlazaReserva(int codigo) {
+   
+    public boolean eliminarPlazaReserva(int codigo) throws SQLException {
         String query;
         boolean exito = true;
         PreparedStatement statement = null;
@@ -366,12 +367,12 @@ public class DAOPlazas extends AbstractDAO {
             int filasAfectadas = statement.executeUpdate();
 
             // Retornar true si se insertó la reserva correctamente, false en caso contrario
-            return filasAfectadas > 0;
+           return filasAfectadas > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+                e.printStackTrace();
+                throw e;
+            }
         }
-    }
 
     public String[] statsTmedioAparcar() {
         String query;

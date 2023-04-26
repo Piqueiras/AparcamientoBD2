@@ -167,12 +167,20 @@ public class FachadaAplicacion {
         return fbd.anadirPlazaReserva(codigoAparcamiento, codigoPlaza, tipoPlaza);
     }
     
-    public boolean eliminarPlazaAparcar(int codigoAparcamiento){
-        return fbd.eliminarPlazaAparcar(codigoAparcamiento);
+    public boolean eliminarPlazaAparcar(int codigoAparcamiento) throws SQLException{
+        try{
+            return fbd.eliminarPlazaAparcar(codigoAparcamiento);
+        }catch(SQLException e){
+            throw e;
+        }
     }
     
-    public boolean eliminarPlazaReserva(int codigoAparcamiento){
-        return fbd.eliminarPlazaReserva(codigoAparcamiento);
+    public boolean eliminarPlazaReserva(int codigoAparcamiento) throws SQLException{
+        try{
+            return fbd.eliminarPlazaReserva(codigoAparcamiento);
+        }catch(SQLException e){
+            throw e;
+        }
     }
         
     public boolean registrarUsuario(Usuario usuario){

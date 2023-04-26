@@ -5,6 +5,7 @@
 package gui;
 
 import aplication.FachadaAplicacion;
+import javax.swing.JTable;
 
 /**
  *
@@ -24,6 +25,7 @@ public class VEliminarReservar extends javax.swing.JDialog {
         initComponents();
     }
 
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -163,6 +165,10 @@ public class VEliminarReservar extends javax.swing.JDialog {
     }//GEN-LAST:event_vehiculoINActionPerformed
 
     private void buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarActionPerformed
+        //reinicio de la transacción:
+        this.fa.getFbd().getDaoUsuarios().commitTransaction(); //acaba la transacción anterior
+        this.fa.getFbd().getDaoUsuarios().beginTransactionSerializable(); //inicia una nueva transaccion
+       
         
         ModeloTablaPlazaReserva m;
 
@@ -233,10 +239,14 @@ public class VEliminarReservar extends javax.swing.JDialog {
         vconf=new VConfirmarER2(this,true, fa, ap, plaza, tipo);        
         vconf.setVisible(true);
         
+        //cada vez que se elimina un plaza y se cierra la ventana de confirmación, entonces se reinicia la tabla de búsquedas
+        tablaPlazasReserva.setModel(new ModeloTablaPlazaReserva());
+        
     }//GEN-LAST:event_eliminarActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         this.dispose();
+        this.fa.getFbd().getDaoUsuarios().commitTransaction();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     /**

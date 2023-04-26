@@ -102,17 +102,22 @@ public class VEliminar extends javax.swing.JDialog {
 
     private void volverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volverActionPerformed
                this.dispose();
-               this.fa.getFbd().getDaoUsuarios().commitTransaction();
+               
     }//GEN-LAST:event_volverActionPerformed
 
     private void reservarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reservarActionPerformed
+        
+        this.dispose();
         VEliminarReservar veliminarreservar  =new VEliminarReservar (this,true, fa);
         veliminarreservar.setVisible(true);
+        
     }//GEN-LAST:event_reservarActionPerformed
 
     private void aparcarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aparcarActionPerformed
+        this.dispose();
         VEliminarAparcar veliminaraparcar  =new VEliminarAparcar (this,true, fa);
         veliminaraparcar.setVisible(true);
+        
     }//GEN-LAST:event_aparcarActionPerformed
 
     /**
