@@ -13,6 +13,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.time.LocalTime;
 
 /**
  *
@@ -30,6 +31,7 @@ public class DAOPlazas extends AbstractDAO {
 
     /**
      * Busca plazas reserva y devuelve una lista
+     *
      * @param codigoAparcamiento de las plazas buscadas
      * @param codigoPlaza de las plazas buscadas
      * @param tipoPlaza de las plazas buscadas(C,M,G)
@@ -207,7 +209,9 @@ public class DAOPlazas extends AbstractDAO {
     }
 
     /**
-     * Añade una nueva tupla a la tabla Aparcar de la base con los datos introducidos
+     * Añade una nueva tupla a la tabla Aparcar de la base con los datos
+     * introducidos
+     *
      * @param matricula del vehiculo que aparca
      * @param plaza en la que va a aparcar
      * @param aparcamiento codigo del aparcamiento
@@ -394,69 +398,22 @@ public class DAOPlazas extends AbstractDAO {
                 int rol = rs.getInt("rol");
 
                 //Obtiene el resultado de tiempo en formato crudo
-                String timeRaw = rs.getString("tiempomedioaparcado").replace(" days", "d");
-                String time = null;
+                String timeRaw = rs.getString("tiempomedioaparcado");
 
-                //En caso de que en el resultado aparezca un '.' (que de el resultado con ms), se quita el punto y todo lo que esté a posteriori
-                int index = timeRaw.indexOf(".");
-                if (index < 0) {
-                    time = timeRaw;
-                } else {
-                    time = timeRaw.substring(0, index);
+                //Limpiar el resultado raw
+                String[] partes = timeRaw.split(" ");
+                String dias = "";
+                String[] horasMinSeg = partes[partes.length - 1].split(":");
+                int horas = Integer.parseInt(horasMinSeg[0]);
+                int minutos = Integer.parseInt(horasMinSeg[1]);
+                int segundos = Integer.parseInt(horasMinSeg[2].split("\\.")[0]);
+                if (partes.length == 3) {
+                    dias = partes[0] + "d, ";
                 }
+                String time = dias + horas + "h, " + minutos + "min y " + segundos + "s";
 
                 //Asginar valor el array según el rol
                 out[rol] = time;
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return out;
-    }
-
-    public List<HashMap<String, Object>> statsVecesUsuario() {
-        String query;
-        List out = new ArrayList();
-
-        try {
-            query
-                    = "SELECT TvecesAparcadovecesReservado.nombre, TvecesAparcadovecesReservado.dni,  "
-                    + "SUM(TvecesAparcadovecesReservado.vecesaparcad) AS vecesaparcado, "
-                    + "SUM(TvecesAparcadovecesReservado.vecesreservad) AS vecesreservado "
-                    + "FROM ( "
-                    + "    SELECT u.dni, u.nombre, COUNT(*) AS vecesaparcad, 0 AS vecesreservad "
-                    + "    FROM usuarios u, aparcar a "
-                    + "    WHERE (SELECT dni FROM vehiculos WHERE matricula = a.matriculavehiculo) = u.dni "
-                    + "    GROUP BY u.dni, u.nombre "
-                    + "    UNION ALL "
-                    + "    SELECT u2.dni, u2.nombre, 0 AS vecesaparcad, COUNT(*) AS vecesreservad "
-                    + "    FROM usuarios u2, reservar r2 "
-                    + "    WHERE (SELECT dni FROM vehiculos WHERE matricula = r2.matriculavehiculo) = u2.dni "
-                    + "    GROUP BY u2.dni, u2.nombre "
-                    + ") AS TvecesAparcadovecesReservado "
-                    + "GROUP BY TvecesAparcadovecesReservado.nombre, TvecesAparcadovecesReservado.dni "
-                    + "ORDER BY vecesaparcado DESC, vecesreservado DESC";
-
-            // Crea una conexión a la base de datos
-            Connection connection = this.getConexion();
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
-
-            //Asginar un HashMap por fila y meter todas las filas en la lista de out
-            while (rs.next()) {
-                String nombre = rs.getString("nombre");
-                String dni = rs.getString("dni");
-                Integer vecesAparcado = rs.getInt("vecesaparcado");
-                Integer vecesReservado = rs.getInt("vecesreservado");
-
-                HashMap<String, Object> datos = new HashMap<>();
-                datos.put("nombre", nombre);
-                datos.put("dni", dni);
-                datos.put("vecesAparcado", vecesAparcado);
-                datos.put("vecesReservado", vecesReservado);
-
-                out.add(datos);
             }
 
         } catch (SQLException e) {

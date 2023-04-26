@@ -213,7 +213,7 @@ public class FachadaBaseDatos {
     }
 
     public List<HashMap<String, Object>> statsVecesUsuario() {
-        return daoPlazas.statsVecesUsuario();
+        return daoUsuarios.statsVecesUsuario();
     }
 
     public HashMap<String, List<HashMap<String, Object>>> statsPlazas() {
