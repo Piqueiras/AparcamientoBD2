@@ -154,6 +154,8 @@ public class VConfirmarER2 extends javax.swing.JDialog {
 
     private void eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarActionPerformed
         
+        VAviso aviso;
+        
         boolean exito=false;
          
         exito= fa.eliminarPlazaReserva(this.getPlaza());
@@ -161,6 +163,11 @@ public class VConfirmarER2 extends javax.swing.JDialog {
         if(exito){
             JOptionPane.showMessageDialog(this,"Plaza eliminada con éxito.");
             this.dispose();
+            return;
+        }
+        else{
+            aviso=new VAviso(this,true, "ERROR: no se ha podido eliminar la plaza seleccionada");
+            aviso.setVisible(true);
             return;
         }
         

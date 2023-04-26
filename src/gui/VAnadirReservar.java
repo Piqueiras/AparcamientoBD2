@@ -41,7 +41,7 @@ public class VAnadirReservar extends javax.swing.JDialog {
         aparcamientoIN = new javax.swing.JTextPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         codigoIN = new javax.swing.JTextPane();
-        vehiculoIN = new javax.swing.JComboBox<>();
+        vehiculoIN = new javax.swing.JComboBox<String>();
         volver = new javax.swing.JButton();
         reservar = new javax.swing.JButton();
 
@@ -57,7 +57,7 @@ public class VAnadirReservar extends javax.swing.JDialog {
 
         jScrollPane2.setViewportView(codigoIN);
 
-        vehiculoIN.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Coche", "Moto", "Vehiculo Grande" }));
+        vehiculoIN.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] { "Coche", "Moto", "Vehiculo Grande" }));
         vehiculoIN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 vehiculoINActionPerformed(evt);
@@ -71,7 +71,7 @@ public class VAnadirReservar extends javax.swing.JDialog {
             }
         });
 
-        reservar.setText("RESERVAR");
+        reservar.setText("ANADIR");
         reservar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 reservarActionPerformed(evt);
