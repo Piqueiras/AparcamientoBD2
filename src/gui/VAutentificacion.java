@@ -5,7 +5,7 @@
 
 /*
  * VAutentificacion.java
- *
+ * Esta clase es la ventana que aparece al principio del programa, que pide un dni para permitir el acceso a la aplicacion
  * Created on 16-feb-2011, 17:52:08
  */
 
@@ -140,20 +140,29 @@ public class VAutentificacion extends javax.swing.JDialog {
     private void textoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textoUsuarioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_textoUsuarioActionPerformed
-
+    
+    /**
+     * Este metodo se ejecuta al presionar el boton 'Aceptar' de la ventana. Comprueba si el dni introducido es de un administrador.
+     * Si es asi, da acceso a la aplicacion. Si no, muestra un mensaje de error.
+     * @param evt - Evento
+     */
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        etiquetaFallo.setVisible(false);
+        etiquetaFallo.setVisible(false);    //Se esconde el mensaje de error
         Usuario u = null;
-        u = fa.comprobarAutentificacion(textoUsuario.getText());
-        if (u != null && u.getRol() == RolUsuario.Administracion) {
+        u = fa.comprobarAutentificacion(textoUsuario.getText());    //Se obtienen los datos del usuario con el dni provisto
+        if (u != null && u.getRol() == RolUsuario.Administracion) {    //Si el usuario existe y es un administrador, se da acceso a la aplicacion
             fa.setUsuario(u);
             this.dispose();
             this.vp.setVisible(true);
             this.vp.etiquetaBienvenida.setText("¡Bienvenida/o señor/a "+ u.getNombre()+"!");
-        }
+        }                                                              //Si el usuario no existe o no es un administrador, se muestra el mensaje de error
         else etiquetaFallo.setVisible(true);
     }//GEN-LAST:event_btnAceptarActionPerformed
 
+    /**
+     * Este metodo se ejecuta al presionar el boton 'Cancelar' de la ventana. Cierra la aplicacion.
+     * @param evt - Evento
+     */
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
      System.exit(0);
     }//GEN-LAST:event_btnCancelarActionPerformed

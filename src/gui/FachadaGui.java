@@ -48,6 +48,10 @@ public class FachadaGui {
        va.setVisible(true);
     }
     
+    /**
+     * Este metodo es llamado por historialPagos() en la fachada de la aplicacion cuando se presiona el boton del historial de pagos.
+     * Inicializa la ventana del historial de pagos.
+     */
     public void historialPagos(){
         VPagos vpagos;
         

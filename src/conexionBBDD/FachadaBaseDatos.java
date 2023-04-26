@@ -45,9 +45,7 @@ public class FachadaBaseDatos {
         this.fa=fa;
         FileInputStream arqConfiguracion;
 
-        try {
-            //Class.forName("postgresql.jar");
-            
+        try {            
             arqConfiguracion = new FileInputStream("baseDatos.properties");
             configuracion.load(arqConfiguracion);
             arqConfiguracion.close();
@@ -74,9 +72,6 @@ public class FachadaBaseDatos {
         } catch (IOException i){
             System.out.println(i.getMessage());
             fa.muestraExcepcion(i.getMessage());
-        //} catch (ClassNotFoundException e) {        //anhadido por mi para usar forName()
-        //    System.out.println(e.getMessage());
-        //    fa.muestraExcepcion(e.getMessage());
         } catch (java.sql.SQLException e){
             System.out.println(e.getMessage());
             fa.muestraExcepcion(e.getMessage());
@@ -87,14 +82,50 @@ public class FachadaBaseDatos {
         return daoUsuarios;
     }
 
+    /**
+     * Este metodo es llamado desde la fachada de la aplicacion por comprobarAutentificacion(), el cual se ejecuta al principio del programa.
+     * Forma parte del camino hasta el metodo encargado de comprobar que el dni introducido es de un administrador.
+     * @param dni - dni a verificar
+     * @return Usuario - Si el usuario esta en la base de datos y es un administrador, se devuelve una instancia de Usuario con sus datos
+     */
     public Usuario validarUsuario(String dni){
         return daoUsuarios.validarUsuario(dni);
     }
     
+    /** 
+     * Este metodo es llamado por historialAparcar() de FachadaAplicacion.
+     * Llama al metodo que obtiene todas las tuplas de la tabla Aparcar de la base de datos que cumplan las condiciones especificadas.
+     * @param dni - DNI del usuario cuyos aparcamientos se quieren obtener.
+     * @param mat - Matricula del vehiculo cuyos aparcamientos se quieren obtener.
+     * @param pza - Numero de la plaza cuyos aparcamientos se quieren obtener.
+     * @param ap - Id del aparcamiento cuyos aparcamientos se quieren obtener.
+     * @param cMax - Coste maximo de los aparcamientos.
+     * @param cMin - Coste minimo de los aparcamientos.
+     * @param dMax - Duracion maxima de los aparcamientos.
+     * @param dMin - Duracion minima de los aparcamientos.
+     * @param fMax - Fecha maxima de los aparcamientos.
+     * @param fMin - Fecha minima de los aparcamientos.
+     * @return List<Aparcar> - Lista con los datos de las tuplas de la tabla Aparcar almacenados en instancias de Aparcar.
+     */
     public List<Aparcar> historialAparcar (String dni, String mat, String pza, String ap, String cMax, String cMin, String dMax, String dMin, String fMax, String fMin) {
         return daoUsuarios.ConsultarHistorialAparcar(dni, mat, pza, ap, cMax, cMin, dMax, dMin, fMax, fMin);
     }
     
+    /**
+     * Este metodo es llamado por historialReservar() de FachadaAplicacion.
+     * Llama al metodo que obtiene todas las tuplas de la tabla Reservar de la base de datos que cumplan las condiciones especificadas.
+     * @param dni - DNI del usuario cuyas reservas se quieren obtener.
+     * @param mat - Matricula del vehiculo cuyas reservas se quieren obtener.
+     * @param pza - Numero de la plaza cuyas reservas se quieren obtener.
+     * @param ap - Id del aparcamiento cuyas reservas se quieren obtener.
+     * @param cMax - Coste maximo de las reservas.
+     * @param cMin - Coste minimo de las reservas.
+     * @param dMax - Duracion maxima de las reservas.
+     * @param dMin - Duracion minima de las reservas.
+     * @param fMax - Fecha maxima de las reservas.
+     * @param fMin - Fecha minima de las reservas.
+     * @return List<Reservar> - Lista con los datos de las tuplas de la tabla Aparcar almacenados en instancias de Aparcar.
+     */
     public List<Reservar> historialReservar (String dni, String mat, String pza, String ap, String cMax, String cMin, String dMax, String dMin, String fMax, String fMin) {
         return daoUsuarios.ConsultarHistorialReservar(dni, mat, pza, ap, cMax, cMin, dMax, dMin, fMax, fMin);
     }

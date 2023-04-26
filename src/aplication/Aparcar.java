@@ -77,6 +77,7 @@ public class Aparcar {
     public void setFechaSalida(LocalDateTime fechaSalida) {
         this.fechaSalida = fechaSalida;
         
+        //Actualizamos la duracion y el precio
         if(this.fechaEntrada != null && this.fechaSalida != null){
             this.horas = (int) Duration.between(fechaEntrada, fechaSalida).toHours();
             this.minutos = (int) (Duration.between(fechaEntrada, fechaSalida).toMinutes() % 60);
@@ -86,6 +87,10 @@ public class Aparcar {
         }
     }
     
+    /**
+     * Este metodo actualiza el precio del aparcamiento
+     * @param rol - Rol del usuario. El precio dependera de si pertenece a la USC o no
+     */
     public final void actualizarPrecio(RolUsuario rol) {
         double mult = 0.5d;
         if (rol.equals(RolUsuario.noUSC)) {

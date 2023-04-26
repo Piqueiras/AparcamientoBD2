@@ -7,7 +7,7 @@ package gui;
 import aplication.Aparcar;
 import javax.swing.table.*;
 /**
- *
+ * El modelo de la JTable de aparcamientos que se muestra en la ventana VPagos
  * @author basesdatos
  */
 public class ModeloTablaAparcar extends AbstractTableModel{

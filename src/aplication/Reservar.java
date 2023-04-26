@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.time.Duration;
         
 /**
- * El objetivo de esta clase es plasmar la tabla 'aparcar'. Se usa en la gestion de pagos.
+ * El objetivo de esta clase es plasmar la tabla 'reservar'. Se usa en la gestion de pagos.
  * @author alumnogreibd
  */
 public class Reservar {
@@ -83,6 +83,7 @@ public class Reservar {
     public void setFechaSalida(LocalDateTime fechaSalida) {
         this.fechaSalida = fechaSalida;
         
+        //Aprovechamos para actualizar la duracion y el coste
         if(this.fechaEntrada != null && this.fechaSalida != null) {
             this.dias = (int) Duration.between(fechaEntrada, fechaSalida).toDays();
             this.horas = (int) Duration.between(fechaEntrada, fechaSalida).toHours() % 24;
@@ -93,6 +94,10 @@ public class Reservar {
         }
     }
     
+    /**
+     * Este metodo actualiza el precio de la reserva
+     * @param rol - Rol del usuario. El precio dependera de si pertenece a la USC o no
+     */
     public final void actualizarPrecio(RolUsuario rol) {
         double mult = 7.5d;
         if (rol.equals(RolUsuario.noUSC)) {

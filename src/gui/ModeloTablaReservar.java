@@ -7,7 +7,7 @@ package gui;
 import aplication.Reservar;
 import javax.swing.table.*;
 /**
- *
+ * El modelo de la JTable de reservas que se muestra en la ventana VPagos
  * @author basesdatos
  */
 public class ModeloTablaReservar extends AbstractTableModel{

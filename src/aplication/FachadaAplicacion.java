@@ -65,6 +65,12 @@ public class FachadaAplicacion {
         fgui.muestraExcepcion(e);
     }
     
+   /**
+     * Este metodo se ejecuta al principio del programa. A traves de la llamada de varios metodos en otras clases, se acabara llegando
+     * al metodo encargado de comprobar que el dni introducido es de un administrador.
+     * @param dni - dni a verificar
+     * @return Usuario - Si el usuario esta en la base de datos y es un administrador, se devuelve una instancia de Usuario con sus datos.
+     */
     public Usuario comprobarAutentificacion(String dni){
         Usuario u = null;
 
@@ -72,14 +78,47 @@ public class FachadaAplicacion {
         return u;
     }
     
+    /**
+     * Este metodo es llamado cuando se presiona el boton del historial de pagos. Llama al metodo de la fachada GUI que inicializa la ventana de los pagos.
+     */
     public void historialPagos() {
         fgui.historialPagos();
     }
     
+    /** 
+     * Este metodo llegara al metodo que obtiene todas las tuplas de la tabla Aparcar de la base de datos que cumplan las condiciones especificadas.
+     * Pasa por FachadaBaseDatos para llegar a DAOUsuarios.
+     * @param dni - DNI del usuario cuyos aparcamientos se quieren obtener.
+     * @param mat - Matricula del vehiculo cuyos aparcamientos se quieren obtener.
+     * @param pza - Numero de la plaza cuyos aparcamientos se quieren obtener.
+     * @param ap - Id del aparcamiento cuyos aparcamientos se quieren obtener.
+     * @param cMax - Coste maximo de los aparcamientos.
+     * @param cMin - Coste minimo de los aparcamientos.
+     * @param dMax - Duracion maxima de los aparcamientos.
+     * @param dMin - Duracion minima de los aparcamientos.
+     * @param fMax - Fecha maxima de los aparcamientos.
+     * @param fMin - Fecha minima de los aparcamientos.
+     * @return List<Aparcar> - Lista con los datos de las tuplas de la tabla Aparcar almacenados en instancias de Aparcar.
+     */
     public List<Aparcar> historialAparcar(String dni, String mat, String pza, String ap, String cMax, String cMin, String dMax, String dMin, String fMax, String fMin) {
         return fbd.historialAparcar(dni, mat, pza, ap, cMax, cMin, dMax, dMin, fMax, fMin);
     }
     
+    /**
+     * Este metodo llegara al metodo que obtiene todas las tuplas de la tabla Reservar de la base de datos que cumplan las condiciones especificadas.
+     * Pasa por FachadaBaseDatos para llegar a DAOUsuarios.
+     * @param dni - DNI del usuario cuyas reservas se quieren obtener.
+     * @param mat - Matricula del vehiculo cuyas reservas se quieren obtener.
+     * @param pza - Numero de la plaza cuyas reservas se quieren obtener.
+     * @param ap - Id del aparcamiento cuyas reservas se quieren obtener.
+     * @param cMax - Coste maximo de las reservas.
+     * @param cMin - Coste minimo de las reservas.
+     * @param dMax - Duracion maxima de las reservas.
+     * @param dMin - Duracion minima de las reservas.
+     * @param fMax - Fecha maxima de las reservas.
+     * @param fMin - Fecha minima de las reservas.
+     * @return List<Reservar> - Lista con los datos de las tuplas de la tabla Aparcar almacenados en instancias de Aparcar.
+     */
     public List<Reservar> historialReservar(String dni, String mat, String pza, String ap, String cMax, String cMin, String dMax, String dMin, String fMax, String fMin) {
         return fbd.historialReservar(dni, mat, pza, ap, cMax, cMin, dMax, dMin, fMax, fMin);
     }
