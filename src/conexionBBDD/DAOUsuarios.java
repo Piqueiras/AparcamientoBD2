@@ -702,29 +702,7 @@ public class DAOUsuarios extends AbstractDAO {
             int filasAfectadas = stmUsuario.executeUpdate();
 
             for (Vehiculo vehiculo : usuario.getVehiculos()) {
-                PreparedStatement stmVehiculo = null;
-                try {
-                    stmVehiculo = con.prepareStatement("INSERT INTO Vehiculos (matricula, tipo, marca, modelo, anhoMatriculacion, dni) VALUES (?, ?, ?, ?, ?, ?)");
-
-                    stmVehiculo.setString(1, vehiculo.getMatricula());
-                    stmVehiculo.setString(2, vehiculo.getTipo().toString());
-                    stmVehiculo.setString(3, vehiculo.getMarca());
-                    stmVehiculo.setString(4, vehiculo.getModelo());
-                    stmVehiculo.setInt(5, vehiculo.getAnoMatriculacion());
-                    stmVehiculo.setString(6, usuario.getDni());
-
-                    filasAfectadas += stmVehiculo.executeUpdate();
-                } catch (SQLException e) {
-                    exito = false;
-                    System.out.println(e.getMessage());
-                    this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
-                } finally {
-                    try {
-                        stmVehiculo.close();
-                    } catch (SQLException e) {
-                        System.out.println("Imposible cerrar cursores");
-                    }
-                }
+                exito = exito && registrarVehiculo(usuario.getDni(), vehiculo);
             }
 
         } catch (SQLException e) {
@@ -740,7 +718,35 @@ public class DAOUsuarios extends AbstractDAO {
         }
         return exito;
     }
+    
+    public boolean registrarVehiculo(String dni, Vehiculo vehiculo) {
+        Connection con = this.getConexion();
+        boolean exito = true;
+        PreparedStatement stmVehiculo = null;
+        try {
+            stmVehiculo = con.prepareStatement("INSERT INTO Vehiculos (matricula, tipo, marca, modelo, anhoMatriculacion, dni) VALUES (?, ?, ?, ?, ?, ?)");
 
+            stmVehiculo.setString(1, vehiculo.getMatricula());
+            stmVehiculo.setString(2, vehiculo.getTipo().toString());
+            stmVehiculo.setString(3, vehiculo.getMarca());
+            stmVehiculo.setString(4, vehiculo.getModelo());
+            stmVehiculo.setInt(5, vehiculo.getAnoMatriculacion());
+            stmVehiculo.setString(6, dni);
+
+            int filasAfectadas = stmVehiculo.executeUpdate();
+        } catch (SQLException e) {
+            exito = false;
+            System.out.println(e.getMessage());
+            this.getFachadaAplicacion().muestraExcepcion(e.getMessage());
+        } finally {
+            try {
+                stmVehiculo.close();
+            } catch (SQLException e) {
+                System.out.println("Imposible cerrar cursores");
+            }
+        }
+        return exito;        
+    }
     /**
      *
      * @param dni Suma unha infracción ao usuario cuxo dni é [dni] FUNCIONA

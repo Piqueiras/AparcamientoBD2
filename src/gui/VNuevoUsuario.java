@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package gui;
 
 import aplication.FachadaAplicacion;
@@ -11,17 +7,13 @@ import aplication.Vehiculo;
 import java.time.*;
 import aplication.RolUsuario;
 
-/**
- *
- * @author alumnogreibd
- */
 public class VNuevoUsuario extends javax.swing.JDialog {
 
     private FachadaAplicacion fa;
     /**
      * Creates new form VNuevoUsuario
      */
-    public VNuevoUsuario(java.awt.Frame parent, boolean modal, FachadaAplicacion fa) {
+    public VNuevoUsuario(java.awt.Dialog parent, boolean modal, FachadaAplicacion fa) {
         super(parent, modal);
         this.fa=fa;
         initComponents();

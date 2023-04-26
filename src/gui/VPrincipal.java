@@ -116,7 +116,7 @@ public class VPrincipal extends javax.swing.JFrame {
 
         panel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        addUsuario.setText("Añadir usuario");
+        addUsuario.setText("Gestión usuarios");
         addUsuario.setBackground(Color.WHITE);
         addUsuario.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         addUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -340,9 +340,9 @@ public class VPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_registrarinfrBtnActionPerformed
 
     private void addUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUsuarioActionPerformed
-        VNuevoUsuario vNuevoUsuario = new VNuevoUsuario(this, true, fa);
-        vNuevoUsuario.setLocationRelativeTo(null);
-        vNuevoUsuario.setVisible(true);
+        VGestionUsuarios vGestionUsuarios = new VGestionUsuarios(this, true, fa);
+        vGestionUsuarios.setLocationRelativeTo(null);
+        vGestionUsuarios.setVisible(true);
     }//GEN-LAST:event_addUsuarioActionPerformed
 
     private void statsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statsActionPerformed

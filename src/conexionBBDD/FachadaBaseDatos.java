@@ -150,6 +150,10 @@ public class FachadaBaseDatos {
         return daoUsuarios.registrarUsuario(usuario);
     }
     
+    public boolean registrarVehiculo(String dni, Vehiculo vehiculo){
+        return daoUsuarios.registrarVehiculo(dni, vehiculo);
+    }
+    
     public List<PlazaAparcar> obtenerPlazasAparcar(String codigoAparcamiento, Integer  codigoPlaza, String tipoPlaza, boolean ocupadas){
         return daoPlazas.obtenerPlazasAparcar(codigoAparcamiento,codigoPlaza,tipoPlaza,ocupadas);
     }

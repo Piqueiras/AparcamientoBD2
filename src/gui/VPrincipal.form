@@ -219,7 +219,7 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="addUsuario">
           <Properties>
-            <Property name="text" type="java.lang.String" value="A&#xf1;adir usuario" postCode="addUsuario.setBackground(Color.WHITE);"/>
+            <Property name="text" type="java.lang.String" value="Gesti&#xf3;n usuarios" postCode="addUsuario.setBackground(Color.WHITE);"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
                 <EmptyBorder/>

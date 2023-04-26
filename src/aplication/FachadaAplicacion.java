@@ -199,6 +199,10 @@ public class FachadaAplicacion {
         return fbd.registrarUsuario(usuario);
     }
     
+    public boolean registrarVehiculo(String dni, Vehiculo vehiculo){
+        return fbd.registrarVehiculo(dni, vehiculo);
+    }
+    
     /**
      * @param matricula
      * @return o usuario propietario do vehiculo con matricula [matricula]
