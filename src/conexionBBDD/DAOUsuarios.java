@@ -22,6 +22,11 @@ public class DAOUsuarios extends AbstractDAO {
         super.setFachadaAplicacion(fa);
     }
     
+    /**
+     * Busca en la base de datos si existe un usuario con el dni que se pasa como parametro
+     * @param dni
+     * @return Usuario con los datos guardados del usuario en la base
+     */
     public Usuario validarUsuario(String dni){
         Usuario resultado=null;
         Connection con;
@@ -31,13 +36,14 @@ public class DAOUsuarios extends AbstractDAO {
         con=this.getConexion();
 
         try {
-            //consulta completa
+            //consulta completa: busca por dni
             stmUsuario=con.prepareStatement("select dni, nombre, telefono, correo, fechaIngresoUSC, rol, fechaVeto, numeroInfracciones "+
                                             "from Usuarios "+
                                             "where dni like ? ");
             
             stmUsuario.setString(1, dni);
             rsUsuario=stmUsuario.executeQuery();
+             //creacion de usuario con los datos de la base de datos
             if (rsUsuario.next())
                 {
                     resultado = new Usuario(rsUsuario.getString("dni"), rsUsuario.getString("nombre"),
@@ -347,7 +353,11 @@ public class DAOUsuarios extends AbstractDAO {
         return resultado;
     }
 
-   List<Vehiculo> obtenerVehiculos() {
+    /**
+     * Devuelve todos los vehiculos registrados en la base de datos de usuarios no vetados
+     * @return Lista con dichos vehiculos
+     */
+    public List<Vehiculo> obtenerVehiculos() {
         String query;
         PreparedStatement statement = null;
         List<Vehiculo> vehiculos = new ArrayList<>();
@@ -362,7 +372,7 @@ public class DAOUsuarios extends AbstractDAO {
             // Ejecutar la consulta y obtener un conjunto de resultados
             ResultSet resultSet = statement.executeQuery();
 
-            // Recorrer los resultados y crear un objeto Plaza por cada fila
+            // Recorrer los resultados y crear un objeto Vehiculo por cada fila
             while (resultSet.next()) {
                 // Obtener los valores de cada columna en la fila actual
                 String matricula = resultSet.getString("matricula");
@@ -374,7 +384,7 @@ public class DAOUsuarios extends AbstractDAO {
                 // Crear un objeto Plaza a partir de los valores obtenidos
                 Vehiculo ve = new Vehiculo(matricula, tipo, marca,modelo,anho,dni2);
 
-                // Añadir el objeto Plaza a la lista
+                // Añadir el objeto Vehiculo a la lista
                 vehiculos.add(ve);
             }
 
@@ -393,10 +403,16 @@ public class DAOUsuarios extends AbstractDAO {
                 System.out.println("Imposible cerrar cursores");
             }
         }
-        // Devolver la lista de objetos Plaza
+        // Devolver la lista de objetos Vehiculos
         return vehiculos;
     }
-    List<Vehiculo> obtenerVehiculos(String dni) {
+
+    /**
+     *     * Devuelve todos los vehiculos registrados en la base de datos de usuarios no vetados
+     * @param dni del usuario del vehiculo
+     * @return Lista con dichos vehiculos
+     */
+    public List<Vehiculo> obtenerVehiculos(String dni) {
         String query;
         PreparedStatement statement = null;
         List<Vehiculo> vehiculos = new ArrayList<>();
@@ -446,7 +462,12 @@ public class DAOUsuarios extends AbstractDAO {
         // Devolver la lista de objetos 
         return vehiculos;
     }
-List<Vehiculo> obtenerVehiculosNoAparcados() {
+
+    /**
+* Devuelve todos los vehiculos registrados en la base de datos, de usuarios no vetados y no aparcados
+     * @return Lista con dichos vehiculos
+     */
+    public List<Vehiculo> obtenerVehiculosNoAparcados() {
         String query;
         PreparedStatement statement = null;
         List<Vehiculo> vehiculos = new ArrayList<>();
@@ -496,8 +517,12 @@ List<Vehiculo> obtenerVehiculosNoAparcados() {
         // Devolver la lista de objetos Plaza
         return vehiculos;
     }
-
-List<Vehiculo> obtenerVehiculosNoAparcados(String dni) {
+    /**
+     *     * Devuelve todos los vehiculos registrados en la base de datos de usuarios no vetados y no aparcados
+     * @param dni del usuario del vehiculo
+     * @return Lista con dichos vehiculos
+     */
+public List<Vehiculo> obtenerVehiculosNoAparcados(String dni) {
         String query;
         PreparedStatement statement = null;
         List<Vehiculo> vehiculos = new ArrayList<>();
@@ -549,7 +574,11 @@ List<Vehiculo> obtenerVehiculosNoAparcados(String dni) {
         return vehiculos;
     }
 
-        
+    /**
+     *Devuelve el rol del usuario registrado en la base de datos con el dni pasado
+     * @param dni
+     * @return rol
+     */
     public String obtenerRol(String dni){
             String rol=null;
              String query;
@@ -866,6 +895,10 @@ List<Vehiculo> obtenerVehiculosNoAparcados(String dni) {
             return dev;
         }
     }
+    
+    /**
+     * Hace  commit a la transaccion actual en la base de datos.
+     */
     public void commitTransaction(){
         java.sql.Connection con;
         con = this.getConexion();
@@ -877,15 +910,19 @@ List<Vehiculo> obtenerVehiculosNoAparcados(String dni) {
             stm.executeQuery(consulta);
         }
          catch(SQLException error){
-             if(error.getErrorCode() == 4001){
+             if(error.getErrorCode() == 4001){ //Comprueba que no se haya producido un error por realizar varias transacciones a la vez
                  System.out.println("Prodúxose un error polo isolation level serializable");  
              }else{
              System.out.println(error.getMessage());
              }
         }finally{
-            try{stm.close();}catch(SQLException e){System.out.println("No se pueden cerrar cursores");}////FALTAME COLLER A EXCEPCION
+            try{stm.close();}catch(SQLException e){System.out.println("No se pueden cerrar cursores");}
         }
     }
+
+    /**
+     * Comienza una nueva transaccion en la base de datos
+     */
     public void beginTransaction(){
         java.sql.Connection con;
         con = this.getConexion();
@@ -902,6 +939,8 @@ List<Vehiculo> obtenerVehiculosNoAparcados(String dni) {
             try{stm.close();}catch(SQLException e){System.out.println("No se pueden cerrar cursores");}////FALTAME COLLER A EXCEPCION
         }
     }
+    
+    
     public void beginTransactionSerializable(){
         java.sql.Connection con;
         con = this.getConexion();

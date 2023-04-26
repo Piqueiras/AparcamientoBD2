@@ -249,7 +249,7 @@ public class VHacerReserva extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        this.dispose();
+        this.dispose();//salir de la ventana
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void BuscarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarButtonActionPerformed
@@ -258,19 +258,21 @@ public class VHacerReserva extends javax.swing.JDialog {
         m=(ModeloTablaVehiculo) tablaVehiculos.getModel();
         
         if(jDNInput.getText().isEmpty()){
-
-        m.setFilas(fa.obtenerVehiculosReserva());
-        if (m.getRowCount() > 0) {
-            tablaVehiculos.setRowSelectionInterval(0, 0);
-        }}
+//si el dni esta vacio, muestra todos los vehiculos
+            m.setFilas(fa.obtenerVehiculosReserva());
+            if (m.getRowCount() > 0) {
+                tablaVehiculos.setRowSelectionInterval(0, 0);
+            }}
         else{
+            //Si se ha introducido dni, se buscan los vehiculos del usuario con ese dni
             m.setFilas(fa.obtenerVehiculosReserva(jDNInput.getText()));}
         if (m.getRowCount() > 0) {
             tablaVehiculos.setRowSelectionInterval(0, 0);
         }
         
     }//GEN-LAST:event_BuscarButtonActionPerformed
-public static boolean estanSeparadosPorMasDe7Dias(Date fecha1, Date fecha2) {
+//Funcion privada que dadas dos fechas, calcula si estan separadas por mas de 7 dias; util para los usuariosNoUSC, que no pueden reservar mas de 7 dias
+private static boolean estanSeparadosPorMasDe7Dias(Date fecha1, Date fecha2) {
     long diffMilis = Math.abs(fecha2.getTime() - fecha1.getTime());
     long diffDias = diffMilis / (1000 * 60 * 60 * 24);
 
@@ -281,15 +283,13 @@ public static boolean estanSeparadosPorMasDe7Dias(Date fecha1, Date fecha2) {
         int horaInicio, horaFin;
         Date Inicio, Fin;
         
-        if(jDateChooserFin.getDate()==null){
-           // aviso=new VAviso(this,true, "Debes seleccionar fecha de Fin");
-            //aviso.setVisible(true);
+        if(jDateChooserFin.getDate()==null){//No se ha seleccionado fechaFin en el jcalendar
             AvisoFFin.setText("No has seleccionado fecha de Fin.");
             return;
         }  
         AvisoFFin.setText("");
 
-        int fila=tablaVehiculos.getSelectedRow();
+        int fila=tablaVehiculos.getSelectedRow(); //Obtiene la fila seleccionada en la tabla de Vehiculos
         if(fila==-1){
             //aviso=new VAviso(this,true, "No has seleccionado ningun vehiculo");
             //aviso.setVisible(true);
@@ -299,14 +299,14 @@ public static boolean estanSeparadosPorMasDe7Dias(Date fecha1, Date fecha2) {
             AvisoVehiculo.setText("");
 
         
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        String strDateF=formatter.format(jDateChooserFin.getDate());
-        String strDateI=formatter.format(new Date());
-        String fFin=strDateF+" "+String.valueOf(9)+":00:00";
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd"); //formato para la fecha
+        String strDateF=formatter.format(jDateChooserFin.getDate()); //obtener FechaFin del jcalendar
+        String strDateI=formatter.format(new Date());//obtener fechaActual
+        String fFin=strDateF+" "+String.valueOf(9)+":00:00"; //Sumar a ese dia 9 horas (todas las reservas empiezan a las 9 de la mañana)
         String fIni=strDateI+" "+String.valueOf(9)+":00:00";
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
-            Inicio = dateFormat.parse(fIni);
+            Inicio = dateFormat.parse(fIni); //guardar fechas como Date
             Fin=dateFormat.parse(fFin);
         } catch (ParseException e) {
             aviso=new VAviso(this,true, "Fecha no valida");
@@ -317,27 +317,26 @@ public static boolean estanSeparadosPorMasDe7Dias(Date fecha1, Date fecha2) {
         String dni=tablaVehiculos.getValueAt(fila, 5).toString();
         
         
-        if(Inicio.compareTo(Fin)>=0){
+        if(Inicio.compareTo(Fin)>=0){ //si la fecha de fin es anterior a la de inicios
             AvisoFFin.setText("Fecha de fin no valida");
             return;
         }    
         AvisoFFin.setText("");
         
-        if("noUSC".equals(fa.obtenerRol(dni)))
+        if("noUSC".equals(fa.obtenerRol(dni))) //si el usuario NO es de la USC
             if( estanSeparadosPorMasDe7Dias(Inicio,Fin)){
                 AvisoFFin.setText("Usuario NoUSC: maximo 7 dias");
                 return;
             }
             
-                AvisoFFin.setText("");
+        AvisoFFin.setText("");
 
         String matricula=tablaVehiculos.getValueAt(fila, 0).toString();
         boolean exito=fa.hacerReserva(matricula, plaza,aparcamiento,Inicio,Fin);
                 
-        if(exito){
+        if(exito){//reserva exitosa
             JOptionPane.showMessageDialog(this,"Reserva realizada con éxito.");
             this.dispose();
-            return;
         }    
     }//GEN-LAST:event_hacerReservaButtonActionPerformed
 

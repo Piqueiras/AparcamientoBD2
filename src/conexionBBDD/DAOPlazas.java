@@ -28,6 +28,14 @@ public class DAOPlazas extends AbstractDAO {
         this.fa = fa;
     }
 
+    /**
+     * Busca plazas reserva y devuelve una lista
+     * @param codigoAparcamiento de las plazas buscadas
+     * @param codigoPlaza de las plazas buscadas
+     * @param tipoPlaza de las plazas buscadas(C,M,G)
+     * @param ocupadas, si false devuelve las plazas no ocupadas
+     * @return
+     */
     public List<PlazaReserva> obtenerPlazasReserva(String codigoAparcamiento, Integer codigoPlaza, String tipoPlaza, boolean ocupadas) {
         String query;
         PreparedStatement statement = null;
@@ -198,6 +206,13 @@ public class DAOPlazas extends AbstractDAO {
         return plazas;
     }
 
+    /**
+     * Añade una nueva tupla a la tabla Aparcar de la base con los datos introducidos
+     * @param matricula del vehiculo que aparca
+     * @param plaza en la que va a aparcar
+     * @param aparcamiento codigo del aparcamiento
+     * @return true si se ha realizado correctamente, false en caso contrario
+     */
     public boolean Aparcar(String matricula, int plaza, String aparcamiento) {
         String query;
         boolean exito = true;

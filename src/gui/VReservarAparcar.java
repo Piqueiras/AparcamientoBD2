@@ -211,17 +211,19 @@ public class VReservarAparcar extends javax.swing.JDialog {
         if (str.isEmpty()) {
             num = -1; // o cualquier otro valor predeterminado
         } else {
-            try{num = Integer.parseInt(str);}catch(Exception e){
+            try{num = Integer.parseInt(str);}catch(Exception e){ //convertir codidoPlaza a tipo int
                  AvisoSeleccionaPlaza2.setText("El codigo de la plaza debe ser un numero");
                 return;
             }
             
         }
         AvisoSeleccionaPlaza2.setText("");
+        //Actualizar Tabla con todas las plazas Reserva
         m.setFilas(fa.obtenerPlazasReserva(aparcamientoINPUT.getText(),num,tipoPlazaINPUT.getText(), false));
         if (m.getRowCount() > 0) {
             jTableReservar.setRowSelectionInterval(0, 0);
         }
+                //Actualizar Tabla con todas las plazas Aparcar
         mA.setFilas(fa.obtenerPlazasAparcar(aparcamientoINPUT.getText(),num,tipoPlazaINPUT.getText(), false));
         if (m.getRowCount() > 0) {
             jTableAparcar.setRowSelectionInterval(0, 0);
@@ -230,7 +232,7 @@ public class VReservarAparcar extends javax.swing.JDialog {
 
     private void reservarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reservarButtonActionPerformed
        // VAviso aviso;
-        VHacerReserva vselec;
+        VHacerReserva vselec;//nueva ventana que se va a crear
         int fila=jTableReservar.getSelectedRow();
         if(fila==-1){
             //aviso=new VAviso(this,true, "No has seleccionado ninguna plaza");
@@ -244,14 +246,13 @@ public class VReservarAparcar extends javax.swing.JDialog {
         int plaza= Integer.parseInt(jTableReservar.getValueAt (fila, 1).toString());
         String tipo= jTableReservar.getValueAt(fila, 2).toString();
 
-        vselec=new VHacerReserva(this,true, fa, ap, plaza, tipo);
+        vselec=new VHacerReserva(this,true, fa, ap, plaza, tipo); //se le pasan los datos de la plaza seleccionada
         vselec.setVisible(true);
     }//GEN-LAST:event_reservarButtonActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         this.fa.getFbd().getDaoUsuarios().commitTransaction();
         this.dispose();
-        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButtonAparcarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAparcarActionPerformed
