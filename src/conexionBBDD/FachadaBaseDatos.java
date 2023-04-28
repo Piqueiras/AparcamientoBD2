@@ -158,19 +158,19 @@ public class FachadaBaseDatos {
         return daoPlazas.obtenerPlazasAparcar(codigoAparcamiento,codigoPlaza,tipoPlaza,ocupadas);
     }
 
-    public List<Vehiculo> obtenerVehiculos() {
-        return daoUsuarios.obtenerVehiculos();
+    public List<Vehiculo> obtenerVehiculos(String tipoletra) {
+        return daoUsuarios.obtenerVehiculos(tipoletra);
     }
-    public List<Vehiculo> obtenerVehiculos(String dni) {
-        return daoUsuarios.obtenerVehiculos(dni);
-    }
-    
-    public List<Vehiculo> obtenerVehiculosNoAparcados(){
-        return daoUsuarios.obtenerVehiculosNoAparcados();
+    public List<Vehiculo> obtenerVehiculos(String dni,String tipoletra) {
+        return daoUsuarios.obtenerVehiculos(dni, tipoletra);
     }
     
-    public List<Vehiculo> obtenerVehiculosNoAparcados(String dni){
-        return daoUsuarios.obtenerVehiculosNoAparcados(dni);
+    public List<Vehiculo> obtenerVehiculosNoAparcados(String tipoletra){
+        return daoUsuarios.obtenerVehiculosNoAparcados(tipoletra);
+    }
+    
+    public List<Vehiculo> obtenerVehiculosNoAparcados(String dni, String tipoletra){
+        return daoUsuarios.obtenerVehiculosNoAparcados(dni, tipoletra);
     }
 
     public boolean hacerReserva(String matricula, int plaza, String aparcamiento,  Date horaInicio, Date horaFin) {

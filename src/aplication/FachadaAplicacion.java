@@ -143,20 +143,20 @@ public class FachadaAplicacion {
         return fbd.obtenerPlazasAparcar(codigoAparcamiento,codigoPlaza,tipoPlaza,ocupadas);
     }
 
-    public List<Vehiculo> obtenerVehiculosReserva(String dni) {
-        return fbd.obtenerVehiculos(dni);
+    public List<Vehiculo> obtenerVehiculosReserva(String dni, String tipoletra) {
+        return fbd.obtenerVehiculos(dni, tipoletra);
     }
-        
-    public List<Vehiculo> obtenerVehiculosReserva() {
-        return fbd.obtenerVehiculos();
+
+    public List<Vehiculo> obtenerVehiculosReserva(String tipoletra) {
+        return fbd.obtenerVehiculos(tipoletra);
+    }
+
+    public List<Vehiculo> obtenerVehiculosNoAparcados(String dni, String tipoletra){
+        return fbd.obtenerVehiculosNoAparcados(dni, tipoletra);
     }
     
-    public List<Vehiculo> obtenerVehiculosNoAparcados(String dni){
-        return fbd.obtenerVehiculosNoAparcados(dni);
-    }
-    
-    public List<Vehiculo> obtenerVehiculosNoAparcados(){
-        return fbd.obtenerVehiculosNoAparcados();
+    public List<Vehiculo> obtenerVehiculosNoAparcados(String tipoletra){
+        return fbd.obtenerVehiculosNoAparcados(tipoletra);
     }
 
     public boolean hacerReserva(String matricula, int plaza, String aparcamiento, Date horaInicio, Date horaFin){

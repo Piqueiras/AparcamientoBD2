@@ -214,10 +214,10 @@ public class VAparcar extends javax.swing.JDialog{
     ModeloTablaVehiculo m;
     m=(ModeloTablaVehiculo) tablaVehiculos.getModel();
     if(jDNInput.getText().isEmpty()){
-        m.setFilas(fa.obtenerVehiculosNoAparcados()); //Buscar todos los vehiculos no aparcados para la tabla
+        m.setFilas(fa.obtenerVehiculosNoAparcados(this.tipo)); //Buscar todos los vehiculos no aparcados para la tabla
        }
         else{
-            m.setFilas(fa.obtenerVehiculosNoAparcados(jDNInput.getText()));}
+            m.setFilas(fa.obtenerVehiculosNoAparcados(jDNInput.getText(), this.tipo));}
         if (m.getRowCount() > 0) {
             tablaVehiculos.setRowSelectionInterval(0, 0);
         }

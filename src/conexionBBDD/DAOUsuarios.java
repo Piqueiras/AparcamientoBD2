@@ -398,14 +398,14 @@ public class DAOUsuarios extends AbstractDAO {
             System.out.println(e.getMessage());
         }      
     }
-
     /**
-     * Devuelve todos los vehiculos registrados en la base de datos de usuarios
-     * no vetados
-     *
+     *     * Devuelve todos los vehiculos registrados en la base de datos de
+     * usuarios no vetados
+     * @param tipoletra tipo de plaza, C M o G
+
      * @return Lista con dichos vehiculos
      */
-    public List<Vehiculo> obtenerVehiculos() {
+public List<Vehiculo> obtenerVehiculos(String tipoletra) {
         String query;
         PreparedStatement statement = null;
         List<Vehiculo> vehiculos = new ArrayList<>();
@@ -413,10 +413,10 @@ public class DAOUsuarios extends AbstractDAO {
         Connection connection = this.getConexion();
         try {
             // Crear un objeto PreparedStatement con la consulta
-            query = "SELECT * FROM Vehiculos v where v.dni not in (select dni from usuarios where fechaveto is not NULL) and matricula not like '0000AAA'";
+            query = "SELECT * FROM Vehiculos v where tipo like ? and v.dni not in (select dni from usuarios where fechaveto is not NULL) and matricula not like '0000AAA'";
             statement = connection.prepareStatement(query);
             // Establecer los parámetros de la consulta
-
+              statement.setString(1, tipoletra);
             // Ejecutar la consulta y obtener un conjunto de resultados
             ResultSet resultSet = statement.executeQuery();
 
@@ -458,11 +458,12 @@ public class DAOUsuarios extends AbstractDAO {
     /**
      *     * Devuelve todos los vehiculos registrados en la base de datos de
      * usuarios no vetados
-     *
+     * @param tipoletra tipo de plaza, C M o G
+
      * @param dni del usuario del vehiculo
      * @return Lista con dichos vehiculos
      */
-    public List<Vehiculo> obtenerVehiculos(String dni) {
+    public List<Vehiculo> obtenerVehiculos(String dni, String tipoletra) {
         String query;
         PreparedStatement statement = null;
         List<Vehiculo> vehiculos = new ArrayList<>();
@@ -470,11 +471,11 @@ public class DAOUsuarios extends AbstractDAO {
         Connection connection = this.getConexion();
         try {
             // Crear un objeto PreparedStatement con la consulta
-            query = "SELECT * FROM Vehiculos WHERE DNI like ? and dni not in (select dni from usuarios where fechaveto is not NULL) and matricula not like '0000AAA'";
+            query = "SELECT * FROM Vehiculos WHERE DNI like ? and tipo like ? and dni not in (select dni from usuarios where fechaveto is not NULL) and matricula not like '0000AAA'";
             statement = connection.prepareStatement(query);
             // Establecer los parámetros de la consulta
             statement.setString(1, dni + "%");
-
+            statement.setString(2, tipoletra );
             // Ejecutar la consulta y obtener un conjunto de resultados
             ResultSet resultSet = statement.executeQuery();
 
@@ -516,10 +517,11 @@ public class DAOUsuarios extends AbstractDAO {
     /**
      * Devuelve todos los vehiculos registrados en la base de datos, de usuarios
      * no vetados y no aparcados
-     *
+     * @param tipoletra tipo de plaza, C M o G
+
      * @return Lista con dichos vehiculos
      */
-    public List<Vehiculo> obtenerVehiculosNoAparcados() {
+    public List<Vehiculo> obtenerVehiculosNoAparcados(String tipoletra) {
         String query;
         PreparedStatement statement = null;
         List<Vehiculo> vehiculos = new ArrayList<>();
@@ -527,11 +529,11 @@ public class DAOUsuarios extends AbstractDAO {
         Connection connection = this.getConexion();
         try {
             // Crear un objeto PreparedStatement con la consulta
-            query = "SELECT * FROM Vehiculos v where (v.dni not in (select dni from usuarios where fechaveto is not NULL)) and "
+            query = "SELECT * FROM Vehiculos v where tipo like ? and (v.dni not in (select dni from usuarios where fechaveto is not NULL)) and "
                     + "(v.matricula not in(select matriculavehiculo from aparcar where fechasalida is NULL)) and matricula not like '0000AAA'";
             statement = connection.prepareStatement(query);
             // Establecer los parámetros de la consulta
-
+            statement.setString(1, tipoletra );
             // Ejecutar la consulta y obtener un conjunto de resultados
             ResultSet resultSet = statement.executeQuery();
 
@@ -575,9 +577,10 @@ public class DAOUsuarios extends AbstractDAO {
      * usuarios no vetados y no aparcados
      *
      * @param dni del usuario del vehiculo
+     * @param tipoletra tipo de plaza, C M o G
      * @return Lista con dichos vehiculos
      */
-    public List<Vehiculo> obtenerVehiculosNoAparcados(String dni) {
+    public List<Vehiculo> obtenerVehiculosNoAparcados(String dni, String tipoletra) {
         String query;
         PreparedStatement statement = null;
         List<Vehiculo> vehiculos = new ArrayList<>();
@@ -585,12 +588,12 @@ public class DAOUsuarios extends AbstractDAO {
         Connection connection = this.getConexion();
         try {
             // Crear un objeto PreparedStatement con la consulta
-            query = "SELECT * FROM Vehiculos WHERE DNI like ? and dni not in (select dni from usuarios where fechaveto is not NULL) and "
-                    + "(matricula not in(select matriculavehiculo from aparcar where fechasalida is NULL)) matricula not like '0000AAA'";
+            query = "SELECT * FROM Vehiculos WHERE DNI like ? and tipo like ? and dni not in (select dni from usuarios where fechaveto is not NULL) and "
+                    + "(matricula not in(select matriculavehiculo from aparcar where fechasalida is NULL)) and matricula not like '0000AAA'";
             statement = connection.prepareStatement(query);
             // Establecer los parámetros de la consulta
             statement.setString(1, dni + "%");
-
+            statement.setString(2,  tipoletra);
             // Ejecutar la consulta y obtener un conjunto de resultados
             ResultSet resultSet = statement.executeQuery();
 
@@ -628,7 +631,6 @@ public class DAOUsuarios extends AbstractDAO {
         // Devolver la lista de objetos 
         return vehiculos;
     }
-
     /**
      * Devuelve el rol del usuario registrado en la base de datos con el dni
      * pasado

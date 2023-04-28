@@ -259,13 +259,13 @@ public class VHacerReserva extends javax.swing.JDialog {
         
         if(jDNInput.getText().isEmpty()){
 //si el dni esta vacio, muestra todos los vehiculos
-            m.setFilas(fa.obtenerVehiculosReserva());
+            m.setFilas(fa.obtenerVehiculosReserva(this.tipo));
             if (m.getRowCount() > 0) {
                 tablaVehiculos.setRowSelectionInterval(0, 0);
             }}
         else{
             //Si se ha introducido dni, se buscan los vehiculos del usuario con ese dni
-            m.setFilas(fa.obtenerVehiculosReserva(jDNInput.getText()));}
+            m.setFilas(fa.obtenerVehiculosReserva(jDNInput.getText(),this.tipo));}
         if (m.getRowCount() > 0) {
             tablaVehiculos.setRowSelectionInterval(0, 0);
         }
