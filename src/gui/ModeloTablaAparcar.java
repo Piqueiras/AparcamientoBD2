@@ -78,7 +78,7 @@ public class ModeloTablaAparcar extends AbstractTableModel{
                     } else {
                         resultado=null;
                     } break;
-            case 6: resultado=aparcamientos.get(row).getHoras() + " h, " + aparcamientos.get(row).getMinutos() + "min y " + aparcamientos.get(row).getSegundos() + " s"; break;
+            case 6: resultado=aparcamientos.get(row).getDuracion().toDays() + " d, " + aparcamientos.get(row).getDuracion().toHoursPart() + " h, " + aparcamientos.get(row).getDuracion().toMinutesPart()  + "min y " + aparcamientos.get(row).getDuracion().toSecondsPart() + " s"; break;
             case 7: resultado=aparcamientos.get(row).getPrecio().toString() + " €"; break;
         }
         return resultado;

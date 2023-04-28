@@ -17,10 +17,7 @@ public class Reservar {
     private String idAparcamiento;
     private LocalDateTime fechaEntrada;
     private LocalDateTime fechaSalida;
-    private int dias;
-    private int horas;
-    private int minutos;
-    private int segundos;
+    private Duration duracion;
     private Double precio;
     private RolUsuario rol;
 
@@ -32,10 +29,7 @@ public class Reservar {
         this.rol = rol;
         
         this.fechaSalida = null;
-        this.dias = 0;
-        this.horas = 0;
-        this.minutos = 0;
-        this.segundos = 0;
+        this.duracion = null;
         
         actualizarPrecio(rol);
     }
@@ -60,20 +54,8 @@ public class Reservar {
         return fechaSalida;
     }
     
-    public int getDias() {
-        return dias;
-    }
-
-    public int getHoras() {
-        return horas;
-    }
-
-    public int getMinutos() {
-        return minutos;
-    }
-
-    public int getSegundos() {
-        return segundos;
+    public Duration getDuracion() {
+        return duracion;
     }
 
     public Double getPrecio() {
@@ -82,13 +64,14 @@ public class Reservar {
 
     public void setFechaSalida(LocalDateTime fechaSalida) {
         this.fechaSalida = fechaSalida;
+    }
+    
+    public void actualizarFechaSalida(LocalDateTime fechaSalida) {
+        this.setFechaSalida(fechaSalida);
         
         //Aprovechamos para actualizar la duracion y el coste
         if(this.fechaEntrada != null && this.fechaSalida != null) {
-            this.dias = (int) Duration.between(fechaEntrada, fechaSalida).toDays();
-            this.horas = (int) Duration.between(fechaEntrada, fechaSalida).toHours() % 24;
-            this.minutos = (int) (Duration.between(fechaEntrada, fechaSalida).toMinutes() % 60);
-            this.segundos = (int) (Duration.between(fechaEntrada, fechaSalida).toSeconds() % 60);        
+            this.duracion = Duration.between(this.fechaEntrada, this.fechaSalida);       
         
             actualizarPrecio(rol);
         }
@@ -104,15 +87,11 @@ public class Reservar {
             mult = 10d;
         }
         if (this.fechaSalida == null) {
-            this.dias = (int) Duration.between(fechaEntrada, LocalDateTime.now()).toDays();
-            this.horas = (int) Duration.between(fechaEntrada, LocalDateTime.now()).toHours() % 24;
-            this.minutos = (int) Duration.between(fechaEntrada, LocalDateTime.now()).toMinutes() % 60;
-            this.segundos = (int) Duration.between(fechaEntrada, LocalDateTime.now()).toSeconds() % 60;
+            this.duracion = Duration.between(this.fechaEntrada, LocalDateTime.now());
         }        
-        precio = (double) dias * mult;
-            if (horas > 0 || minutos > 0 || segundos > 0) {
+        precio = (double) this.duracion.toDays() * mult;
+            if (this.duracion.toHoursPart() > 0 || this.duracion.toMinutesPart() > 0 || this.duracion.toSecondsPart() > 0) {
                 precio += (double) mult;
-        
         }
     }
 }

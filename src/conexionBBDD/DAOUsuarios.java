@@ -9,6 +9,7 @@ import aplication.*;
 import static aplication.Hash.sha256;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -84,6 +85,32 @@ public class DAOUsuarios extends AbstractDAO {
     }
     
     /**
+     * Este metodo recibe una duracion en el formato "0d 0h 0m 0s", donde d son los dias, h las horas, m los minutos y s los segundos.
+     * Puede faltar cualquiera de los cuatro campos. Devuelve un String al que se le puede aplicar el metodo parse() de LocalDateTime
+     * para crear un tipo Duration con los datos del String pasado como argumento.
+     * @param dBusqueda - La duracion introducida como parametro de busqueda
+     * @return duracion - 
+     */
+    private String aFormatoDuration (String dBusqueda) throws IllegalArgumentException {
+        String[] partes;
+        String aux = dBusqueda.replaceAll(" ", "") + "F";
+        String duracion = "P0DT0H0M0S";
+
+        partes = aux.split("d");
+        if (partes.length == 2) { duracion = duracion.replaceFirst("0D", partes[0] + "D"); aux = partes[1]; }
+        partes = aux.split("h");
+        if (partes.length == 2) { duracion = duracion.replaceFirst("0H", partes[0] + "H"); aux = partes[1]; }
+        partes = aux.split("m");
+        if (partes.length == 2) { duracion = duracion.replaceFirst("0M", partes[0] + "M"); aux = partes[1]; }
+        partes = aux.split("s");
+        if (partes.length == 2) { duracion = duracion.replaceFirst("0S", partes[0] + "S"); aux = partes[1]; }
+        
+        if(!aux.equals("F")) throw(new IllegalArgumentException());
+        
+        return duracion;
+    }
+    
+    /**
      * Este metodo obtiene todas las tuplas de la tabla Aparcar de la base de
      * datos que cumplan las condiciones especificadas. Los datos de cada tupla
      * se guardan en una instancia de Aparcar, y los resultados se devuelven en
@@ -110,8 +137,6 @@ public class DAOUsuarios extends AbstractDAO {
         Connection con;
         PreparedStatement stmAparcar = null;
         ResultSet rsAparcar;
-        String partes[];
-        String aux;
         int cAct;
         int cSat;
 
@@ -162,7 +187,7 @@ public class DAOUsuarios extends AbstractDAO {
                 //fechasalida puede ser null. Si se diese el caso, .toLocalDateTime() lanzaria una excepcion y no se podría seguir con el proceso.
                 //Para evitarlo, controlamos que sea null, y solo si no lo es realizamos la conversion
                 if (rsAparcar.getObject("fechasalida") != null) {
-                    aparcarActual.setFechaSalida(rsAparcar.getTimestamp("fechasalida").toLocalDateTime());
+                    aparcarActual.actualizarFechaSalida(rsAparcar.getTimestamp("fechasalida").toLocalDateTime());
                 }
 
                 //Ahora tenemos que aplicar las restricciones de coste y duracion. Como estos parametros no estan en la tabla, no se pueden aplicar en la consulta.
@@ -183,25 +208,13 @@ public class DAOUsuarios extends AbstractDAO {
                     cAct += 1;
                 }
                 if (!dMax.isEmpty()) {
-                    aux = dMax.replaceAll(" ", "");
-                    partes = aux.split("[dhms]");
-                    if (partes.length != 4) throw(new java.lang.NumberFormatException());
-                    if ((aparcarActual.getHoras() < Integer.parseInt(partes[0]) * 24)
-                            || (aparcarActual.getHoras() == (Integer.parseInt(partes[0]) * 24) && aparcarActual.getHoras() < Integer.parseInt(partes[1]))
-                            || (aparcarActual.getHoras() == (Integer.parseInt(partes[0]) * 24) && aparcarActual.getHoras() == Integer.parseInt(partes[1]) && aparcarActual.getMinutos() < Integer.parseInt(partes[2]))
-                            || (aparcarActual.getHoras() == (Integer.parseInt(partes[0]) * 24) && aparcarActual.getHoras() == Integer.parseInt(partes[1]) && aparcarActual.getMinutos() == Integer.parseInt(partes[2]) && aparcarActual.getSegundos() <= Integer.parseInt(partes[3]))) {
+                    if (aparcarActual.getDuracion().compareTo(Duration.parse(aFormatoDuration(dMax))) <= 0) {
                         cSat += 1;
                     }
                     cAct += 1;
                 }
                 if (!dMin.isEmpty()) {
-                    aux = dMin.replaceAll(" ", "");
-                    partes = aux.split("[dhms]");
-                    if (partes.length != 4) throw(new java.lang.NumberFormatException());
-                    if ((aparcarActual.getHoras() > Integer.parseInt(partes[0]) * 24)
-                            || (aparcarActual.getHoras() == (Integer.parseInt(partes[0]) * 24) && aparcarActual.getHoras() > Integer.parseInt(partes[1]))
-                            || (aparcarActual.getHoras() == (Integer.parseInt(partes[0]) * 24) && aparcarActual.getHoras() == Integer.parseInt(partes[1]) && aparcarActual.getMinutos() > Integer.parseInt(partes[2]))
-                            || (aparcarActual.getHoras() == (Integer.parseInt(partes[0]) * 24) && aparcarActual.getHoras() == Integer.parseInt(partes[1]) && aparcarActual.getMinutos() == Integer.parseInt(partes[2]) && aparcarActual.getSegundos() >= Integer.parseInt(partes[3]))) {
+                    if (aparcarActual.getDuracion().compareTo(Duration.parse(aFormatoDuration(dMin))) >= 0) {
                         cSat += 1;
                     }
                     cAct += 1;
@@ -212,9 +225,12 @@ public class DAOUsuarios extends AbstractDAO {
                     resultado.add(aparcarActual);
                 }
             }
-        } catch (SQLException | java.lang.NumberFormatException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
-            this.getFachadaAplicacion().muestraExcepcion("Formato incorrecto");
+            this.getFachadaAplicacion().muestraExcepcion("Error en SQL");
+        } catch (java.time.format.DateTimeParseException | IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            this.getFachadaAplicacion().muestraExcepcion("Formato Incorrecto");
         } finally {
             try {
                 stmAparcar.close();
@@ -253,8 +269,6 @@ public class DAOUsuarios extends AbstractDAO {
         Connection con;
         PreparedStatement stmReservar = null;
         ResultSet rsReservar;
-        String partes[];
-        String aux;
         int cAct;
         int cSat;
 
@@ -305,7 +319,7 @@ public class DAOUsuarios extends AbstractDAO {
                 //fechaFin puede ser null. Si se diese el caso, .toLocalDateTime() lanzaria una excepcion y no se podría seguir con el proceso.
                 //Para evitarlo, controlamos que sea null, y solo si no lo es realizamos la conversion
                 if (rsReservar.getObject("fechaFin") != null) {
-                    reservarActual.setFechaSalida(rsReservar.getTimestamp("fechaFin").toLocalDateTime());
+                    reservarActual.actualizarFechaSalida(rsReservar.getTimestamp("fechaFin").toLocalDateTime());
                 }
 
                 //Ahora tenemos que aplicar las restricciones de coste y duracion. Como estos parametros no estan en la tabla, no se pueden aplicar en la consulta.
@@ -326,25 +340,13 @@ public class DAOUsuarios extends AbstractDAO {
                     cAct += 1;
                 }
                 if (!dMax.isEmpty()) {
-                    aux = dMax.replaceAll(" ", "");
-                    partes = aux.split("[dhms]");
-                    if (partes.length != 4) throw(new java.lang.NumberFormatException());
-                    if ((reservarActual.getHoras() < Integer.parseInt(partes[0]) * 24)
-                            || (reservarActual.getHoras() == (Integer.parseInt(partes[0]) * 24) && reservarActual.getHoras() < Integer.parseInt(partes[1]))
-                            || (reservarActual.getHoras() == (Integer.parseInt(partes[0]) * 24) && reservarActual.getHoras() == Integer.parseInt(partes[1]) && reservarActual.getMinutos() < Integer.parseInt(partes[2]))
-                            || (reservarActual.getHoras() == (Integer.parseInt(partes[0]) * 24) && reservarActual.getHoras() == Integer.parseInt(partes[1]) && reservarActual.getMinutos() == Integer.parseInt(partes[2]) && reservarActual.getSegundos() <= Integer.parseInt(partes[3]))) {
+                    if (reservarActual.getDuracion().compareTo(Duration.parse(aFormatoDuration(dMax))) <= 0) {
                         cSat += 1;
                     }
                     cAct += 1;
                 }
                 if (!dMin.isEmpty()) {
-                    aux = dMin.replaceAll(" ", "");
-                    partes = aux.split("[dhms]");
-                    if (partes.length != 4) throw(new java.lang.NumberFormatException());
-                    if ((reservarActual.getHoras() > Integer.parseInt(partes[0]) * 24)
-                            || (reservarActual.getHoras() == (Integer.parseInt(partes[0]) * 24) && reservarActual.getHoras() > Integer.parseInt(partes[1]))
-                            || (reservarActual.getHoras() == (Integer.parseInt(partes[0]) * 24) && reservarActual.getHoras() == Integer.parseInt(partes[1]) && reservarActual.getMinutos() > Integer.parseInt(partes[2]))
-                            || (reservarActual.getHoras() == (Integer.parseInt(partes[0]) * 24) && reservarActual.getHoras() == Integer.parseInt(partes[1]) && reservarActual.getMinutos() == Integer.parseInt(partes[2]) && reservarActual.getSegundos() >= Integer.parseInt(partes[3]))) {
+                    if (reservarActual.getDuracion().compareTo(Duration.parse(aFormatoDuration(dMin))) >= 0) {
                         cSat += 1;
                     }
                     cAct += 1;
@@ -355,7 +357,9 @@ public class DAOUsuarios extends AbstractDAO {
                     resultado.add(reservarActual);
                 }
             }
-        } catch (SQLException | java.lang.NumberFormatException e) {
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } catch (java.time.format.DateTimeParseException | IllegalArgumentException e) {
             System.out.println(e.getMessage());
         } finally {
             try {
@@ -393,7 +397,6 @@ public class DAOUsuarios extends AbstractDAO {
                            + "and idAparcamiento like \'" + ap + "\' "
                            + "and fechaentrada = \'" + fi + "\' ";
         try {
-            System.out.println(actualizacion);
             stmAparcar = con.prepareStatement(actualizacion);
             stmAparcar.executeUpdate();
         } catch (SQLException e) {
