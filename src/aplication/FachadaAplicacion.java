@@ -4,6 +4,7 @@
  */
 
 package aplication;
+import static aplication.Hash.sha256;
 import conexionBBDD.FachadaBaseDatos;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

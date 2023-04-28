@@ -21,11 +21,13 @@ public class Usuario {
     private RolUsuario rol;
     private LocalDate fechaVeto;
     private int numeroInfracciones;
+    private String contrasena;
     private ArrayList<Vehiculo> vehiculos;
 
     public Usuario(String dni) {
         this.dni = dni;
     }
+    
     
     public Usuario(String dni, String nombre, String telefono, String correo, RolUsuario rol, int numeroInfracciones) {
         this.dni = dni;
@@ -39,8 +41,22 @@ public class Usuario {
         this.fechaVeto = null;
         this.vehiculos = new ArrayList<Vehiculo>();
     }
+    
+    public Usuario(String dni, String nombre, String telefono, String correo, RolUsuario rol, int numeroInfracciones, String contrasena) {
+        this.dni = dni;
+        this.nombre = nombre;
+        this.telefono = telefono;
+        this.correo = correo;
+        this.rol = rol;
+        this.numeroInfracciones = numeroInfracciones;
+        this.contrasena = contrasena;
+        
+        this.fechaIngreso = null;
+        this.fechaVeto = null;
+        this.vehiculos = new ArrayList<Vehiculo>();
+    }
 
-    public Usuario(String dni, String nombre, String telefono, String correo, LocalDate fechaIngreso, RolUsuario rol, int numeroInfracciones) {
+    public Usuario(String dni, String nombre, String telefono, String correo, LocalDate fechaIngreso, RolUsuario rol, int numeroInfracciones, String contrasena) {
         this.dni = dni;
         this.nombre = nombre;
         this.telefono = telefono;
@@ -48,11 +64,12 @@ public class Usuario {
         this.fechaIngreso = fechaIngreso;
         this.rol = rol;
         this.numeroInfracciones = numeroInfracciones;
+        this.contrasena = contrasena;
         
         this.fechaVeto = null;
         this.vehiculos = new ArrayList<Vehiculo>();
     }
-
+     
     public Usuario(String dni, String nombre, String telefono, String correo, LocalDate fechaIngreso, RolUsuario rol, LocalDate fechaVeto, int numeroInfracciones) {
         this.dni = dni;
         this.nombre = nombre;
@@ -96,6 +113,10 @@ public class Usuario {
 
     public int getNumeroInfracciones() {
         return numeroInfracciones;
+    }
+    
+    public String getContrasena(){
+        return contrasena;
     }
 
     public ArrayList<Vehiculo> getVehiculos() {

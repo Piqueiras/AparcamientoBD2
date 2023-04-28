@@ -6,6 +6,7 @@ package conexionBBDD;
 
 import java.sql.*;
 import aplication.*;
+import static aplication.Hash.sha256;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class DAOUsuarios extends AbstractDAO {
 
         try {
             //Con esta consulta, se obtienen todos los datos del usuario
-            stmUsuario = con.prepareStatement("select dni, nombre, telefono, correo, fechaIngresoUSC, rol, fechaVeto, numeroInfracciones "
+            stmUsuario = con.prepareStatement("select dni, nombre, telefono, correo, fechaIngresoUSC, rol, fechaVeto, numeroInfracciones, contrasena "
                     + "from Usuarios "
                     + "where dni like ? ");
 
@@ -57,7 +58,8 @@ public class DAOUsuarios extends AbstractDAO {
                 resultado = new Usuario(rsUsuario.getString("dni"), rsUsuario.getString("nombre"),
                         rsUsuario.getString("telefono"), rsUsuario.getString("correo"),
                         aplication.RolUsuario.valueOf(rsUsuario.getString("rol")),
-                        rsUsuario.getInt("numeroInfracciones"));
+                        rsUsuario.getInt("numeroInfracciones"),
+                rsUsuario.getString("contrasena"));
 
                 //fechaIngresoUSC y fechaVeto pueden ser null, lo que causaria problemas con toLocalDate(). Por eso, hay que tratar estos errores.
                 if (rsUsuario.getObject("fechaIngresoUSC") != null) {
@@ -685,7 +687,7 @@ public List<Vehiculo> obtenerVehiculos(String tipoletra) {
         boolean exito = true;
 
         try {
-            stmUsuario = con.prepareStatement("INSERT INTO Usuarios (dni, nombre, telefono, correo, fechaIngresoUSC, rol, fechaVeto, numeroInfracciones) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            stmUsuario = con.prepareStatement("INSERT INTO Usuarios (dni, nombre, telefono, correo, fechaIngresoUSC, rol, fechaVeto, numeroInfracciones, contrasena) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
             stmUsuario.setString(1, usuario.getDni());
             stmUsuario.setString(2, usuario.getNombre());
@@ -700,6 +702,13 @@ public List<Vehiculo> obtenerVehiculos(String tipoletra) {
 
             }
             stmUsuario.setInt(8, usuario.getNumeroInfracciones());
+            
+            if(usuario.getRol().equals(RolUsuario.Administracion)){
+            stmUsuario.setString(9, usuario.getContrasena());
+        }else{
+                
+            stmUsuario.setString(9, null);
+            }
 
             int filasAfectadas = stmUsuario.executeUpdate();
 
