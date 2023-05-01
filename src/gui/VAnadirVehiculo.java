@@ -241,7 +241,7 @@ public class VAnadirVehiculo extends javax.swing.JDialog {
         Usuario usuario = fa.comprobarAutentificacion(inDNI.getText());
         ModeloTablaUsuarios m=(ModeloTablaUsuarios) tablaUsuario.getModel();
         ArrayList<Usuario> lista = new ArrayList<>();
-        lista.add(usuario);
+        if(usuario!=null)lista.add(usuario);
         m.setFilas(lista);
     }//GEN-LAST:event_btnBuscarActionPerformed
 

@@ -51,7 +51,7 @@ public class DAOUsuarios extends AbstractDAO {
                     + "where dni like ? ");
 
             //Se ejecuta la consulta en la base de datos y se obtiene el resultSet
-            stmUsuario.setString(1, dni);
+            stmUsuario.setString(1, "%"+dni+"%");
             rsUsuario = stmUsuario.executeQuery();
 
             if (rsUsuario.next()) {
