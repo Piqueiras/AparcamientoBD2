@@ -27,8 +27,11 @@ public class ModeloListaVehiculos extends javax.swing.AbstractListModel {
     }
 
     public void nuevoElemento(Vehiculo e){
-        this.elementos.add(e);
-        fireIntervalAdded(this, this.elementos.size()-1, this.elementos.size()-1);
+        if (!this.elementos.contains(e)) {
+            this.elementos.add(e);
+            fireIntervalAdded(this, this.elementos.size()-1, this.elementos.size()-1);
+        }
+        
     }
 
     public void borrarElemento(int i){

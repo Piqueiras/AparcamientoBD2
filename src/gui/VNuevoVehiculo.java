@@ -168,6 +168,8 @@ public class VNuevoVehiculo extends javax.swing.JDialog {
         Vehiculo v = new Vehiculo(matricula, tipo, marca, modelo, ano);
         
         this.lista.nuevoElemento(v);
+        
+        this.dispose();
     }//GEN-LAST:event_addVehiculoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
