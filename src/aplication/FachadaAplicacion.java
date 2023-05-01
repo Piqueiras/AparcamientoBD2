@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.List;
+import javax.swing.UIManager;
 
 /**
  *
@@ -51,7 +52,9 @@ public class FachadaAplicacion {
     
     public static void main(String args[]) {
         FachadaAplicacion fa;
-
+        try{
+            UIManager.setLookAndFeel(new com.jtattoo.plaf.smart.SmartLookAndFeel());
+        }catch(Exception e){}
         fa= new FachadaAplicacion();
         fa.usuariosSalvados = fa.Actualizar(); //Actualiza os vetos
         
