@@ -18,6 +18,7 @@ public class VNuevoVehiculo extends javax.swing.JDialog {
         super(parent, modal);
         lista=mv;
         initComponents();
+        errorText.setVisible(false);
     }
 
     /**
@@ -41,6 +42,7 @@ public class VNuevoVehiculo extends javax.swing.JDialog {
         switchTipo = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         addVehiculo = new javax.swing.JButton();
+        errorText = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -65,6 +67,9 @@ public class VNuevoVehiculo extends javax.swing.JDialog {
                 addVehiculoActionPerformed(evt);
             }
         });
+
+        errorText.setForeground(new java.awt.Color(255, 0, 51));
+        errorText.setText("Error");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -101,7 +106,9 @@ public class VNuevoVehiculo extends javax.swing.JDialog {
                         .addComponent(descripcion)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(33, 33, 33)
+                .addComponent(errorText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(addVehiculo)
                 .addContainerGap())
         );
@@ -129,7 +136,9 @@ public class VNuevoVehiculo extends javax.swing.JDialog {
                     .addComponent(jLabel4)
                     .addComponent(inAno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
-                .addComponent(addVehiculo)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addVehiculo)
+                    .addComponent(errorText))
                 .addContainerGap())
         );
 
@@ -137,11 +146,11 @@ public class VNuevoVehiculo extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addVehiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addVehiculoActionPerformed
-        VAviso aviso;
+        errorText.setVisible(false);
         String matricula = inMatricula.getText();
         if(matricula.isEmpty()){
-            aviso=new VAviso(this,true, "Debe introducir matricula");
-            aviso.setVisible(true);
+            errorText.setText("Debe introducir matricula");
+            errorText.setVisible(true);
             return;
         }
         
@@ -163,7 +172,18 @@ public class VNuevoVehiculo extends javax.swing.JDialog {
         }
         
         
-        Integer ano = Integer.parseInt(anoStr);
+        Integer ano = 0;
+        
+        if (!anoStr.isEmpty()) {
+            ano = Integer.parseInt(anoStr);
+        }
+        
+        
+        if (ano<1900) {
+            errorText.setText("Año debe ser >1900");
+            errorText.setVisible(true);
+            return;
+        }
         
         Vehiculo v = new Vehiculo(matricula, tipo, marca, modelo, ano);
         
@@ -175,6 +195,7 @@ public class VNuevoVehiculo extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addVehiculo;
     private javax.swing.JLabel descripcion;
+    private javax.swing.JLabel errorText;
     private javax.swing.JTextField inAno;
     private javax.swing.JTextField inMarca;
     private javax.swing.JTextField inMatricula;
